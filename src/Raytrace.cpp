@@ -241,9 +241,9 @@ Color* raytrace(Ray* r, bool &light)
 					receivedColor->g /= 255.f;
 					receivedColor->b /= 255.f;
 
-					//double lightSourceIntensity =-1* cosAngle(lToSphere,sphereNormal);
-					//if(lightSourceIntensity < 0) lightSourceIntensity = 0;
-					double lightSourceIntensity = 1;
+					double lightSourceIntensity =-1* cosAngle(lToSphere,sphereNormal);
+					if(lightSourceIntensity < 0) lightSourceIntensity = 0;
+					//double lightSourceIntensity = 1;
 					llocal->r += receivedColor->r * lightSourceIntensity;
 					llocal->g += receivedColor->g * lightSourceIntensity;
 					llocal->b += receivedColor->b * lightSourceIntensity;
@@ -546,17 +546,7 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 					sInt.y = tempIntY;
 					sInt.z = tempIntZ;
 				}
-				else if(dist3(sInt.x,
-							  r->start.x,
-							  sInt.y,
-							  r->start.y,
-							  sInt.z,
-							  r->start.z) < dist3(tempIntX,
-												  r->start.x,
-												  tempIntY,
-												  r->start.y,
-												  tempIntZ,
-												  r->start.z)) //If closer than previous
+				else if(dist3(sInt, r->start) < dist3(tempIntX, r->start.x, tempIntY, r->start.y, tempIntZ, r->start.z)) //If closer than previous
 				{
 					closestSphere = tempS;
 					sInt.x = tempIntX;

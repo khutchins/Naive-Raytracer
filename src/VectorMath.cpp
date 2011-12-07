@@ -29,9 +29,11 @@ double discrim(double a, double b, double c) //Discriminant
 	return b*b - 4*a*c;
 }
 
-double quadratic(double a, double b, double c) //Returns the smallest value that satisfies the quadratic equation
+double quadratic(double a, double b, double c) //Returns the smallest value (greater than zero) that satisfies the quadratic equation
 {
-	return (-1*b - sqrt(b*b - 4*a*c))/2/a;
+	double t1 = (-1*b - sqrt(b*b - 4*a*c))/2/a;
+	if (t1 > 0) return t1;
+	else return (-1*b + sqrt(b*b - 4*a*c))/2/a;
 }
 
 double quadratic2(double a, double b, double c) 

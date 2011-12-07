@@ -13,7 +13,7 @@ Cameras
 Point Lights
 
 Reflection and refraction do not work.
-Sphere lighting calculations do not work.
+Sphere diffuse lighting calculations somewhat work (dimmer than they should be).
 Plane diffusive lighting calculations appear to work.
 Point lights appear to work.
 Perspective and orthogonal cameras work.
