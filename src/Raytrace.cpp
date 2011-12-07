@@ -182,22 +182,23 @@ Color* raytrace(Ray* r, bool &light)
 	{
 		if(sDist < pDist && sDist < lDist && !light) //Sphere is closest
 		{
-			Color* llocal = new Color();
+			Color *llocal = new Color();
 			llocal->r = 0;
 			llocal->g = 0;
 			llocal->b = 0;
 
-			Color* reflect = new Color();
+			Color *reflect = new Color();
 			reflect->r = 0;
 			reflect->g = 0;
 			reflect->b = 0;
 
-			Color* refract = new Color();
+			Color *refract = new Color();
 			refract->r = 0;
 			refract->g = 0;
 			refract->b = 0;
 
 			Vector sphereNormal = closestS->calculateNormalForPoint(sInt);
+			norm(sphereNormal);
 
 			for(unsigned int i = 0; i < lightQ.size(); i++)
 			{
@@ -299,6 +300,10 @@ Color* raytrace(Ray* r, bool &light)
 			c->g = closestS->material.color.g * llocal->g * 255;
 			c->b = closestS->material.color.b * llocal->b * 255;
 			light = false;
+
+			delete llocal;
+			delete reflect;
+			delete refract;
 		}
 		else if( pDist < sDist && pDist < lDist && !light) //Plane is closest
 		{
@@ -480,6 +485,10 @@ Color* raytrace(Ray* r, bool &light)
 				}
 			}
 			light = false;
+
+			delete llocal;
+			delete reflect;
+			delete refract;
 		}
 		else if ( lDist < pDist && lDist < sDist ) //Light is closest
 		{
@@ -512,24 +521,10 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 		dist.z = tempS->center.z - r->start.z;
 
 		norm(dist.x,dist.y,dist.z);
-
-		double dotOC = dot3((r->start.x - tempS->center.x),
-							(r->start.x - tempS->center.x),
-							(r->start.y - tempS->center.y),
-							(r->start.y - tempS->center.y),
-							(r->start.z - tempS->center.z),
-							(r->start.z - tempS->center.z));
-
-		
-		//double a = 1;
-		double a = dot3(r->dir.x,r->dir.x,r->dir.y,r->dir.y,r->dir.z,r->dir.z);
-		double b = 2 * dot3(r->start.x - tempS->center.x,r->dir.x,r->start.y - tempS->center.y,r->dir.y,r->start.z - tempS->center.z,r->dir.z);
-		double c = dotOC - tempS->radius * tempS->radius;
-
-		//double a = r->dir.x * r->dir.x + r->dir.y * r->dir.y + r->dir.z * r->dir.z;
-		//double b = 2 * (r->dir.x*(r->start.x - tempS->center.x) + r->dir.y*(r->start.y - tempS->center.y) + r->dir.z*(r->start.z - tempS->center.z));
-		//double c = pow(tempS->center.x,2) + pow(tempS->center.y,2) + pow(tempS->center.z,2) + pow(r->start.x,2) + pow(r->start.y,2) + pow(r->start.z,2)
-		//		   - 2 * (tempS->center.x * r->start.x + tempS->center.y * r->start.y + tempS->center.z * r->start.z) - pow(tempS->radius,2);
+	
+		double a = magnitude(r->dir);
+		double b = 2 * dot3(r->start - tempS->center,r->dir);
+		double c = magnitude(r->start - tempS->center) - tempS->radius * tempS->radius;
 
 		double disc = discrim(a,b,c);
 
