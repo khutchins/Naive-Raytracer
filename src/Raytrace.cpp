@@ -258,25 +258,19 @@ Color* raytrace(Ray* r, bool &light)
 			}
 			if(closestS->material.reflection != 0) //If reflective, generate a reflective ray
 			{
-				//Calculate sphere normal
-				Vector sphereNorm;
-				sphereNorm.x = (sInt.x - closestS->center.x);
-				sphereNorm.y = (sInt.y - closestS->center.y);
-				sphereNorm.z = (sInt.z - closestS->center.z);
-				norm(sphereNorm.x,sphereNorm.y,sphereNorm.z);
-
-				//Calc angle of incidence
+				//Calc reflected vector
 				Vector reflectVec;
-				double angle = dot3(sphereNorm.x,r->dir.x,sphereNorm.y,r->dir.y,sphereNorm.z,r->dir.z);
-				reflectVec.x = -2 * angle * sphereNorm.x + r->dir.x;
-				reflectVec.y = -2 * angle * sphereNorm.y + r->dir.y;
-				reflectVec.z = -2 * angle * sphereNorm.z + r->dir.z;
+				double angle = dot3(sphereNormal,r->dir);
+				reflectVec.x = -2 * angle * sphereNormal.x + r->dir.x;
+				reflectVec.y = -2 * angle * sphereNormal.y + r->dir.y;
+				reflectVec.z = -2 * angle * sphereNormal.z + r->dir.z;
 
+				//Generate reflected ray
 				Ray reflectRay;
 				reflectRay.dir = reflectVec;
-				reflectRay.start.x = sInt.x;
-				reflectRay.start.y = sInt.y;
-				reflectRay.start.z = sInt.z;
+				reflectRay.start.x = sInt.x + 0.01 * reflectVec.x;
+				reflectRay.start.y = sInt.y + 0.01 * reflectVec.y;
+				reflectRay.start.z = sInt.z + 0.01 * reflectVec.z;
 
 				bool lig = false;
 				reflect = raytrace(&reflectRay,lig);
@@ -285,9 +279,9 @@ Color* raytrace(Ray* r, bool &light)
 			{
 				Ray refractRay;
 				refractRay.dir = r->dir;
-				refractRay.start.x = sInt.x + 0.1 * r->dir.x;
-				refractRay.start.y = sInt.y + 0.1 * r->dir.y;
-				refractRay.start.z = sInt.z + 0.1 * r->dir.z;
+				refractRay.start.x = sInt.x + 0.01 * r->dir.x;
+				refractRay.start.y = sInt.y + 0.01 * r->dir.y;
+				refractRay.start.z = sInt.z + 0.01 * r->dir.z;
 
 				bool lig = false;
 				refract = raytrace(&refractRay,lig);
@@ -379,6 +373,36 @@ Color* raytrace(Ray* r, bool &light)
 				}
 
 			}
+			if(closestP->material.reflection != 0) //If reflective, generate a reflective ray
+			{
+				//Calc reflected vector
+				Vector reflectVec;
+				double angle = dot3(closestP->normal,r->dir);
+				reflectVec.x = -2 * angle * closestP->normal.x + r->dir.x;
+				reflectVec.y = -2 * angle * closestP->normal.y + r->dir.y;
+				reflectVec.z = -2 * angle * closestP->normal.z + r->dir.z;
+
+				//Generate reflected ray
+				Ray reflectRay;
+				reflectRay.dir = reflectVec;
+				reflectRay.start.x = sInt.x + 0.01 * reflectVec.x;
+				reflectRay.start.y = sInt.y + 0.01 * reflectVec.y;
+				reflectRay.start.z = sInt.z + 0.01 * reflectVec.z;
+
+				bool lig = false;
+				reflect = raytrace(&reflectRay,lig);
+			}
+			if(closestP->material.transparency != 0) //If transparent, generate a refractive ray
+			{
+				Ray refractRay;
+				refractRay.dir = r->dir;
+				refractRay.start.x = sInt.x + 0.01 * r->dir.x;
+				refractRay.start.y = sInt.y + 0.01 * r->dir.y;
+				refractRay.start.z = sInt.z + 0.01 * r->dir.z;
+
+				bool lig = false;
+				refract = raytrace(&refractRay,lig);
+			}
 			if(closestP->hastexture) //If we need to map the texture onto the plane
 			{
 				BMP* temp;
@@ -469,20 +493,21 @@ Color* raytrace(Ray* r, bool &light)
 				pixelX %= width;
 				pixelY %= height;
 
-				c->r = temp->GetPixel(pixelX,pixelY).Red * llocal->r;
-				c->g = temp->GetPixel(pixelX,pixelY).Green * llocal->g;
-				c->b = temp->GetPixel(pixelX,pixelY).Blue * llocal->b;
-
+				//c->r = temp->GetPixel(pixelX,pixelY).Red * llocal->r;
+				//c->g = temp->GetPixel(pixelX,pixelY).Green * llocal->g;
+				//c->b = temp->GetPixel(pixelX,pixelY).Blue * llocal->b;
+				c->r = llocal->r * temp->GetPixel(pixelX,pixelY).Red + closestP->material.reflection * reflect->r + closestP->material.transparency * refract->r;
+				c->g = llocal->g * temp->GetPixel(pixelX,pixelY).Green + closestP->material.reflection * reflect->g + closestP->material.transparency * refract->g;
+				c->b = llocal->b * temp->GetPixel(pixelX,pixelY).Blue + closestP->material.reflection * reflect->b + closestP->material.transparency * refract->b;
 			}
 			else
 			{
-				c->r = closestP->material.color.r * llocal->r * 255;
-				c->g = closestP->material.color.g * llocal->g * 255;
-				c->b = closestP->material.color.b * llocal->b * 255;
-				if(c->b > 200) {
-					int x =5;
-					x++;
-				}
+				//c->r = closestP->material.color.r * llocal->r * 255;
+				//c->g = closestP->material.color.g * llocal->g * 255;
+				//c->b = closestP->material.color.b * llocal->b * 255;
+				c->r = llocal->r * closestP->material.color.r * 255 + closestP->material.reflection * reflect->r + closestP->material.transparency * refract->r;
+				c->g = llocal->g * closestP->material.color.g * 255 + closestP->material.reflection * reflect->g + closestP->material.transparency * refract->g;
+				c->b = llocal->b * closestP->material.color.b * 255 + closestP->material.reflection * reflect->b + closestP->material.transparency * refract->b;
 			}
 			light = false;
 
@@ -669,15 +694,15 @@ Light *findClosestLight(Ray *r, Point &lInt) {
 		//tempL->origin.x - r->start.x == 0 && r->dir.x != 0.  This only hits if all are zero. Assign zero
 		//tempL->origin.x - r->start.x != 0 && r->dir.x != 0.  This will hit at the point calculated.  Assign that t
 		Vector t; //Increments to each intercept. If they are roughly the same, we intersect the light
-		if(r->dir.x == 0 && abs(tempL->origin.x - r->start.x) < 0.001) t.x = std::numeric_limits<double>::infinity();
-		else if(r->dir.x == 0) t.x = std::numeric_limits<double>::quiet_NaN();
-		else t.x = (tempL->origin.x - r->start.x) / r->dir.x;
-		if(r->dir.y == 0 && abs(tempL->origin.y - r->start.y) < 0.001) t.y = std::numeric_limits<double>::infinity();
-		else if(r->dir.y == 0) t.y = std::numeric_limits<double>::quiet_NaN();
-		else t.y = (tempL->origin.y - r->start.y) / r->dir.y;
-		if(r->dir.z == 0 && abs(tempL->origin.z - r->start.z) < 0.001) t.z = std::numeric_limits<double>::infinity();
-		else if(r->dir.z == 0) t.z = std::numeric_limits<double>::quiet_NaN();
-		else t.z = (tempL->origin.z - r->start.z) / r->dir.z;
+		if(r->dir.x == 0 && abs(tempL->origin.x - r->start.x) < 0.001)	t.x = std::numeric_limits<double>::infinity();
+		else if(r->dir.x == 0)											t.x = std::numeric_limits<double>::quiet_NaN();
+		else															t.x = (tempL->origin.x - r->start.x) / r->dir.x;
+		if(r->dir.y == 0 && abs(tempL->origin.y - r->start.y) < 0.001)	t.y = std::numeric_limits<double>::infinity();
+		else if(r->dir.y == 0)											t.y = std::numeric_limits<double>::quiet_NaN();
+		else															t.y = (tempL->origin.y - r->start.y) / r->dir.y;
+		if(r->dir.z == 0 && abs(tempL->origin.z - r->start.z) < 0.001)	t.z = std::numeric_limits<double>::infinity();
+		else if(r->dir.z == 0)											t.z = std::numeric_limits<double>::quiet_NaN();
+		else															t.z = (tempL->origin.z - r->start.z) / r->dir.z;
 
 		bool txyEquiv = (abs(t.x-t.y) < 0.001) || t.x == std::numeric_limits<double>::infinity() || t.y == std::numeric_limits<double>::infinity();
 		bool tyzEquiv = (abs(t.y-t.z) < 0.001) || t.y == std::numeric_limits<double>::infinity() || t.z == std::numeric_limits<double>::infinity();
