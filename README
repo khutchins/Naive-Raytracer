@@ -1,0 +1,22 @@
+A naive, unfinished, (largely) uncommented, (very) basic raytracing system in C++.
+
+The main purposes of this project are to:
+A) Refresh and increase my knowledge of raytracing through the implementation of a raytracer.
+B) To become familiar with using git.
+
+As such, it is highly unlikely that you will gain any benefit from looking at this project.  You're welcome to look if you want though.
+
+It can encorporate the following elements:
+Planes
+Spheres
+Cameras
+Point Lights
+
+Reflection and refraction do not work.
+Sphere lighting calculations do not work.
+Plane lighting calculations somewhat work.
+Point lights appear to work.
+Perspective and orthogonal cameras work.
+There is very naive anti-aliasing in which each value is averaged with a weighted average across all adjacent values.  It essentially just blurs the image.
+
+This currently outputs two .bmp files for each camera in a scene: <scene_name><camera_number>.bmp and <scene_name><camera_number>_aa_naive.bmp
