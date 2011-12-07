@@ -167,6 +167,7 @@ Color* raytrace(Ray* r, bool &light)
 		}
 		else if( pDist < sDist && pDist < lDist && !light) //Plane is closest
 		{
+			Color* materialTexture;
 			Color* llocal = new Color();
 			Color* reflect = new Color();
 			Color* refract = new Color();
@@ -174,99 +175,13 @@ Color* raytrace(Ray* r, bool &light)
 			llocal = calculateLocalLighting(pInt,closestP->up,PLANE);
 			if(closestP->material.reflection != 0)	 reflect = calculateReflectedRay(*r,pInt,closestP->normal,PLANE);
 			if(closestP->material.transparency != 0) refract = calculateRefractedRay(*r, pInt, closestP->normal,PLANE);
-			if(closestP->hastexture) //If we need to map the texture onto the plane
+			if(closestP->hastexture) materialTexture = calculateTextureOnPlaneFromMaterial(closestP,pInt);
+
+			if(materialTexture)
 			{
-				BMP* temp;
-				temp = &closestP->texture;
-				int height = temp->TellHeight();
-				int width = temp->TellWidth();
-				double planeHeight = closestP->height;
-				double pixelSize = height / planeHeight; //Width and height of pixel on plane
-
-				Vector left = cross3(closestP->normal.x,closestP->up.x,closestP->normal.y,closestP->up.y,closestP->normal.z,closestP->up.z);
-
-				Vector upMid;
-				upMid.x = (closestP->up.x * closestP->height / 2) + closestP->center.x;
-				upMid.y = (closestP->up.y * closestP->height / 2) + closestP->center.y;
-				upMid.z = (closestP->up.z * closestP->height / 2) + closestP->center.z;
-
-				Vector upLeft;
-				upLeft.x = upMid.x + (left.x * closestP->width / 2);
-				upLeft.y = upMid.y + (left.y * closestP->width / 2);
-				upLeft.z = upMid.z + (left.z * closestP->width / 2);
-
-				Vector upRight;
-				upRight.x = upMid.x - (left.x * closestP->width / 2);
-				upRight.y = upMid.y - (left.y * closestP->width / 2);
-				upRight.z = upMid.z - (left.z * closestP->width / 2);
-
-				Vector botLeft;
-				botLeft.x = upLeft.x - (closestP->up.x * closestP->height);
-				botLeft.y = upLeft.y - (closestP->up.y * closestP->height);
-				botLeft.z = upLeft.z - (closestP->up.z * closestP->height);
-
-				Vector botRight;
-				botRight.x = upRight.x - (closestP->up.x * closestP->height);
-				botRight.y = upRight.y - (closestP->up.y * closestP->height);
-				botRight.z = upRight.z - (closestP->up.z * closestP->height);
-
-				Ray top;
-				top.dir.x = upLeft.x - upRight.x;
-				top.dir.y = upLeft.y - upRight.y;
-				top.dir.z = upLeft.z - upRight.z;
-				top.start.x = upLeft.x;
-				top.start.y = upLeft.y;
-				top.start.z = upLeft.z;
-
-				Ray side;
-				side.dir.x = upLeft.x - botLeft.x;
-				side.dir.y = upLeft.y - botLeft.y;
-				side.dir.z = upLeft.z - botLeft.z;
-				side.start.x = upLeft.x;
-				side.start.y = upLeft.y;
-				side.start.z = upLeft.z;
-				double heightPercentage = 0;
-				double widthPercentage = 0;
-
-				if(side.dir.x - top.dir.x != 0 && side.dir.x != 0)
-				{
-					double sideT = (pInt.x - side.start.x)/(side.dir.x - top.dir.x);
-					heightPercentage = sideT / side.dir.x;
-				}
-				else if(side.dir.y - top.dir.y != 0 && side.dir.y != 0)
-				{
-					double sideT = (pInt.y - side.start.y)/(side.dir.y - top.dir.y);
-					heightPercentage = sideT / side.dir.y;
-				}
-				else if(side.dir.z - top.dir.z != 0 && side.dir.z != 0)
-				{
-					double sideT = (pInt.z - side.start.z)/(side.dir.z - top.dir.z);
-					heightPercentage = sideT / side.dir.z;
-				}
-				if(top.dir.x - side.dir.x != 0 && top.dir.x != 0)
-				{
-					double topT = (pInt.x - top.start.x)/(top.dir.x - side.dir.x);
-					widthPercentage = topT / top.dir.x;
-				}
-				else if(top.dir.y - side.dir.y != 0 && top.dir.y != 0)
-				{
-					double topT = (pInt.y - top.start.y)/(top.dir.y - side.dir.y);
-					widthPercentage = topT / top.dir.y;
-				}
-				else if(top.dir.z - side.dir.z != 0 && top.dir.z != 0)
-				{
-					double topT = (pInt.z - top.start.z)/(top.dir.z - side.dir.z);
-					widthPercentage = topT / top.dir.z;
-				}
-				
-				int pixelX = abs((int)(widthPercentage * width) * 10);
-				int pixelY = abs((int)(heightPercentage * height) * 5);
-				pixelX %= width;
-				pixelY %= height;
-
-				c->r = llocal->r * temp->GetPixel(pixelX,pixelY).Red + closestP->material.reflection * reflect->r + closestP->material.transparency * refract->r;
-				c->g = llocal->g * temp->GetPixel(pixelX,pixelY).Green + closestP->material.reflection * reflect->g + closestP->material.transparency * refract->g;
-				c->b = llocal->b * temp->GetPixel(pixelX,pixelY).Blue + closestP->material.reflection * reflect->b + closestP->material.transparency * refract->b;
+				c->r = llocal->r * materialTexture->r * 255 + closestP->material.reflection * reflect->r + closestP->material.transparency * refract->r;
+				c->g = llocal->g * materialTexture->g * 255 + closestP->material.reflection * reflect->g + closestP->material.transparency * refract->g;
+				c->b = llocal->b * materialTexture->b * 255 + closestP->material.reflection * reflect->b + closestP->material.transparency * refract->b;
 			}
 			else
 			{
@@ -354,6 +269,99 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		delete lightRay;
 	}
 	return llocal;
+}
+
+Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
+	Color* materialColor = new Color();
+	BMP* temp;
+	temp = &plane->texture;
+	int height = temp->TellHeight();
+	int width = temp->TellWidth();
+	double planeHeight = plane->height;
+	double pixelSize = height / planeHeight; //Width and height of pixel on plane
+
+	Vector left = cross3(plane->normal,plane->up);
+
+	Vector upMid;
+	upMid.x = (plane->up.x * plane->height / 2) + plane->center.x;
+	upMid.y = (plane->up.y * plane->height / 2) + plane->center.y;
+	upMid.z = (plane->up.z * plane->height / 2) + plane->center.z;
+
+	Vector upLeft;
+	upLeft.x = upMid.x + (left.x * plane->width / 2);
+	upLeft.y = upMid.y + (left.y * plane->width / 2);
+	upLeft.z = upMid.z + (left.z * plane->width / 2);
+
+	Vector upRight;
+	upRight.x = upMid.x - (left.x * plane->width / 2);
+	upRight.y = upMid.y - (left.y * plane->width / 2);
+	upRight.z = upMid.z - (left.z * plane->width / 2);
+
+	Vector botLeft;
+	botLeft.x = upLeft.x - (plane->up.x * plane->height);
+	botLeft.y = upLeft.y - (plane->up.y * plane->height);
+	botLeft.z = upLeft.z - (plane->up.z * plane->height);
+
+	Vector botRight;
+	botRight.x = upRight.x - (plane->up.x * plane->height);
+	botRight.y = upRight.y - (plane->up.y * plane->height);
+	botRight.z = upRight.z - (plane->up.z * plane->height);
+
+	Ray top;
+	top.dir.x = upLeft.x - upRight.x;
+	top.dir.y = upLeft.y - upRight.y;
+	top.dir.z = upLeft.z - upRight.z;
+	top.start.x = upLeft.x;
+	top.start.y = upLeft.y;
+	top.start.z = upLeft.z;
+
+	Ray side;
+	side.dir.x = upLeft.x - botLeft.x;
+	side.dir.y = upLeft.y - botLeft.y;
+	side.dir.z = upLeft.z - botLeft.z;
+	side.start.x = upLeft.x;
+	side.start.y = upLeft.y;
+	side.start.z = upLeft.z;
+	double heightPercentage = 0;
+	double widthPercentage = 0;
+
+	if(side.dir.x - top.dir.x != 0 && side.dir.x != 0)
+	{
+		double sideT = (intercept.x - side.start.x)/(side.dir.x - top.dir.x);
+		heightPercentage = sideT / side.dir.x;
+	}
+	else if(side.dir.y - top.dir.y != 0 && side.dir.y != 0)
+	{
+		double sideT = (intercept.y - side.start.y)/(side.dir.y - top.dir.y);
+		heightPercentage = sideT / side.dir.y;
+	}
+	else if(side.dir.z - top.dir.z != 0 && side.dir.z != 0)
+	{
+		double sideT = (intercept.z - side.start.z)/(side.dir.z - top.dir.z);
+		heightPercentage = sideT / side.dir.z;
+	}
+	if(top.dir.x - side.dir.x != 0 && top.dir.x != 0)
+	{
+		double topT = (intercept.x - top.start.x)/(top.dir.x - side.dir.x);
+		widthPercentage = topT / top.dir.x;
+	}
+	else if(top.dir.y - side.dir.y != 0 && top.dir.y != 0)
+	{
+		double topT = (intercept.y - top.start.y)/(top.dir.y - side.dir.y);
+		widthPercentage = topT / top.dir.y;
+	}
+	else if(top.dir.z - side.dir.z != 0 && top.dir.z != 0)
+	{
+		double topT = (intercept.z - top.start.z)/(top.dir.z - side.dir.z);
+		widthPercentage = topT / top.dir.z;
+	}
+	
+	int pixelX = abs((int)(widthPercentage * width) * 10);
+	int pixelY = abs((int)(heightPercentage * height) * 5);
+	pixelX %= width;
+	pixelY %= height;
+	Color *matColor = new Color(temp->GetPixel(pixelX,pixelY).Red/255.f, temp->GetPixel(pixelX,pixelY).Green/255.f, temp->GetPixel(pixelX,pixelY).Blue/255.f);
+	return matColor;
 }
 
 //Calc reflected vector

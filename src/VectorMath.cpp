@@ -50,6 +50,10 @@ Vector cross3(double x1, double x2, double y1, double y2, double z1, double z2) 
 	return v;
 }
 
+Vector cross3(Vector v1, Vector v2) {
+	return cross3(v1.x,v2.x,v1.y,v2.y,v1.z,v2.z);
+}
+
 void norm(double &x, double &y, double &z) //Returns the normalized vector by reference
 {
 	if(x != 0 || y != 0 || z != 0)

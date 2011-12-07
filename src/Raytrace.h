@@ -36,6 +36,7 @@ typedef enum EntityID {
 Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id);
 Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);
 Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id);
+Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept);
 
 Plane* findClosestPlane(Ray *r, Point &pInt);
 Sphere* findClosestSphere(Ray *r, Point &sInt);

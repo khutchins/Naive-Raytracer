@@ -6,6 +6,7 @@ public:
     double r,g,b;        // Valid range 0-1
 
 	Color();
+	Color(double r, double g, double b);
 } Color;
 
 #endif
