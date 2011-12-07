@@ -3,10 +3,10 @@
 
 #include "Vector.h"
 
-typedef struct _Point {
+typedef struct Point {
     double x,y,z;
-	Vector operator+(_Point right);
-	Vector operator-(_Point right);
+	Vector operator+(Point right);
+	Vector operator-(Point right);
 } Point;
 
 #endif

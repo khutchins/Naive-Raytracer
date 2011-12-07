@@ -14,13 +14,7 @@ double zmaxG = 1000;
 bool aa = false;
 int cameraNum = 0;
 
-enum {
-	SPHERE,
-	PLANE,
-	NONE
-};
-
-int lastProc = NONE;
+EntityID lastProc = NONE;
 
 int main(int argc, char * argv[])
 {
@@ -120,11 +114,7 @@ int main(int argc, char * argv[])
 
 Color* raytrace(Ray* r, bool &light)
 {
-	if(lastProc == PLANE && r->start.y < -3.612 && r->start.y > -3.613 && r->start.x >= 4.95 && r->start.x < 4.951) {
-		int x = 0;
-		x++;
-	}
-	Color* c = new Color;
+	Color* c = new Color();
 
 	//find nearest intersection
 	Sphere* closestS = NULL;
@@ -137,162 +127,38 @@ Color* raytrace(Ray* r, bool &light)
 	closestS = findClosestSphere(r, sInt);
 	closestP = findClosestPlane(r, pInt);
 	closestL = findClosestLight(r, lInt);
-
-	if(lastProc == SPHERE && closestS) {
-		findClosestSphere(r, sInt); 
-		findClosestLight(r,lInt);
-		int x = sphereQ.size();
-		int y = x+5;
-		y++;
-	}
 	
-	//Set default color values
-	c->r = 0;
-	c->g = 0;
-	c->b = 0;
-
 	double sDist;
-	if(closestS)
-		sDist = dist3(sInt.x,r->start.x,sInt.y,r->start.y,sInt.z,r->start.z);
-	else
-		sDist = numeric_limits<double>::max();
+	if(closestS)	sDist = dist3(sInt.x,r->start.x,sInt.y,r->start.y,sInt.z,r->start.z);
+	else			sDist = numeric_limits<double>::max();
 
 	double pDist;
-	if(closestP)
-		pDist = dist3(pInt.x,r->start.x,pInt.y,r->start.y,pInt.z,r->start.z);
-	else
-		pDist = numeric_limits<double>::max();
+	if(closestP)	pDist = dist3(pInt.x,r->start.x,pInt.y,r->start.y,pInt.z,r->start.z);
+	else			pDist = numeric_limits<double>::max();
 
 	double lDist;
-	if(closestL)
-		lDist = dist3(lInt.x,r->start.x,lInt.y,r->start.y,lInt.z,r->start.z);
-	else
-		lDist = numeric_limits<double>::max();
+	if(closestL)	lDist = dist3(lInt.x,r->start.x,lInt.y,r->start.y,lInt.z,r->start.z);
+	else			lDist = numeric_limits<double>::max();
 
-	//If no entities found
-	if(sDist == numeric_limits<double>::max() && pDist == numeric_limits<double>::max() && lDist == numeric_limits<double>::max())
-	{
-		c->r = 0;
-		c->g = 0;
-		c->b = 0;
-	}
-
-	//Find the closest entity
-	else 
+	//If >=1 entity found
+	if(sDist != numeric_limits<double>::max() || pDist != numeric_limits<double>::max() || lDist != numeric_limits<double>::max())
 	{
 		if(sDist < pDist && sDist < lDist && !light) //Sphere is closest
 		{
 			Color *llocal = new Color();
-			llocal->r = 0;
-			llocal->g = 0;
-			llocal->b = 0;
-
 			Color *reflect = new Color();
-			reflect->r = 0;
-			reflect->g = 0;
-			reflect->b = 0;
-
 			Color *refract = new Color();
-			refract->r = 0;
-			refract->g = 0;
-			refract->b = 0;
 
 			Vector sphereNormal = closestS->calculateNormalForPoint(sInt);
 			norm(sphereNormal);
 
-			for(unsigned int i = 0; i < lightQ.size(); i++)
-			{
-				Light* l = lightQ.front();
-				lightQ.pop();
-
-				Ray* lightRay = new Ray();
-				bool lig = true;
-
-				Point lStart;
-				lStart.x = sInt.x + 0.01 * (l->origin.x - sInt.x);
-				lStart.y = sInt.y + 0.01 * (l->origin.y - sInt.y);
-				lStart.z = sInt.z + 0.01 * (l->origin.z - sInt.z);
-
-				Vector lDir;
-				lDir.x = l->origin.x - lStart.x;
-				lDir.y = l->origin.y - lStart.y;
-				lDir.z = l->origin.z - lStart.z;
-
-				lightRay->dir = lDir;
-				lightRay->start = lStart;
-
-				lightQ.push(l);
-
-				lastProc = SPHERE;
-				Color* receivedColor = raytrace(lightRay,lig);
-				lastProc = NONE;
-
-				if(lig) //We see the light from the point
-				{
-					//Direction from the light source to the plane.  Used for calculating lambert
-					Vector lToSphere;
-					lToSphere.x = -1*lDir.x;
-					lToSphere.y = -1*lDir.y;
-					lToSphere.z = -1*lDir.z;
-
-					norm(lToSphere);
-
-					receivedColor->r /= 255.f;
-					receivedColor->g /= 255.f;
-					receivedColor->b /= 255.f;
-
-					double lightSourceIntensity =-1* cosAngle(lToSphere,sphereNormal);
-					if(lightSourceIntensity < 0) lightSourceIntensity = 0;
-					//double lightSourceIntensity = 1;
-					llocal->r += receivedColor->r * lightSourceIntensity;
-					llocal->g += receivedColor->g * lightSourceIntensity;
-					llocal->b += receivedColor->b * lightSourceIntensity;
-					if(llocal->r > 1)
-						llocal->r = 1;
-					if(llocal->g > 1)
-						llocal->g = 1;
-					if(llocal->b > 1)
-						llocal->b = 1;
-				}
-
-			}
-			if(closestS->material.reflection != 0) //If reflective, generate a reflective ray
-			{
-				//Calc reflected vector
-				Vector reflectVec;
-				double angle = dot3(sphereNormal,r->dir);
-				reflectVec.x = -2 * angle * sphereNormal.x + r->dir.x;
-				reflectVec.y = -2 * angle * sphereNormal.y + r->dir.y;
-				reflectVec.z = -2 * angle * sphereNormal.z + r->dir.z;
-
-				//Generate reflected ray
-				Ray reflectRay;
-				reflectRay.dir = reflectVec;
-				reflectRay.start.x = sInt.x + 0.01 * reflectVec.x;
-				reflectRay.start.y = sInt.y + 0.01 * reflectVec.y;
-				reflectRay.start.z = sInt.z + 0.01 * reflectVec.z;
-
-				bool lig = false;
-				reflect = raytrace(&reflectRay,lig);
-			}
-			if(closestS->material.transparency != 0) //If transparent, generate a refractive ray
-			{
-				Ray refractRay;
-				refractRay.dir = r->dir;
-				refractRay.start.x = sInt.x + 0.01 * r->dir.x;
-				refractRay.start.y = sInt.y + 0.01 * r->dir.y;
-				refractRay.start.z = sInt.z + 0.01 * r->dir.z;
-
-				bool lig = false;
-				refract = raytrace(&refractRay,lig);
-			}
-			
-			//c->r = llocal->r * closestS->material.color.r + closestS->material.reflection * reflect->r + closestS->material.transparency * refract->r;
-			//c->g = llocal->g * closestS->material.color.g + closestS->material.reflection * reflect->g + closestS->material.transparency * refract->g;
-			//c->b = llocal->b * closestS->material.color.b + closestS->material.reflection * reflect->b + closestS->material.transparency * refract->b;
-			c->r = closestS->material.color.r * llocal->r * 255;
-			c->g = closestS->material.color.g * llocal->g * 255;
-			c->b = closestS->material.color.b * llocal->b * 255;
+			llocal = calculateLocalLighting(sInt,sphereNormal,SPHERE);
+			if(closestS->material.reflection != 0)	 reflect = calculateReflectedRay(*r,sInt,sphereNormal,SPHERE);
+			if(closestS->material.transparency != 0) refract = calculateRefractedRay(*r,sInt,sphereNormal,SPHERE);
+						
+			c->r = closestS->material.color.r * llocal->r * 255 + closestS->material.reflection * reflect->r + closestS->material.transparency * refract->r;
+			c->g = closestS->material.color.g * llocal->g * 255 + closestS->material.reflection * reflect->g + closestS->material.transparency * refract->g;
+			c->b = closestS->material.color.b * llocal->b * 255 + closestS->material.reflection * reflect->b + closestS->material.transparency * refract->b;
 			light = false;
 
 			delete llocal;
@@ -302,107 +168,12 @@ Color* raytrace(Ray* r, bool &light)
 		else if( pDist < sDist && pDist < lDist && !light) //Plane is closest
 		{
 			Color* llocal = new Color();
-			llocal->r = 0;
-			llocal->g = 0;
-			llocal->b = 0;
-
 			Color* reflect = new Color();
-			reflect->r = 0;
-			reflect->g = 0;
-			reflect->b = 0;
-
 			Color* refract = new Color();
-			refract->r = 0;
-			refract->g = 0;
-			refract->b = 0;
 
-			for(unsigned int i = 0; i < lightQ.size(); i++)
-			{
-				Light* l = lightQ.front();
-				lightQ.pop();
-
-				Ray* lightRay = new Ray();
-				bool lig = true;
-
-				//Start of the ray (moved a bit so we won't intercept the plane)
-				Point lStart;
-				lStart.x = pInt.x + 0.01 * (l->origin.x - pInt.x);
-				lStart.y = pInt.y + 0.01 * (l->origin.y - pInt.y);
-				lStart.z = pInt.z + 0.01 * (l->origin.z - pInt.z);
-
-				//Direction from the plane *to* the light source
-				Vector lDir;
-				lDir.x = l->origin.x - lStart.x;
-				lDir.y = l->origin.y - lStart.y;
-				lDir.z = l->origin.z - lStart.z;
-
-				lightRay->dir = lDir;
-				lightRay->start = lStart;
-
-				lightQ.push(l);
-
-				lastProc = PLANE;
-				Color* receivedColor = raytrace(lightRay,lig);
-				lastProc = NONE;
-
-				if(lig) //We see the light from the point
-				{
-					//Direction from the light source to the plane.  Used for calculating lambert
-					Vector lToPlane;
-					lToPlane.x = -1*lDir.x;
-					lToPlane.y = -1*lDir.y;
-					lToPlane.z = -1*lDir.z;
-
-					norm(lToPlane);
-
-					receivedColor->r /= 255.f;
-					receivedColor->g /= 255.f;
-					receivedColor->b /= 255.f;
-
-					double lightSourceIntensity =-1* cosAngle(lToPlane,closestP->normal);
-					if(lightSourceIntensity < 0) lightSourceIntensity = 0;
-					llocal->r += receivedColor->r * lightSourceIntensity;
-					llocal->g += receivedColor->g * lightSourceIntensity;
-					llocal->b += receivedColor->b * lightSourceIntensity;
-					if(llocal->r > 1)
-						llocal->r = 1;
-					if(llocal->g > 1)
-						llocal->g = 1;
-					if(llocal->b > 1)
-						llocal->b = 1;
-				}
-
-			}
-			if(closestP->material.reflection != 0) //If reflective, generate a reflective ray
-			{
-				//Calc reflected vector
-				Vector reflectVec;
-				double angle = dot3(closestP->normal,r->dir);
-				reflectVec.x = -2 * angle * closestP->normal.x + r->dir.x;
-				reflectVec.y = -2 * angle * closestP->normal.y + r->dir.y;
-				reflectVec.z = -2 * angle * closestP->normal.z + r->dir.z;
-
-				//Generate reflected ray
-				Ray reflectRay;
-				reflectRay.dir = reflectVec;
-				reflectRay.start.x = sInt.x + 0.01 * reflectVec.x;
-				reflectRay.start.y = sInt.y + 0.01 * reflectVec.y;
-				reflectRay.start.z = sInt.z + 0.01 * reflectVec.z;
-
-				bool lig = false;
-				reflect = raytrace(&reflectRay,lig);
-			}
-			if(closestP->material.transparency != 0) //If transparent, generate a refractive ray
-			{
-				Ray refractRay;
-				refractRay.dir = r->dir;
-				refractRay.start.x = sInt.x + 0.01 * r->dir.x;
-				refractRay.start.y = sInt.y + 0.01 * r->dir.y;
-				refractRay.start.z = sInt.z + 0.01 * r->dir.z;
-
-				bool lig = false;
-				refract = raytrace(&refractRay,lig);
-			}
+			llocal = calculateLocalLighting(pInt,closestP->up,PLANE);
+			if(closestP->material.reflection != 0)	 reflect = calculateReflectedRay(*r,pInt,closestP->normal,PLANE);
+			if(closestP->material.transparency != 0) refract = calculateRefractedRay(*r, pInt, closestP->normal,PLANE);
 			if(closestP->hastexture) //If we need to map the texture onto the plane
 			{
 				BMP* temp;
@@ -493,18 +264,12 @@ Color* raytrace(Ray* r, bool &light)
 				pixelX %= width;
 				pixelY %= height;
 
-				//c->r = temp->GetPixel(pixelX,pixelY).Red * llocal->r;
-				//c->g = temp->GetPixel(pixelX,pixelY).Green * llocal->g;
-				//c->b = temp->GetPixel(pixelX,pixelY).Blue * llocal->b;
 				c->r = llocal->r * temp->GetPixel(pixelX,pixelY).Red + closestP->material.reflection * reflect->r + closestP->material.transparency * refract->r;
 				c->g = llocal->g * temp->GetPixel(pixelX,pixelY).Green + closestP->material.reflection * reflect->g + closestP->material.transparency * refract->g;
 				c->b = llocal->b * temp->GetPixel(pixelX,pixelY).Blue + closestP->material.reflection * reflect->b + closestP->material.transparency * refract->b;
 			}
 			else
 			{
-				//c->r = closestP->material.color.r * llocal->r * 255;
-				//c->g = closestP->material.color.g * llocal->g * 255;
-				//c->b = closestP->material.color.b * llocal->b * 255;
 				c->r = llocal->r * closestP->material.color.r * 255 + closestP->material.reflection * reflect->r + closestP->material.transparency * refract->r;
 				c->g = llocal->g * closestP->material.color.g * 255 + closestP->material.reflection * reflect->g + closestP->material.transparency * refract->g;
 				c->b = llocal->b * closestP->material.color.b * 255 + closestP->material.reflection * reflect->b + closestP->material.transparency * refract->b;
@@ -526,12 +291,104 @@ Color* raytrace(Ray* r, bool &light)
 		else light = false;
 	}
 
-	if(lastProc == NONE && c->r == 255 && c->g == 0 && c->b == 0 && cameraNum == 3) {
-		int x = 5;
-		x++;
-	}
-
 	return c;
+}
+
+Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
+	Color* llocal = new Color();
+	for(unsigned int i = 0; i < lightQ.size(); i++)
+	{
+		Light* l = lightQ.front();
+		lightQ.pop();
+
+		Ray* lightRay = new Ray();
+		bool lig = true;
+
+		//Start of the ray (moved a bit so we won't intercept the object)
+		Point lStart;
+		lStart.x = intercept.x + 0.01 * (l->origin.x - intercept.x);
+		lStart.y = intercept.y + 0.01 * (l->origin.y - intercept.y);
+		lStart.z = intercept.z + 0.01 * (l->origin.z - intercept.z);
+
+		//Direction from the object *to* the light source
+		Vector lDir;
+		lDir.x = l->origin.x - lStart.x;
+		lDir.y = l->origin.y - lStart.y;
+		lDir.z = l->origin.z - lStart.z;
+
+		lightRay->dir = lDir;
+		lightRay->start = lStart;
+
+		lightQ.push(l);
+
+		lastProc = id;
+		Color* receivedColor = raytrace(lightRay,lig);
+		lastProc = NONE;
+
+		if(lig) //We see the light from the point
+		{
+			//Direction from the light source to the plane.  Used for calculating lambert
+			Vector lToObject;
+			lToObject.x = -1*lDir.x;
+			lToObject.y = -1*lDir.y;
+			lToObject.z = -1*lDir.z;
+
+			norm(lToObject);
+
+			receivedColor->r /= 255.f;
+			receivedColor->g /= 255.f;
+			receivedColor->b /= 255.f;
+
+			double lightSourceIntensity = -1*cosAngle(lToObject,normal);
+			if(lightSourceIntensity < 0) lightSourceIntensity = 0;
+			llocal->r += receivedColor->r * lightSourceIntensity;
+			llocal->g += receivedColor->g * lightSourceIntensity;
+			llocal->b += receivedColor->b * lightSourceIntensity;
+			if(llocal->r > 1)
+				llocal->r = 1;
+			if(llocal->g > 1)
+				llocal->g = 1;
+			if(llocal->b > 1)
+				llocal->b = 1;
+		}
+		delete lightRay;
+	}
+	return llocal;
+}
+
+//Calc reflected vector
+Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
+	Vector reflectVec;
+	double angle = dot3(normal,r.dir);
+	reflectVec.x = -2 * angle * normal.x + r.dir.x;
+	reflectVec.y = -2 * angle * normal.y + r.dir.y;
+	reflectVec.z = -2 * angle * normal.z + r.dir.z;
+
+	//Generate reflected ray
+	Ray reflectRay;
+	reflectRay.dir = reflectVec;
+	reflectRay.start.x = intercept.x + 0.01 * reflectVec.x;
+	reflectRay.start.y = intercept.y + 0.01 * reflectVec.y;
+	reflectRay.start.z = intercept.z + 0.01 * reflectVec.z;
+
+	bool lig = false;
+	lastProc = id;
+	return raytrace(&reflectRay,lig);
+	lastProc = NONE;
+}
+
+//Calc refracted vector
+Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
+	Ray refractRay;
+	refractRay.dir = r.dir;
+	refractRay.start.x = intercept.x + 0.01 * r.dir.x;
+	refractRay.start.y = intercept.y + 0.01 * r.dir.y;
+	refractRay.start.z = intercept.z + 0.01 * r.dir.z;
+
+	bool lig = false;
+	lastProc = id;
+	return raytrace(&refractRay,lig);
+	lastProc = NONE;
 }
 
 Sphere *findClosestSphere(Ray *r, Point &sInt) {
@@ -743,7 +600,7 @@ Light *findClosestLight(Ray *r, Point &lInt) {
 
 Camera* makeCamera(ifstream &f)
 {
-	_Camera* c = new _Camera();
+	Camera* c = new Camera();
 
 	while(!f.eof())
 	{
@@ -862,7 +719,7 @@ Camera* makeCamera(ifstream &f)
 
 Light* makeLight(ifstream &f)
 {
-	_Light* l = new _Light();
+	Light* l = new Light();
 
 	while(!f.eof())
 	{
@@ -925,7 +782,7 @@ Light* makeLight(ifstream &f)
 
 Plane* makePlane(ifstream &f)
 {
-	_Plane* p = new _Plane();
+	Plane* p = new Plane();
 	p->hastexture = false;
 
 	while(!f.eof())
@@ -1055,7 +912,7 @@ Plane* makePlane(ifstream &f)
 
 Sphere* makeSphere(ifstream &f)
 {
-	_Sphere* s = new _Sphere();
+	Sphere* s = new Sphere();
 
 	while(!f.eof())
 	{

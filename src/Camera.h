@@ -3,7 +3,7 @@
 
 #include "Point.h"
 
-typedef struct _Camera {
+typedef struct Camera {
     Point origin;
     Point direction;
     Point up;

@@ -5,7 +5,7 @@
 #include "Material.h"
 #include "EasyBMP\EasyBMP.h"
 
-typedef struct _Plane {
+typedef struct Plane {
     Point center;
     Vector normal;
     Vector up;

@@ -7,7 +7,7 @@
 #include "Vector.h"
 #include "Point.h"
 
-typedef struct _Sphere {
+typedef struct Sphere {
     Point center;
     Material material;
     double radius;

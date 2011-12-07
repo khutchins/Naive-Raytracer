@@ -3,7 +3,7 @@
 
 #include "Color.h"
 
-typedef struct _Material {
+typedef struct Material {
     Color color;
     double reflection;   // Valid range 0-1
     double transparency; // Valid range 0-1

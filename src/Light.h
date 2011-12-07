@@ -4,7 +4,7 @@
 #include "Point.h"
 #include "Color.h"
 
-typedef struct _Light {
+typedef struct Light {
     Point origin;
     Color color;
 } Light;

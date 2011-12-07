@@ -25,9 +25,21 @@ using namespace std;
 #define W 320
 #define H 240
 
-Plane *findClosestPlane(Ray *r, Point &pInt);
-Sphere *findClosestSphere(Ray *r, Point &sInt);
-Light *findClosestLight(Ray *r, Point &lInt);
+typedef enum EntityID {
+	SPHERE,
+	PLANE,
+	CAMERA,
+	LIGHT,
+	NONE
+};
+
+Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id);
+Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);
+Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id);
+
+Plane* findClosestPlane(Ray *r, Point &pInt);
+Sphere* findClosestSphere(Ray *r, Point &sInt);
+Light* findClosestLight(Ray *r, Point &lInt);
 
 Camera* makeCamera(ifstream &f);
 Light* makeLight(ifstream &f);
