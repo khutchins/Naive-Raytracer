@@ -4,11 +4,15 @@
 #include "Point.h"
 #include "Material.h"
 #include "Color.h"
+#include "Vector.h"
+#include "Point.h"
 
 typedef struct _Sphere {
     Point center;
     Material material;
     double radius;
+
+	Vector calculateNormalForPoint(Point p);
 } Sphere;
 
 #endif

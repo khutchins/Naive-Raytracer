@@ -7,8 +7,8 @@
 
 typedef struct _Plane {
     Point center;
-    Point normal;
-    Point up;
+    Vector normal;
+    Vector up;
     double width;
     double height;
     bool hastexture;

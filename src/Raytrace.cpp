@@ -197,6 +197,8 @@ Color* raytrace(Ray* r, bool &light)
 			refract->g = 0;
 			refract->b = 0;
 
+			Vector sphereNormal = closestS->calculateNormalForPoint(sInt);
+
 			for(unsigned int i = 0; i < lightQ.size(); i++)
 			{
 				Light* l = lightQ.front();
@@ -221,14 +223,29 @@ Color* raytrace(Ray* r, bool &light)
 				lightQ.push(l);
 
 				lastProc = SPHERE;
-				Color* temp = raytrace(lightRay,lig);
+				Color* receivedColor = raytrace(lightRay,lig);
 				lastProc = NONE;
 
 				if(lig) //We see the light from the point
 				{
-					llocal->r += temp->r / 255.0;
-					llocal->g += temp->g / 255.0;
-					llocal->b += temp->b / 255.0;
+					//Direction from the light source to the plane.  Used for calculating lambert
+					Vector lToSphere;
+					lToSphere.x = -1*lDir.x;
+					lToSphere.y = -1*lDir.y;
+					lToSphere.z = -1*lDir.z;
+
+					norm(lToSphere);
+
+					receivedColor->r /= 255.f;
+					receivedColor->g /= 255.f;
+					receivedColor->b /= 255.f;
+
+					//double lightSourceIntensity =-1* cosAngle(lToSphere,sphereNormal);
+					//if(lightSourceIntensity < 0) lightSourceIntensity = 0;
+					double lightSourceIntensity = 1;
+					llocal->r += receivedColor->r * lightSourceIntensity;
+					llocal->g += receivedColor->g * lightSourceIntensity;
+					llocal->b += receivedColor->b * lightSourceIntensity;
 					if(llocal->r > 1)
 						llocal->r = 1;
 					if(llocal->g > 1)
@@ -308,11 +325,13 @@ Color* raytrace(Ray* r, bool &light)
 				Ray* lightRay = new Ray();
 				bool lig = true;
 
+				//Start of the ray (moved a bit so we won't intercept the plane)
 				Point lStart;
 				lStart.x = pInt.x + 0.01 * (l->origin.x - pInt.x);
 				lStart.y = pInt.y + 0.01 * (l->origin.y - pInt.y);
 				lStart.z = pInt.z + 0.01 * (l->origin.z - pInt.z);
 
+				//Direction from the plane *to* the light source
 				Vector lDir;
 				lDir.x = l->origin.x - lStart.x;
 				lDir.y = l->origin.y - lStart.y;
@@ -324,18 +343,28 @@ Color* raytrace(Ray* r, bool &light)
 				lightQ.push(l);
 
 				lastProc = PLANE;
-				Color* temp = raytrace(lightRay,lig);
+				Color* receivedColor = raytrace(lightRay,lig);
 				lastProc = NONE;
 
-				if(!lig) {
-					int x = 0;
-					x++;
-				}
 				if(lig) //We see the light from the point
 				{
-					llocal->r += temp->r / 255.0;
-					llocal->g += temp->g / 255.0;
-					llocal->b += temp->b / 255.0;
+					//Direction from the light source to the plane.  Used for calculating lambert
+					Vector lToPlane;
+					lToPlane.x = -1*lDir.x;
+					lToPlane.y = -1*lDir.y;
+					lToPlane.z = -1*lDir.z;
+
+					norm(lToPlane);
+
+					receivedColor->r /= 255.f;
+					receivedColor->g /= 255.f;
+					receivedColor->b /= 255.f;
+
+					double lightSourceIntensity =-1* cosAngle(lToPlane,closestP->normal);
+					if(lightSourceIntensity < 0) lightSourceIntensity = 0;
+					llocal->r += receivedColor->r * lightSourceIntensity;
+					llocal->g += receivedColor->g * lightSourceIntensity;
+					llocal->b += receivedColor->b * lightSourceIntensity;
 					if(llocal->r > 1)
 						llocal->r = 1;
 					if(llocal->g > 1)
@@ -947,12 +976,14 @@ Plane* makePlane(ifstream &f)
 				p->normal.x = num1;
 				p->normal.y = num2;
 				p->normal.z = num3;
+				norm(p->normal);
 			}
 			else if(word == "up")
 			{
 				p->up.x = num1;
 				p->up.y = num2;
 				p->up.z = num3;
+				norm(p->up);
 			}
 		}
 

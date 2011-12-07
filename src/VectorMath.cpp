@@ -6,6 +6,9 @@ double dot3(double x1,double x2,double y1,double y2,double z1,double z2) //Dot p
 {
 	return x1*x2 + y1*y2 + z1*z2;
 }
+double dot3(Vector v1, Vector v2) {
+	return dot3(v1.x,v2.x,v1.y,v2.y,v1.z,v2.z);
+}
 
 double dot2(double x1,double x2,double y1,double y2) //Dot product for 2D
 {
@@ -54,4 +57,21 @@ void norm(double &x, double &y, double &z) //Returns the normalized vector by re
 		y /= n;
 		z /= n;
 	}
+}
+
+void norm(Vector &v) //Returns the normalized vector by reference
+{
+	norm(v.x,v.y,v.z);
+}
+
+double magnitude(Vector v) { //Returns the magnitude of a vector
+	return dot3(v,v);
+}
+
+double cosAngle(Vector v1, Vector v2) { //Returns cos(angle) between two vectors
+	return dot3(v1,v2)/magnitude(v1)/magnitude(v2);
+}
+
+double angle(Vector v1, Vector v2) { //Returns the angle between two vectors
+	return acos(cosAngle(v1,v2));
 }
