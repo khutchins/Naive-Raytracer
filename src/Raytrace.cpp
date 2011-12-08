@@ -127,7 +127,7 @@ Color* raytrace(Ray* r, bool &light)
 	closestS = findClosestSphere(r, sInt);
 	closestP = findClosestPlane(r, pInt);
 	closestL = findClosestLight(r, lInt);
-	
+
 	double sDist;
 	if(closestS)	sDist = dist3(sInt.x,r->start.x,sInt.y,r->start.y,sInt.z,r->start.z);
 	else			sDist = numeric_limits<double>::max();
@@ -405,6 +405,8 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 	{
 		Sphere* tempS = sphereQ.front();
 		sphereQ.pop();
+		sphereQ.push(tempS);
+
 		Vector dist;
 		dist.x = tempS->center.x - r->start.x;
 		dist.y = tempS->center.y - r->start.y;
@@ -445,8 +447,6 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 				}
 			}
 		}
-
-		sphereQ.push(tempS);
 	}
 
 	return closestSphere;
@@ -458,6 +458,7 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 	{
 		Plane* tempP = planeQ.front();
 		planeQ.pop();
+		planeQ.push(tempP);
 
 		double dot = dot3(tempP->normal.x,r->dir.x,tempP->normal.y,r->dir.y,tempP->normal.z,r->dir.z);
 
@@ -540,8 +541,6 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 				}
 			}
 		}
-
-		planeQ.push(tempP);
 	}
 	return closestPlane;
 }
@@ -552,6 +551,7 @@ Light *findClosestLight(Ray *r, Point &lInt) {
 	{
 		Light* tempL = lightQ.front();
 		lightQ.pop();
+		lightQ.push(tempL);
 		
 		//Four cases here
 		//tempL->origin.x - r->start.x == 0 && r->dir.x == 0.  This is fine, they intersect at all points.  Assign infinity
@@ -568,6 +568,9 @@ Light *findClosestLight(Ray *r, Point &lInt) {
 		if(r->dir.z == 0 && abs(tempL->origin.z - r->start.z) < 0.001)	t.z = std::numeric_limits<double>::infinity();
 		else if(r->dir.z == 0)											t.z = std::numeric_limits<double>::quiet_NaN();
 		else															t.z = (tempL->origin.z - r->start.z) / r->dir.z;
+
+		//if light is behind the camera, go to the next one
+		if(t.x < 0 || t.y < 0 || t.z < 0) continue;
 
 		bool txyEquiv = (abs(t.x-t.y) < 0.001) || t.x == std::numeric_limits<double>::infinity() || t.y == std::numeric_limits<double>::infinity();
 		bool tyzEquiv = (abs(t.y-t.z) < 0.001) || t.y == std::numeric_limits<double>::infinity() || t.z == std::numeric_limits<double>::infinity();
@@ -600,8 +603,6 @@ Light *findClosestLight(Ray *r, Point &lInt) {
 				lInt.z = tempL->origin.z;
 			}
 		}
-
-		lightQ.push(tempL);
 	}
 	return closestLight;
 }
