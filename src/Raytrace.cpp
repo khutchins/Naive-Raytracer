@@ -167,7 +167,7 @@ Color* raytrace(Ray* r, bool &light)
 		}
 		else if( pDist < sDist && pDist < lDist && !light) //Plane is closest
 		{
-			Color* materialTexture;
+			Color* materialTexture = NULL;
 			Color* llocal = new Color();
 			Color* reflect = new Color();
 			Color* refract = new Color();
@@ -244,9 +244,9 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		{
 			//Direction from the light source to the plane.  Used for calculating lambert
 			Vector lToObject;
-			lToObject.x = -1*lDir.x;
-			lToObject.y = -1*lDir.y;
-			lToObject.z = -1*lDir.z;
+			lToObject.x = 1*lDir.x;
+			lToObject.y = 1*lDir.y;
+			lToObject.z = 1*lDir.z;
 
 			norm(lToObject);
 
@@ -254,7 +254,7 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 			receivedColor->g /= 255.f;
 			receivedColor->b /= 255.f;
 
-			double lightSourceIntensity = -1*cosAngle(lToObject,normal);
+			double lightSourceIntensity = cosAngle(lToObject,normal);
 			if(lightSourceIntensity < 0) lightSourceIntensity = 0;
 			llocal->r += receivedColor->r * lightSourceIntensity;
 			llocal->g += receivedColor->g * lightSourceIntensity;
