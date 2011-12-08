@@ -45,44 +45,40 @@ int main(int argc, char * argv[])
 			{
 				double height = c->width * aspect; //Height of image plane
 				double width = c->width; //Width of image plane
-				bool pers = c->perspective; //False if orthogonal, true if perspective
+				bool isPerspective = c->perspective; //False if orthogonal, true if perspective
 
 				double uc = -1*width/2 + width/2 * 2*x/W;
 				double vr = -1*height/2 + height/2 * 2*y/H;
 
-				norm(c->direction.x,c->direction.y,c->direction.z);
-				norm(c->up.x,c->up.y,c->up.z);
+				norm(c->direction);
+				norm(c->up);
 
-				Vector vLeft = cross3(c->direction.x,c->up.x,c->direction.y,c->up.y,c->direction.z,c->up.z); 
+				Vector vLeft = cross3(c->direction,c->up); 
 
-				Point pP; //Point on the image plane
+				Point pPointOnImagePlane; //Point on the image plane
 				
-				pP.x = c->origin.x + c->zmin * c->direction.x + uc * vLeft.x + vr * c->up.x;
-				pP.y = c->origin.y + c->zmin * c->direction.y + uc * vLeft.y + vr * c->up.y;
-				pP.z = c->origin.z + c->zmin * c->direction.z + uc * vLeft.z + vr * c->up.z;
+				pPointOnImagePlane.x = c->origin.x + c->zmin * c->direction.x + uc * vLeft.x + vr * c->up.x;
+				pPointOnImagePlane.y = c->origin.y + c->zmin * c->direction.y + uc * vLeft.y + vr * c->up.y;
+				pPointOnImagePlane.z = c->origin.z + c->zmin * c->direction.z + uc * vLeft.z + vr * c->up.z;
 				
-				Vector vP; //Vector from the camera to the image plane
+				Vector vCamToImagePlane; //Vector from the camera to the image plane
 
-				if(pers) //If camera is perspective
+				if(isPerspective) //If camera is perspective
 				{
-					vP.x = pP.x - c->origin.x;
-					vP.y = pP.y - c->origin.y;
-					vP.z = pP.z - c->origin.z;
+					vCamToImagePlane = pPointOnImagePlane - c->origin;
 				}
 				else //If camera is orthogonal
 				{
-					vP.x = c->direction.x;
-					vP.y = c->direction.y;
-					vP.z = c->direction.z;
+					vCamToImagePlane = c->direction;
 				}
 
 				Ray* r = new Ray(); //Ray from the camera to the image plane
-				r->dir = vP;
+				r->dir = vCamToImagePlane;
 				
-				if(pers)
+				if(isPerspective)
 					r->start = c->origin;
 				else
-					r->start = pP;
+					r->start = pPointOnImagePlane;
 
 				bool lightT = false;
 				Color* col = raytrace(r,lightT);
@@ -464,15 +460,15 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 
 		if(dot != 0) //If the normal and ray aren't perpendicular (ray and plane parallel)
 		{
-			double t = dot3(tempP->normal.x,tempP->center.x - r->start.x,tempP->normal.y,tempP->center.y - r->start.y,tempP->normal.z,tempP->center.z - r->start.z)
-						/ dot3(tempP->normal.x,r->dir.x,tempP->normal.y,r->dir.y,tempP->normal.z,r->dir.z);
+			double t = dot3(tempP->normal,tempP->center - r->start)	/ dot3(tempP->normal,r->dir);
 
 			if(t >= 0) //If the ray is pointing toward the plane
 			{
 				//Calculate point of intersection on plane
-				double tempIntX = r->dir.x * t + r->start.x;
-				double tempIntY = r->dir.y * t + r->start.y;
-				double tempIntZ = r->dir.z * t + r->start.z;
+				Point tempInt;
+				tempInt.x = r->dir.x * t + r->start.x;
+				tempInt.y = r->dir.y * t + r->start.y;
+				tempInt.z = r->dir.z * t + r->start.z;
 
 				Vector inter;
 				inter.x = t * r->dir.x + r->start.x;
@@ -481,7 +477,7 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 
 				//See if the point of intersection is actually on the finite plane
 				//First, find coordinates of vertices that make up the quad
-				Vector left = cross3(tempP->normal.x,tempP->up.x,tempP->normal.y,tempP->up.y,tempP->normal.z,tempP->up.z);
+				Vector left = cross3(tempP->normal,tempP->up);
 
 				Vector upMid;
 				upMid.x = (tempP->up.x * tempP->height / 2) + tempP->center.x;
@@ -517,26 +513,12 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 					if(!closestPlane)
 					{
 						closestPlane = tempP;
-						pInt.x = tempIntX;
-						pInt.y = tempIntY;
-						pInt.z = tempIntZ;
+						pInt = tempInt;
 					}
-					if(dist3(r->start.x,
-							 pInt.x,
-							 r->start.y,
-							 pInt.y,
-							 r->start.z,
-							 pInt.z) > dist3(r->start.x,
-											 tempIntX,
-											 r->start.y,
-											 tempIntY,
-											 r->start.z,
-											 tempIntZ))
+					if(dist3(r->start, pInt) > dist3(r->start, tempInt))
 					{
 						closestPlane = tempP;
-						pInt.x = tempIntX;
-						pInt.y = tempIntY;
-						pInt.z = tempIntZ;
+						pInt = tempInt;
 					}
 				}
 			}
@@ -581,26 +563,12 @@ Light *findClosestLight(Ray *r, Point &lInt) {
 			if(!closestLight)
 			{
 				closestLight = tempL;
-				lInt.x = tempL->origin.x;
-				lInt.y = tempL->origin.y;
-				lInt.z = tempL->origin.z;
+				lInt = tempL->origin;
 			}
-			else if(dist3(tempL->origin.x,
-						  r->start.x,
-						  tempL->origin.y,
-						  r->start.y,
-						  tempL->origin.z,
-						  r->start.z) < dist3(closestLight->origin.x,
-											  r->start.x,
-											  closestLight->origin.y,
-											  r->start.y,
-											  closestLight->origin.z,
-											  r->start.z))
+			else if(dist3(tempL->origin,r->start) < dist3(closestLight->origin, r->start))
 			{
 				closestLight = tempL;
-				lInt.x = tempL->origin.x;
-				lInt.y = tempL->origin.y;
-				lInt.z = tempL->origin.z;
+				lInt = tempL->origin;
 			}
 		}
 	}
