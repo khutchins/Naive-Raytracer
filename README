@@ -12,6 +12,7 @@ Spheres
 Cameras
 Point Lights
 
+There is an issue if spheres intersect with each other (seen in scene src/intersectspheres.txt) or if planes intersect with each other (seen in the second camera in src/intersectplanes.txt)
 Reflection and refraction somewhat work.
 Sphere and Plane diffusive lighting work.
 Point lights work.
