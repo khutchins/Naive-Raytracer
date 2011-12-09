@@ -341,18 +341,13 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 
 //Calc reflected vector
 Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
-	Vector reflectVec;
 	double angle = dot3(normal,r.dir);
-	reflectVec.x = -2 * angle * normal.x + r.dir.x;
-	reflectVec.y = -2 * angle * normal.y + r.dir.y;
-	reflectVec.z = -2 * angle * normal.z + r.dir.z;
+	Vector reflectVec = -2 * angle * normal + r.dir;
 
 	//Generate reflected ray
 	Ray reflectRay;
 	reflectRay.dir = reflectVec;
-	reflectRay.start.x = intercept.x + 0.01 * reflectVec.x;
-	reflectRay.start.y = intercept.y + 0.01 * reflectVec.y;
-	reflectRay.start.z = intercept.z + 0.01 * reflectVec.z;
+	reflectRay.start = intercept + 0.0001 * reflectVec;
 
 	bool lig = false;
 	lastProc = id;
@@ -364,9 +359,7 @@ Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id)
 Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	Ray refractRay;
 	refractRay.dir = r.dir;
-	refractRay.start.x = intercept.x + 0.01 * r.dir.x;
-	refractRay.start.y = intercept.y + 0.01 * r.dir.y;
-	refractRay.start.z = intercept.z + 0.01 * r.dir.z;
+	refractRay.start = intercept + 0.0001 * r.dir;
 
 	bool lig = false;
 	lastProc = id;
@@ -382,14 +375,11 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 		sphereQ.pop();
 		sphereQ.push(tempS);
 
-		Vector dist;
-		dist.x = tempS->center.x - r->start.x;
-		dist.y = tempS->center.y - r->start.y;
-		dist.z = tempS->center.z - r->start.z;
+		Vector dist = tempS->center - r->start;
 
-		norm(dist.x,dist.y,dist.z);
-	
+		norm(dist);
 		norm(r->dir);
+
 		double a = dot3(r->dir,r->dir);
 		double b = 2 * dot3(r->start - tempS->center,r->dir);
 		double c = dot3(r->start - tempS->center,r->start - tempS->center) - tempS->radius * tempS->radius;
@@ -414,10 +404,7 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 			if(t0 < 0) t = t1;
 			else t = t0;
 
-			Point tempInt;
-			tempInt.x = r->start.x + t * r->dir.x;
-			tempInt.y = r->start.y + t * r->dir.y;
-			tempInt.z = r->start.z + t * r->dir.z;
+			Point tempInt = r->start + t * r->dir;
 			double distance = dist3(tempInt,r->start);
 			if(distance <= zmaxG)
 			{
@@ -446,7 +433,7 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 		planeQ.pop();
 		planeQ.push(tempP);
 
-		double dot = dot3(tempP->normal.x,r->dir.x,tempP->normal.y,r->dir.y,tempP->normal.z,r->dir.z);
+		double dot = dot3(tempP->normal,r->dir);
 
 		if(dot != 0) //If the normal and ray aren't perpendicular (ray and plane parallel)
 		{
