@@ -13,9 +13,8 @@ Cameras
 Point Lights
 
 Reflection and refraction somewhat work.
-Sphere diffuse lighting calculations somewhat work (dimmer than they should be).
-Plane diffusive lighting calculations somewhat work (dimmer than they should be).
-Point lights appear to work.
+Sphere and Plane diffusive lighting work.
+Point lights work.
 Perspective and orthogonal cameras work.
 There is very naive anti-aliasing in which each value is averaged with a weighted average across all adjacent values.  It essentially just blurs the image.
 
