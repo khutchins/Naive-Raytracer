@@ -85,6 +85,8 @@ int main(int argc, char * argv[])
 			    image(W-x-1,H-y-1)->Green = (unsigned char)col->g;
 			    image(W-x-1,H-y-1)->Blue  = (unsigned char)col->b;
 			    image(W-x-1,H-y-1)->Alpha = 0;
+				delete r;
+				delete col;
 			}
 		}
 
@@ -185,6 +187,7 @@ Color* raytrace(Ray* r, bool &light)
 			}
 			light = false;
 
+			delete materialTexture;
 			delete llocal;
 			delete reflect;
 			delete refract;
@@ -251,12 +254,12 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 				llocal->b = 1;
 		}
 		delete lightRay;
+		delete receivedColor;
 	}
 	return llocal;
 }
 
 Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
-	Color* materialColor = new Color();
 	BMP* temp;
 	temp = &plane->texture;
 	int height = temp->TellHeight();
