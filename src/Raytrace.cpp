@@ -168,7 +168,7 @@ Color* raytrace(Ray* r, bool &light)
 			Color* reflect = new Color();
 			Color* refract = new Color();
 
-			llocal = calculateLocalLighting(pInt,closestP->up,PLANE);
+			llocal = calculateLocalLighting(pInt,closestP->normal,PLANE);
 			if(closestP->material.reflection != 0)	 reflect = calculateReflectedRay(*r,pInt,closestP->normal,PLANE);
 			if(closestP->material.transparency != 0) refract = calculateRefractedRay(*r, pInt, closestP->normal,PLANE);
 			if(closestP->hastexture) materialTexture = calculateTextureOnPlaneFromMaterial(closestP,pInt);
@@ -416,9 +416,9 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 
 		norm(dist.x,dist.y,dist.z);
 	
-		double a = magnitude(r->dir);
+		double a = oldMag(r->dir);
 		double b = 2 * dot3(r->start - tempS->center,r->dir);
-		double c = magnitude(r->start - tempS->center) - tempS->radius * tempS->radius;
+		double c = oldMag(r->start - tempS->center) - tempS->radius * tempS->radius;
 
 		double disc = discrim(a,b,c);
 

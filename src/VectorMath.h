@@ -17,6 +17,7 @@ Vector cross3(Vector v1, Vector v2);
 void norm(double &x, double &y, double &z); //Returns the normalized doubles by reference
 void norm(Vector &v); //Returns the normalized vector by reference
 double magnitude(Vector v); //Returns the magnitude of a vector
+double oldMag(Vector v); //Returns the incorrect vector (actually dot product of v with itself)
 double cosAngle(Vector v1, Vector v2); //Returns cosine of the angle between two vectors
 double angle(Vector v1, Vector v2); //Returns angle between two vectors
 

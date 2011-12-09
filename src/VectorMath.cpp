@@ -71,6 +71,10 @@ void norm(Vector &v) //Returns the normalized vector by reference
 }
 
 double magnitude(Vector v) { //Returns the magnitude of a vector
+	return sqrt(dot3(v,v));
+}
+
+double oldMag(Vector v) {
 	return dot3(v,v);
 }
 
