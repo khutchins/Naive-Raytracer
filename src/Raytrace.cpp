@@ -218,9 +218,9 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 
 		//Start of the ray (moved a bit so we won't intercept the object)
 		Point lStart;
-		lStart.x = intercept.x + 0.01 * (l->origin.x - intercept.x);
-		lStart.y = intercept.y + 0.01 * (l->origin.y - intercept.y);
-		lStart.z = intercept.z + 0.01 * (l->origin.z - intercept.z);
+		lStart.x = intercept.x + 0.00001 * (l->origin.x - intercept.x);
+		lStart.y = intercept.y + 0.00001 * (l->origin.y - intercept.y);
+		lStart.z = intercept.z + 0.00001 * (l->origin.z - intercept.z);
 
 		//Direction from the object *to* the light source
 		Vector lDir = l->origin - lStart;
@@ -416,6 +416,7 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 
 		norm(dist.x,dist.y,dist.z);
 	
+		norm(r->dir);
 		double a = dot3(r->dir,r->dir);
 		double b = 2 * dot3(r->start - tempS->center,r->dir);
 		double c = dot3(r->start - tempS->center,r->start - tempS->center) - tempS->radius * tempS->radius;
@@ -423,10 +424,23 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 		double disc = discrim(a,b,c);
 
 		if(disc < 0) //No intersection, do nothing
-			;
+			continue;
 		else if(disc >= 0) //Find closest intersection
 		{
-			double t = quadratic2(a,b,c);
+			double discSqrt = sqrt(disc);
+			double quad;
+			if (b < 0)	quad = (-b - discSqrt)/2.f;
+			else quad = (-b + discSqrt)/2.f;
+
+			double t0 = quad/a;
+			double t1 = c/quad;
+			if(t0 > t1) swap(t0,t1);
+
+			double t;
+			if(t0 < 0 && t1 < 0) continue;
+			if(t0 < 0) t = t1;
+			else t = t0;
+
 			double tempIntX = r->start.x + t * r->dir.x;
 			double tempIntY = r->start.y + t * r->dir.y;
 			double tempIntZ = r->start.z + t * r->dir.z;

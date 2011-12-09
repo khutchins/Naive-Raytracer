@@ -36,11 +36,6 @@ double quadratic(double a, double b, double c) //Returns the smallest value (gre
 	else return (-1*b + sqrt(b*b - 4*a*c))/2/a;
 }
 
-double quadratic2(double a, double b, double c) 
-{
-	return (-1 * b / a) - sqrt(b*b - a*c)/a;
-}
-
 Vector cross3(double x1, double x2, double y1, double y2, double z1, double z2) //Returns the vector of the cross product of 2 3D vectors
 {
 	Vector v;
