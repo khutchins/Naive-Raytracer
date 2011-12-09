@@ -284,9 +284,9 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 	planeUp.dir = plane->up;
 	planeUp.start = intercept;
 
-	//Point topIntersect;
+	Point topIntersect;
 	// ((p2 - p1)xd1) . (d1xd2) / ||d1xd2||^2
-	//double tTopPoint = dot3(cross3((planeUp.start - top.start),planeUp.dir),cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir));
+	double tTopPoint = dot3(cross3((planeUp.start - top.start),planeUp.dir),cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir));
 
 	Ray side;
 	side.dir = upLeft - botLeft;
@@ -297,42 +297,11 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 	planeLeft.dir = left;
 	planeLeft.start = intercept;
 
-	//Point sideIntersect;
-	//double tLeftPoint = dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir));
-
-	if(side.dir.x - top.dir.x != 0 && side.dir.x != 0)
-	{
-		double sideT = (intercept.x - side.start.x)/(side.dir.x - top.dir.x);
-		heightPercentage = sideT / side.dir.x;
-	}
-	else if(side.dir.y - top.dir.y != 0 && side.dir.y != 0)
-	{
-		double sideT = (intercept.y - side.start.y)/(side.dir.y - top.dir.y);
-		heightPercentage = sideT / side.dir.y;
-	}
-	else if(side.dir.z - top.dir.z != 0 && side.dir.z != 0)
-	{
-		double sideT = (intercept.z - side.start.z)/(side.dir.z - top.dir.z);
-		heightPercentage = sideT / side.dir.z;
-	}
-	if(top.dir.x - side.dir.x != 0 && top.dir.x != 0)
-	{
-		double topT = (intercept.x - top.start.x)/(top.dir.x - side.dir.x);
-		widthPercentage = topT / top.dir.x;
-	}
-	else if(top.dir.y - side.dir.y != 0 && top.dir.y != 0)
-	{
-		double topT = (intercept.y - top.start.y)/(top.dir.y - side.dir.y);
-		widthPercentage = topT / top.dir.y;
-	}
-	else if(top.dir.z - side.dir.z != 0 && top.dir.z != 0)
-	{
-		double topT = (intercept.z - top.start.z)/(top.dir.z - side.dir.z);
-		widthPercentage = topT / top.dir.z;
-	}
+	Point sideIntersect;
+	double tLeftPoint = dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir));
 	
-	int pixelX = abs((int)(widthPercentage * width));
-	int pixelY = abs((int)(heightPercentage * height));
+	int pixelX = abs((int)(tTopPoint * width));
+	int pixelY = abs((int)(tLeftPoint * height));
 	pixelX %= width;
 	pixelY %= height;
 	Color *matColor = new Color(temp->GetPixel(pixelX,pixelY).Red/255.f, temp->GetPixel(pixelX,pixelY).Green/255.f, temp->GetPixel(pixelX,pixelY).Blue/255.f);
