@@ -74,10 +74,6 @@ double magnitude(Vector v) { //Returns the magnitude of a vector
 	return sqrt(dot3(v,v));
 }
 
-double oldMag(Vector v) {
-	return dot3(v,v);
-}
-
 double cosAngle(Vector v1, Vector v2) { //Returns cos(angle) between two vectors
 	return dot3(v1,v2)/magnitude(v1)/magnitude(v2);
 }

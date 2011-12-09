@@ -416,9 +416,9 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 
 		norm(dist.x,dist.y,dist.z);
 	
-		double a = oldMag(r->dir);
+		double a = dot3(r->dir,r->dir);
 		double b = 2 * dot3(r->start - tempS->center,r->dir);
-		double c = oldMag(r->start - tempS->center) - tempS->radius * tempS->radius;
+		double c = dot3(r->start - tempS->center,r->start - tempS->center) - tempS->radius * tempS->radius;
 
 		double disc = discrim(a,b,c);
 
