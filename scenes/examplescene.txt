@@ -23,7 +23,7 @@ direction 0 0 1
 up 0 1 0
 z 1 10
 width 3
-perspective 1
+perspective 0
 end
    
 light

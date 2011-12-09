@@ -211,6 +211,7 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 	{
 		Light* l = lightQ.front();
 		lightQ.pop();
+		lightQ.push(l);
 
 		Ray* lightRay = new Ray();
 		bool lig = true;
@@ -222,15 +223,10 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		lStart.z = intercept.z + 0.01 * (l->origin.z - intercept.z);
 
 		//Direction from the object *to* the light source
-		Vector lDir;
-		lDir.x = l->origin.x - lStart.x;
-		lDir.y = l->origin.y - lStart.y;
-		lDir.z = l->origin.z - lStart.z;
+		Vector lDir = l->origin - lStart;
 
 		lightRay->dir = lDir;
 		lightRay->start = lStart;
-
-		lightQ.push(l);
 
 		lastProc = id;
 		Color* receivedColor = raytrace(lightRay,lig);
@@ -276,50 +272,60 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 	double planeHeight = plane->height;
 	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
+	//Figure out the boundaries of the plane
 	Vector left = cross3(plane->normal,plane->up);
 
-	Vector upMid;
+	Point upMid;
 	upMid.x = (plane->up.x * plane->height / 2) + plane->center.x;
 	upMid.y = (plane->up.y * plane->height / 2) + plane->center.y;
 	upMid.z = (plane->up.z * plane->height / 2) + plane->center.z;
 
-	Vector upLeft;
+	Point upLeft;
 	upLeft.x = upMid.x + (left.x * plane->width / 2);
 	upLeft.y = upMid.y + (left.y * plane->width / 2);
 	upLeft.z = upMid.z + (left.z * plane->width / 2);
 
-	Vector upRight;
+	Point upRight;
 	upRight.x = upMid.x - (left.x * plane->width / 2);
 	upRight.y = upMid.y - (left.y * plane->width / 2);
 	upRight.z = upMid.z - (left.z * plane->width / 2);
 
-	Vector botLeft;
+	Point botLeft;
 	botLeft.x = upLeft.x - (plane->up.x * plane->height);
 	botLeft.y = upLeft.y - (plane->up.y * plane->height);
 	botLeft.z = upLeft.z - (plane->up.z * plane->height);
 
-	Vector botRight;
+	Point botRight;
 	botRight.x = upRight.x - (plane->up.x * plane->height);
 	botRight.y = upRight.y - (plane->up.y * plane->height);
 	botRight.z = upRight.z - (plane->up.z * plane->height);
 
-	Ray top;
-	top.dir.x = upLeft.x - upRight.x;
-	top.dir.y = upLeft.y - upRight.y;
-	top.dir.z = upLeft.z - upRight.z;
-	top.start.x = upLeft.x;
-	top.start.y = upLeft.y;
-	top.start.z = upLeft.z;
-
-	Ray side;
-	side.dir.x = upLeft.x - botLeft.x;
-	side.dir.y = upLeft.y - botLeft.y;
-	side.dir.z = upLeft.z - botLeft.z;
-	side.start.x = upLeft.x;
-	side.start.y = upLeft.y;
-	side.start.z = upLeft.z;
 	double heightPercentage = 0;
 	double widthPercentage = 0;
+
+	Ray top;
+	top.dir = upLeft - upRight;
+	top.start = upRight;
+
+	Ray planeUp;
+	planeUp.dir = plane->up;
+	planeUp.start = intercept;
+
+	//Point topIntersect;
+	// ((p2 - p1)xd1) . (d1xd2) / ||d1xd2||^2
+	//double tTopPoint = dot3(cross3((planeUp.start - top.start),planeUp.dir),cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir));
+
+	Ray side;
+	side.dir = upLeft - botLeft;
+	side.start = botLeft;
+	norm(side.dir);
+
+	Ray planeLeft;
+	planeLeft.dir = left;
+	planeLeft.start = intercept;
+
+	//Point sideIntersect;
+	//double tLeftPoint = dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir));
 
 	if(side.dir.x - top.dir.x != 0 && side.dir.x != 0)
 	{
@@ -352,8 +358,8 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 		widthPercentage = topT / top.dir.z;
 	}
 	
-	int pixelX = abs((int)(widthPercentage * width) * 10);
-	int pixelY = abs((int)(heightPercentage * height) * 5);
+	int pixelX = abs((int)(widthPercentage * width));
+	int pixelY = abs((int)(heightPercentage * height));
 	pixelX %= width;
 	pixelY %= height;
 	Color *matColor = new Color(temp->GetPixel(pixelX,pixelY).Red/255.f, temp->GetPixel(pixelX,pixelY).Green/255.f, temp->GetPixel(pixelX,pixelY).Blue/255.f);
