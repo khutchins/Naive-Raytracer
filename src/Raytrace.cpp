@@ -55,15 +55,8 @@ int main(int argc, char * argv[])
 
 				Vector vLeft = cross3(c->direction,c->up); 
 
-				Point pPointOnImagePlane; //Point on the image plane
-				
-				pPointOnImagePlane.x = c->origin.x + c->zmin * c->direction.x + uc * vLeft.x + vr * c->up.x;
-				pPointOnImagePlane.y = c->origin.y + c->zmin * c->direction.y + uc * vLeft.y + vr * c->up.y;
-				pPointOnImagePlane.z = c->origin.z + c->zmin * c->direction.z + uc * vLeft.z + vr * c->up.z;
-
-				/*pPointOnImagePlane.x = 0;
-				pPointOnImagePlane.y = 0;
-				pPointOnImagePlane.z = 0;*/
+				//Point on image plane
+				Point pPointOnImagePlane = c->origin + c->zmin * c->direction + uc * vLeft + vr * c->up;
 				
 				Vector vCamToImagePlane; //Vector from the camera to the image plane
 
@@ -130,15 +123,15 @@ Color* raytrace(Ray* r, bool &light)
 	closestL = findClosestLight(r, lInt);
 
 	double sDist;
-	if(closestS)	sDist = dist3(sInt.x,r->start.x,sInt.y,r->start.y,sInt.z,r->start.z);
+	if(closestS)	sDist = dist3(sInt,r->start);
 	else			sDist = numeric_limits<double>::max();
 
 	double pDist;
-	if(closestP)	pDist = dist3(pInt.x,r->start.x,pInt.y,r->start.y,pInt.z,r->start.z);
+	if(closestP)	pDist = dist3(pInt,r->start);
 	else			pDist = numeric_limits<double>::max();
 
 	double lDist;
-	if(closestL)	lDist = dist3(lInt.x,r->start.x,lInt.y,r->start.y,lInt.z,r->start.z);
+	if(closestL)	lDist = dist3(lInt,r->start);
 	else			lDist = numeric_limits<double>::max();
 
 	//If >=1 entity found
@@ -222,10 +215,7 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		bool lig = true;
 
 		//Start of the ray (moved a bit so we won't intercept the object)
-		Point lStart;
-		lStart.x = intercept.x + 0.00001 * (l->origin.x - intercept.x);
-		lStart.y = intercept.y + 0.00001 * (l->origin.y - intercept.y);
-		lStart.z = intercept.z + 0.00001 * (l->origin.z - intercept.z);
+		Point lStart = intercept + 0.00001 * (l->origin - intercept);
 
 		//Direction from the object *to* the light source
 		Vector lDir = l->origin - lStart;
@@ -240,10 +230,7 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		if(lig) //We see the light from the point
 		{
 			//Direction from the light source to the plane.  Used for calculating lambert
-			Vector lToObject;
-			lToObject.x = 1*lDir.x;
-			lToObject.y = 1*lDir.y;
-			lToObject.z = 1*lDir.z;
+			Vector lToObject = lDir;
 
 			norm(lToObject);
 
@@ -280,30 +267,11 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 	//Figure out the boundaries of the plane
 	Vector left = cross3(plane->normal,plane->up);
 
-	Point upMid;
-	upMid.x = (plane->up.x * plane->height / 2) + plane->center.x;
-	upMid.y = (plane->up.y * plane->height / 2) + plane->center.y;
-	upMid.z = (plane->up.z * plane->height / 2) + plane->center.z;
-
-	Point upLeft;
-	upLeft.x = upMid.x + (left.x * plane->width / 2);
-	upLeft.y = upMid.y + (left.y * plane->width / 2);
-	upLeft.z = upMid.z + (left.z * plane->width / 2);
-
-	Point upRight;
-	upRight.x = upMid.x - (left.x * plane->width / 2);
-	upRight.y = upMid.y - (left.y * plane->width / 2);
-	upRight.z = upMid.z - (left.z * plane->width / 2);
-
-	Point botLeft;
-	botLeft.x = upLeft.x - (plane->up.x * plane->height);
-	botLeft.y = upLeft.y - (plane->up.y * plane->height);
-	botLeft.z = upLeft.z - (plane->up.z * plane->height);
-
-	Point botRight;
-	botRight.x = upRight.x - (plane->up.x * plane->height);
-	botRight.y = upRight.y - (plane->up.y * plane->height);
-	botRight.z = upRight.z - (plane->up.z * plane->height);
+	Point upMid = (plane->up * plane->height * 0.5) + plane->center;
+	Point upLeft = upMid + (left * plane->width * 0.5);
+	Point upRight = upMid - (left * plane->width * 0.5);
+	Point botLeft = upLeft - (plane->up * plane->height);
+	Point botRight = upRight - (plane->up * plane->height);
 
 	double heightPercentage = 0;
 	double widthPercentage = 0;
@@ -487,49 +455,21 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 			if(t >= 0) //If the ray is pointing toward the plane
 			{
 				//Calculate point of intersection on plane
-				Point tempInt;
-				tempInt.x = r->dir.x * t + r->start.x;
-				tempInt.y = r->dir.y * t + r->start.y;
-				tempInt.z = r->dir.z * t + r->start.z;
-
-				Vector inter;
-				inter.x = t * r->dir.x + r->start.x;
-				inter.y = t * r->dir.y + r->start.y;
-				inter.z = t * r->dir.z + r->start.z;
+				Point tempInt = r->dir * t + r->start;
 
 				//See if the point of intersection is actually on the finite plane
 				//First, find coordinates of vertices that make up the quad
 				Vector left = cross3(tempP->normal,tempP->up);
-
-				Vector upMid;
-				upMid.x = (tempP->up.x * tempP->height / 2) + tempP->center.x;
-				upMid.y = (tempP->up.y * tempP->height / 2) + tempP->center.y;
-				upMid.z = (tempP->up.z * tempP->height / 2) + tempP->center.z;
-
-				Vector upLeft;
-				upLeft.x = upMid.x + (left.x * tempP->width / 2);
-				upLeft.y = upMid.y + (left.y * tempP->width / 2);
-				upLeft.z = upMid.z + (left.z * tempP->width / 2);
-
-				Vector upRight;
-				upRight.x = upMid.x - (left.x * tempP->width / 2);
-				upRight.y = upMid.y - (left.y * tempP->width / 2);
-				upRight.z = upMid.z - (left.z * tempP->width / 2);
-
-				Vector botLeft;
-				botLeft.x = upLeft.x - (tempP->up.x * tempP->height);
-				botLeft.y = upLeft.y - (tempP->up.y * tempP->height);
-				botLeft.z = upLeft.z - (tempP->up.z * tempP->height);
-
-				Vector botRight;
-				botRight.x = upRight.x - (tempP->up.x * tempP->height);
-				botRight.y = upRight.y - (tempP->up.y * tempP->height);
-				botRight.z = upRight.z - (tempP->up.z * tempP->height);
+				Point upMid = (tempP->up * tempP->height * 0.5) + tempP->center;
+				Point upLeft = upMid + (left * tempP->width * 0.5);
+				Point upRight = upMid - (left * tempP->width * 0.5);
+				Point botLeft = upLeft - (tempP->up * tempP->height);
+				Point botRight = upRight - (tempP->up * tempP->height);
 
 				//Now see if the ray is inbetween all of these rays
-				if(inter.x <= (max(upLeft.x,max(upRight.x,botLeft.x))) && inter.x >= (min(upLeft.x,min(upRight.x,botLeft.x)))
-					&& inter.y <= (max(upLeft.y,max(upRight.y,botLeft.y))) && inter.y >= (min(upLeft.y,min(upRight.y,botLeft.y)))
-					&& inter.z <= (max(upLeft.z,max(upRight.z,botLeft.z))) && inter.z >= (min(upLeft.z,min(upRight.z,botLeft.z))))
+				if(tempInt.x <= (max(upLeft.x,max(upRight.x,botLeft.x))) && tempInt.x >= (min(upLeft.x,min(upRight.x,botLeft.x)))
+					&& tempInt.y <= (max(upLeft.y,max(upRight.y,botLeft.y))) && tempInt.y >= (min(upLeft.y,min(upRight.y,botLeft.y)))
+					&& tempInt.z <= (max(upLeft.z,max(upRight.z,botLeft.z))) && tempInt.z >= (min(upLeft.z,min(upRight.z,botLeft.z))))
 				{
 					//See if it's the closest plane so far
 					if(!closestPlane)

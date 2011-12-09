@@ -30,18 +30,18 @@ Vector Vector::operator-(Vector &right)
     return result;
 }
 
-Vector Vector::operator+(Point &right)
+Point Vector::operator+(Point &right)
 {
-    Vector result;
+    Point result;
     result.x = this->x + right.x;
 	result.y = this->y + right.y;
 	result.z = this->z + right.z;
     return result;
 }
 
-Vector Vector::operator-(Point &right)
+Point Vector::operator-(Point &right)
 {
-    Vector result;
+    Point result;
     result.x = this->x - right.x;
 	result.y = this->y - right.y;
 	result.z = this->z - right.z;

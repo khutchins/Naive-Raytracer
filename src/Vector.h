@@ -13,8 +13,8 @@ struct Vector {
 
 	Vector operator+(Vector &right);
 	Vector operator-(Vector &right);
-	Vector operator+(Point &right);
-	Vector operator-(Point &right);
+	Point operator+(Point &right);
+	Point operator-(Point &right);
 	Vector operator * (double k);
 	friend Vector operator * (double k, Vector& v);
 
