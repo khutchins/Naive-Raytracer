@@ -60,6 +60,10 @@ int main(int argc, char * argv[])
 				pPointOnImagePlane.x = c->origin.x + c->zmin * c->direction.x + uc * vLeft.x + vr * c->up.x;
 				pPointOnImagePlane.y = c->origin.y + c->zmin * c->direction.y + uc * vLeft.y + vr * c->up.y;
 				pPointOnImagePlane.z = c->origin.z + c->zmin * c->direction.z + uc * vLeft.z + vr * c->up.z;
+
+				/*pPointOnImagePlane.x = 0;
+				pPointOnImagePlane.y = 0;
+				pPointOnImagePlane.z = 0;*/
 				
 				Vector vCamToImagePlane; //Vector from the camera to the image plane
 
@@ -71,6 +75,7 @@ int main(int argc, char * argv[])
 				{
 					vCamToImagePlane = c->direction;
 				}
+				//vCamToImagePlane = c->direction;
 
 				Ray* r = new Ray(); //Ray from the camera to the image plane
 				r->dir = vCamToImagePlane;
@@ -441,25 +446,22 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 			if(t0 < 0) t = t1;
 			else t = t0;
 
-			double tempIntX = r->start.x + t * r->dir.x;
-			double tempIntY = r->start.y + t * r->dir.y;
-			double tempIntZ = r->start.z + t * r->dir.z;
-			double distance = dist3(tempIntX,r->start.x,tempIntY,r->start.y,tempIntZ,r->start.z);
+			Point tempInt;
+			tempInt.x = r->start.x + t * r->dir.x;
+			tempInt.y = r->start.y + t * r->dir.y;
+			tempInt.z = r->start.z + t * r->dir.z;
+			double distance = dist3(tempInt,r->start);
 			if(distance <= zmaxG)
 			{
 				if(!closestSphere) //If no previous sphere intersections found
 				{
 					closestSphere = tempS;
-					sInt.x = tempIntX;
-					sInt.y = tempIntY;
-					sInt.z = tempIntZ;
+					sInt = tempInt;
 				}
-				else if(dist3(sInt, r->start) < dist3(tempIntX, r->start.x, tempIntY, r->start.y, tempIntZ, r->start.z)) //If closer than previous
+				else if(dist3(sInt, r->start) > dist3(tempInt, r->start)) //If closer than previous
 				{
 					closestSphere = tempS;
-					sInt.x = tempIntX;
-					sInt.y = tempIntY;
-					sInt.z = tempIntZ;
+					sInt = tempInt;
 				}
 			}
 		}
