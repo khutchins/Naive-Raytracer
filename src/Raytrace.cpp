@@ -11,7 +11,6 @@ queue<Sphere*> sphereQ;
 const double aspect = (double)H/(double)W;
 double zmaxG = 1000;
 
-bool aa = false;
 int cameraNum = 0;
 
 EntityID lastProc = NONE;
@@ -39,9 +38,9 @@ int main(int argc, char * argv[])
 		cameraNum = i;
 		Camera* c = cameraQ.front();
 		zmaxG = c->zmax;
-		for(int x=0; x<W; x++)
+		for(int y = 0; y < H; y++)
 		{
-			for(int y=0; y<H; y++)
+			for(int x = 0; x < W; x++)
 			{
 				double height = c->width * aspect; //Height of image plane
 				double width = c->width; //Width of image plane
@@ -256,12 +255,9 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 			llocal->r += receivedColor->r * lightSourceIntensity;
 			llocal->g += receivedColor->g * lightSourceIntensity;
 			llocal->b += receivedColor->b * lightSourceIntensity;
-			if(llocal->r > 1)
-				llocal->r = 1;
-			if(llocal->g > 1)
-				llocal->g = 1;
-			if(llocal->b > 1)
-				llocal->b = 1;
+			if(llocal->r > 1) llocal->r = 1;
+			if(llocal->g > 1) llocal->g = 1;
+			if(llocal->b > 1) llocal->b = 1;
 		}
 		delete lightRay;
 		delete receivedColor;
@@ -366,8 +362,8 @@ Sphere *findClosestSphere(Ray *r, Point &sInt) {
 
 		double disc = discrim(a,b,c);
 
-		if(disc < 0) //No intersection, do nothing
-			continue;
+		//No intersection, do nothing
+		if(disc < 0) continue;
 		else if(disc >= 0) //Find closest intersection
 		{
 			double discSqrt = sqrt(disc);
