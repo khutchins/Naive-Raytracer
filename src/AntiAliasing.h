@@ -3,6 +3,11 @@
 
 #include "EasyBMP\EasyBMP.h"
 
+typedef enum AntiAliasingType {
+	NO_AA,
+	NAIVE_AVERAGE
+};
+
 BMP generateAABMP(BMP originalImage);
 
 #endif

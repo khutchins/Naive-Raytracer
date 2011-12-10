@@ -1,7 +1,13 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
+#include "StringProcessing.h"
 #include "Point.h"
+#include <fstream>
+#include <string>
+#include <queue>
+
+using namespace std;
 
 typedef struct Camera {
     Point origin;
@@ -11,6 +17,8 @@ typedef struct Camera {
     double width;      // Width at zmin, the image plane
     bool perspective;
 	bool grayscale;
+
+	Camera(ifstream &f);
 } Camera;
 
 #endif
