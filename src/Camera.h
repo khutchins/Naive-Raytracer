@@ -9,7 +9,8 @@ typedef struct Camera {
     Vector up;
     double zmin, zmax; // zmin is also the location of the image plane
     double width;      // Width at zmin, the image plane
-    bool  perspective;
+    bool perspective;
+	bool grayscale;
 } Camera;
 
 #endif

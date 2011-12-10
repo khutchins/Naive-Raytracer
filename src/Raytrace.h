@@ -18,6 +18,7 @@
 #include "Ray.h"
 #include "Plane.h"
 #include "Light.h"
+#include "StringProcessing.h"
 #include <limits>
 
 using namespace std;

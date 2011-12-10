@@ -504,41 +504,30 @@ Camera* makeCamera(ifstream &f)
 		string line;
 		getline(f,line);
 
-		while(line.length() > 0 && line[0] == ' ')
-			line = line.substr(1,line.length());
-		if(line.length() < 1)
-			continue;
-		if(line[0] == '#' || line[0] == '\n' || line[0] == '\r')
-			continue;
+		queue<string> lineContents;
+		explode(line," ",&lineContents);
+		
+		if(lineContents.size() == 0) continue;
+		string word = lineContents.front();
+		lineContents.pop();
 
-		size_t space = line.find(' '); //Find and extract first word
-		string word = line.substr(0,space);
-		string restOfLine = line.substr(space+1,line.length());
+		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
+		//words with three arguments
 		if(word == "origin" || word == "direction" || word == "up")
 		{
-			string numS1;
-			string numS2;
-			string numS3;
 			double num1 = 0;
 			double num2 = 0;
 			double num3 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 3) break;
 
-			space = restOfLine.find(' ');
-			numS2 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			space = restOfLine.find(' ');
-			numS3 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			num1 = (double)atof(numS1.c_str());
-			num2 = (double)atof(numS2.c_str());
-			num3 = (double)atof(numS3.c_str());
+			num1 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num2 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num3 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
 
 			if(word == "origin") //read in the origin coordinates
 			{
@@ -560,55 +549,50 @@ Camera* makeCamera(ifstream &f)
 			}
 		}
 
+		//words with two arguments
 		else if(word == "z")
 		{
-			string numS1;
-			string numS2;
 			double num1 = 0;
 			double num2 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 2) break;
 
-			space = restOfLine.find(' ');
-			numS2 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			num1 = (double)atof(numS1.c_str());
-			num2 = (double)atof(numS2.c_str());
+			num1 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num2 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
 
 			c->zmin = num1;
 			c->zmax = num2;
 		}
 
-		else if(word == "width" || word == "perspective")
+		//words with one argument
+		else if(word == "width" || word == "perspective" || word == "grayscale")
 		{
-			string numS1;
+			string sNum1;
 			double num1 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			bool pers;
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 1) break;
 
-			if(numS1[0] == '0')
-				pers = false;
-			else
-				pers = true;
-			num1 = (double)atof(numS1.c_str());
+			sNum1 = lineContents.front();
+			lineContents.pop();
+			bool bool1 = (sNum1[0] != '0') ? true : false;
+			num1 = (double)atof(sNum1.c_str());
 
 			if(word == "width") //read in the color coordinates
 			{
 				c->width = num1;
 			}
-			else
+			else if(word == "perspective")
 			{
-				c->perspective = pers;
+				c->perspective = bool1;
+			}
+			else if(word == "grayscale")
+			{
+				c->grayscale = bool1;
 			}
 		}
-		else
-			break;
+		else break;
 	}
 	if(c->perspective && c->zmin == 0)
 		printf("Warning: Perspective camera with a zmin of zero.\n");
@@ -624,39 +608,27 @@ Light* makeLight(ifstream &f)
 		string line;
 		getline(f,line);
 
-		while(line.length() > 0 && line[0] == ' ')
-			line = line.substr(1,line.length());
-		if(line.length() < 1)
-			continue;
-		if(line[0] == '#' || line[0] == '\n' || line[0] == '\r')
-			continue;
+		queue<string> lineContents;
+		explode(line," ",&lineContents);
+		
+		if(lineContents.size() == 0) continue;
+		string word = lineContents.front();
+		lineContents.pop();
 
-		size_t space = line.find(' '); //Find and extract first word
-		string word = line.substr(0,space);
-		string restOfLine = line.substr(space+1,line.length());
+		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
-		string numS1;
-		string numS2;
-		string numS3;
 		double num1 = 0;
 		double num2 = 0;
 		double num3 = 0;
 
-		space = restOfLine.find(' ');
-		numS1 = restOfLine.substr(0,space);
-		restOfLine = restOfLine.substr(space+1,line.length());
+		if(lineContents.size() < 3) break;
 
-		space = restOfLine.find(' ');
-		numS2 = restOfLine.substr(0,space);
-		restOfLine = restOfLine.substr(space+1,line.length());
-
-		space = restOfLine.find(' ');
-		numS3 = restOfLine.substr(0,space);
-		restOfLine = restOfLine.substr(space+1,line.length());
-
-		num1 = (double)atof(numS1.c_str());
-		num2 = (double)atof(numS2.c_str());
-		num3 = (double)atof(numS3.c_str());
+		num1 = (double)atof(lineContents.front().c_str());
+		lineContents.pop();
+		num2 = (double)atof(lineContents.front().c_str());
+		lineContents.pop();
+		num3 = (double)atof(lineContents.front().c_str());
+		lineContents.pop();
 
 		if(word == "origin") //read in the origin coordinates
 		{
@@ -688,41 +660,30 @@ Plane* makePlane(ifstream &f)
 		string line;
 		getline(f,line);
 
-		while(line.length() > 0 && line[0] == ' ')
-			line = line.substr(1,line.length());
-		if(line.length() < 1)
-			continue;
-		if(line[0] == '#' || line[0] == '\n' || line[0] == '\r')
-			continue;
+		queue<string> lineContents;
+		explode(line," ",&lineContents);
+		
+		if(lineContents.size() == 0) continue;
+		string word = lineContents.front();
+		lineContents.pop();
 
-		size_t space = line.find(' '); //Find and extract first word
-		string word = line.substr(0,space);
-		string restOfLine = line.substr(space+1,line.length());
+		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
+		//words with three arguments
 		if(word == "origin" || word == "color" || word == "normal" || word == "up")
 		{
-			string numS1;
-			string numS2;
-			string numS3;
 			double num1 = 0;
 			double num2 = 0;
 			double num3 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 3) break;
 
-			space = restOfLine.find(' ');
-			numS2 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			space = restOfLine.find(' ');
-			numS3 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			num1 = (double)atof(numS1.c_str());
-			num2 = (double)atof(numS2.c_str());
-			num3 = (double)atof(numS3.c_str());
+			num1 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num2 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num3 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
 
 			if(word == "origin") //read in the origin coordinates
 			{
@@ -752,55 +713,54 @@ Plane* makePlane(ifstream &f)
 			}
 		}
 
+		//words with two arguments
 		else if(word == "size")
 		{
-			string numS1;
-			string numS2;
 			double num1 = 0;
 			double num2 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 2) break;
 
-			space = restOfLine.find(' ');
-			numS2 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			num1 = (double)atof(numS1.c_str());
-			num2 = (double)atof(numS2.c_str());
+			num1 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num2 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
 
 			p->width = num1;
 			p->height = num2;
 		}
 
+		//words with one double argument
 		else if(word == "reflect" || word == "transparency")
 		{
-			string numS1;
 			double num1 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 1) break;
 
-			num1 = (double)atof(numS1.c_str());
+			num1 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
 
 			if(word == "reflect") //read in the color coordinates
 			{
 				p->material.reflection = num1;
 			}
-			else
+			else if (word == "transparency")
 			{
 				p->material.transparency = num1;
 			}
 		}
 
+		//words with one string argument
 		else if(word == "texture")
 		{
-			p->hastexture = true;
-			string textName;
-			space = restOfLine.find(' ');
-			p->texture.ReadFromFile(restOfLine.substr(0,space).c_str());
+			string textureName;
+
+			if(lineContents.size() < 1) break;
+
+			textureName = lineContents.front();
+			lineContents.pop();
+
+			p->texture.ReadFromFile(textureName.c_str());
 		}
 		else
 			break;
@@ -817,41 +777,30 @@ Sphere* makeSphere(ifstream &f)
 		string line;
 		getline(f,line);
 
-		while(line.length() > 0 && line[0] == ' ')
-			line = line.substr(1,line.length());
-		if(line.length() < 1)
-			continue;
-		if(line[0] == '#' || line[0] == '\n' || line[0] == '\r')
-			continue;
+		queue<string> lineContents;
+		explode(line," ",&lineContents);
+		
+		if(lineContents.size() == 0) continue;
+		string word = lineContents.front();
+		lineContents.pop();
 
-		size_t space = line.find(' '); //Find and extract first word
-		string word = line.substr(0,space);
-		string restOfLine = line.substr(space+1,line.length());
+		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
+		//words with three string arguments
 		if(word == "origin" || word == "color")
 		{
-			string numS1;
-			string numS2;
-			string numS3;
 			double num1 = 0;
 			double num2 = 0;
 			double num3 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 3) break;
 
-			space = restOfLine.find(' ');
-			numS2 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			space = restOfLine.find(' ');
-			numS3 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
-
-			num1 = (double)atof(numS1.c_str());
-			num2 = (double)atof(numS2.c_str());
-			num3 = (double)atof(numS3.c_str());
+			num1 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num2 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
+			num3 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
 
 			if(word == "origin") //read in the origin coordinates
 			{
@@ -867,16 +816,15 @@ Sphere* makeSphere(ifstream &f)
 			}
 		}
 
+		//words with one argument
 		else if(word == "radius" || word == "reflect" || word == "transparency")
 		{
-			string numS1;
 			double num1 = 0;
 
-			space = restOfLine.find(' ');
-			numS1 = restOfLine.substr(0,space);
-			restOfLine = restOfLine.substr(space+1,line.length());
+			if(lineContents.size() < 1) break;
 
-			num1 = (double)atof(numS1.c_str());
+			num1 = (double)atof(lineContents.front().c_str());
+			lineContents.pop();
 
 			if(word == "radius") //read in the origin coordinates
 			{
@@ -914,15 +862,14 @@ int processInput(string filename)
 	{
 		getline(sceneFile,line);
 
-		while(line.length() > 0 && line[0] == ' ')
-			line = line.substr(1,line.length());
-		if(line.length() < 1)
-			continue;
-		if(line[0] == '#' || line[0] == '\n' || line[0] == '\r')
-			continue;
+		queue<string> lineContents;
+		explode(line," ",&lineContents);
+		
+		if(lineContents.size() == 0) continue;
+		string word = lineContents.front();
+		lineContents.pop();
 
-		size_t space = line.find(' '); //Find and extract first word
-		string word = line.substr(0,space);
+		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		if(word == "camera")
 		{
