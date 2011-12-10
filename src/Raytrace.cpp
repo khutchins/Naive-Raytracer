@@ -298,7 +298,7 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 	planeUp.start = intercept;
 
 	// ((p2 - p1)xd1) . (d1xd2) / ||d1xd2||^2
-	double tTopPoint = dot3(cross3((planeUp.start - top.start),planeUp.dir),cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir))/magnitude(cross3(top.dir,planeUp.dir));
+	double tTopPoint = dot3(cross3((planeUp.start - top.start),planeUp.dir),cross3(top.dir,planeUp.dir))/magnitude2(cross3(top.dir,planeUp.dir));
 
 	Ray side;
 	side.dir = upLeft - botLeft;
@@ -309,7 +309,7 @@ Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept) {
 	planeLeft.dir = left;
 	planeLeft.start = intercept;
 
-	double tLeftPoint = dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir))/magnitude(cross3(side.dir,planeLeft.dir));
+	double tLeftPoint = dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude2(cross3(side.dir,planeLeft.dir));
 	
 	int pixelX = abs((int)(tTopPoint * width));
 	int pixelY = abs((int)(tLeftPoint * height));
@@ -768,7 +768,8 @@ Plane* makePlane(ifstream &f)
 			textureName = lineContents.front();
 			lineContents.pop();
 
-			p->texture.ReadFromFile(textureName.c_str());
+			if(p->texture.ReadFromFile(textureName.c_str()))
+				p->hastexture = true;
 		}
 		else
 			break;
