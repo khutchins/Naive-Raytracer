@@ -14,6 +14,8 @@ z 1 10
 width 3
 # 0 if orthogonal, 1 if perspective
 perspective 1
+# 0 if full color, anything else if grayscale
+grayscale 0
 end
 
 # multiple cameras are fine.  Each camera will output a new image
@@ -24,6 +26,7 @@ up 0 1 0
 z 1 10
 width 3
 perspective 0
+grayscale 1
 end
    
 light

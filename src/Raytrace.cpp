@@ -81,9 +81,17 @@ int main(int argc, char * argv[])
 				bool lightT = false;
 				Color* col = raytrace(r,lightT);
 
-			    image(W-x-1,H-y-1)->Red   = (unsigned char)col->r;
-			    image(W-x-1,H-y-1)->Green = (unsigned char)col->g;
-			    image(W-x-1,H-y-1)->Blue  = (unsigned char)col->b;
+				if(c->grayscale) {
+					double grayscaleVal = col->r * 0.3 + col->g * 0.59 + col->b * 0.11;
+					image(W-x-1,H-y-1)->Red   = (unsigned char)grayscaleVal;
+					image(W-x-1,H-y-1)->Green = (unsigned char)grayscaleVal;
+					image(W-x-1,H-y-1)->Blue  = (unsigned char)grayscaleVal;
+				}
+				else {
+					image(W-x-1,H-y-1)->Red   = (unsigned char)col->r;
+					image(W-x-1,H-y-1)->Green = (unsigned char)col->g;
+					image(W-x-1,H-y-1)->Blue  = (unsigned char)col->b;
+				}
 			    image(W-x-1,H-y-1)->Alpha = 0;
 
 				delete r;
