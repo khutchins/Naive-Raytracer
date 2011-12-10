@@ -85,6 +85,7 @@ int main(int argc, char * argv[])
 			    image(W-x-1,H-y-1)->Green = (unsigned char)col->g;
 			    image(W-x-1,H-y-1)->Blue  = (unsigned char)col->b;
 			    image(W-x-1,H-y-1)->Alpha = 0;
+
 				delete r;
 				delete col;
 			}
@@ -169,6 +170,7 @@ Color* raytrace(Ray* r, bool &light)
 			Color* refract = new Color();
 
 			llocal = calculateLocalLighting(pInt,closestP->normal,PLANE);
+
 			if(closestP->material.reflection != 0)	 reflect = calculateReflectedRay(*r,pInt,closestP->normal,PLANE);
 			if(closestP->material.transparency != 0) refract = calculateRefractedRay(*r, pInt, closestP->normal,PLANE);
 			if(closestP->hastexture) materialTexture = calculateTextureOnPlaneFromMaterial(closestP,pInt);
@@ -407,8 +409,7 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 
 		if(dot != 0) //If the normal and ray aren't perpendicular (ray and plane parallel)
 		{
-			double t = dot3(tempP->normal,tempP->center - r->start)	/ dot3(tempP->normal,r->dir);
-
+			double t = dot3(tempP->normal,tempP->center - r->start)	/ dot;
 			if(t >= 0) //If the ray is pointing toward the plane
 			{
 				//Calculate point of intersection on plane
@@ -609,7 +610,8 @@ Camera* makeCamera(ifstream &f)
 		else
 			break;
 	}
-
+	if(c->perspective && c->zmin == 0)
+		printf("Warning: Perspective camera with a zmin of zero.\n");
 	return c;
 }
 
