@@ -12,7 +12,6 @@ Spheres
 Cameras
 Point Lights
 
-There is an issue if planes intersect with each other (seen in the second camera in src/intersectplanes.txt)
 Reflection and refraction somewhat work.
 Sphere and Plane diffusive lighting work.
 Point lights work.
