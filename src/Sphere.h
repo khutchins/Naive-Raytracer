@@ -22,7 +22,7 @@ public:
     double radius;
 
 	Sphere(ifstream &f);
-	Vector calculateNormalForPoint(Point p);
+	Vector calculateNormalForPoint(Point p, Point raySource);
 	bool intersect(Ray* r, Point &intersect);
 	double getReflection();
 	double getRefraction();

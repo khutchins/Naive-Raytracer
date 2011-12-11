@@ -1,6 +1,6 @@
 #include "Sphere.h"
 
-Vector Sphere::calculateNormalForPoint(Point p) {
+Vector Sphere::calculateNormalForPoint(Point p, Point raySource) {
 	return p - this->origin;
 }
 

@@ -22,7 +22,7 @@ public:
 	EntityID objectType;
 
 	virtual bool intersect(Ray* r, Point &intersect) {return false;}
-	virtual Vector calculateNormalForPoint(Point p) {return Vector::VectorZero();}
+	virtual Vector calculateNormalForPoint(Point p, Point raySource) {return Vector::VectorZero();}
 	virtual double getReflection() { return 0; }
 	virtual double getRefraction() { return 0; }
 	virtual Color getColor() { return Color::ColorBlack(); }

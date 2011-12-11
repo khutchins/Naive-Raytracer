@@ -145,7 +145,7 @@ Color raytrace(Ray* r, bool &light)
 			Color reflect = Color::ColorBlack();
 			Color refract = Color::ColorBlack();
 
-			Vector normal = closestO->calculateNormalForPoint(oInt);
+			Vector normal = closestO->calculateNormalForPoint(oInt,r->start);
 			norm(normal);
 
 			llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
