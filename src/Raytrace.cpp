@@ -15,7 +15,7 @@ int cameraNum = 0;
 
 EntityID lastProc = NONE;
 
-DiagnosticStatus DIAGNOSTIC_STATUS = IS_LIT;
+DiagnosticStatus DIAGNOSTIC_STATUS = NORMAL;
 
 int main(int argc, char * argv[])
 {
