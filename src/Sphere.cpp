@@ -6,6 +6,8 @@ Vector Sphere::calculateNormalForPoint(Point p) {
 
 Sphere::Sphere(ifstream &f)
 {
+	this->isLight = false;
+	this->isVisible = true;
 	while(!f.eof())
 	{
 		string line;

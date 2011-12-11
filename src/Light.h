@@ -1,6 +1,7 @@
 #ifndef _LIGHT_H_
 #define _LIGHT_H_
 
+#include "SceneObject.h"
 #include "StringProcessing.h"
 #include "Point.h"
 #include "Color.h"
@@ -10,7 +11,7 @@
 
 using namespace std;
 
-class Light {
+class Light : public SceneObject{
 public:
     Point origin;
     Color color;

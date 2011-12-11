@@ -2,6 +2,8 @@
 
 Light::Light(ifstream &f)
 {
+	this->isVisible = true;
+	this->isLight = true;
 	while(!f.eof())
 	{
 		string line;

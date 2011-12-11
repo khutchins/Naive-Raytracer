@@ -2,6 +2,8 @@
 
 Plane::Plane(ifstream &f)
 {
+	this->isLight = false;
+	this->isVisible = false;
 	this->hastexture = false;
 
 	while(!f.eof())

@@ -1,6 +1,7 @@
 #ifndef _SPHERE_H_
 #define _SPHERE_H_
 
+#include "SceneObject.h"
 #include "StringProcessing.h"
 #include "Point.h"
 #include "Material.h"
@@ -13,7 +14,7 @@
 
 using namespace std;
 
-class Sphere {
+class Sphere : public SceneObject {
 public:
     Point center;
     Material material;

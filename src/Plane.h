@@ -1,6 +1,7 @@
 #ifndef _PLANE_H_
 #define _PLANE_H_
 
+#include "SceneObject.h"
 #include "VectorMath.h"
 #include "StringProcessing.h"
 #include "Point.h"
@@ -12,7 +13,7 @@
 
 using namespace std;
 
-class Plane {
+class Plane : public SceneObject {
 public:
     Point center;
     Vector normal;
