@@ -13,7 +13,7 @@ int cameraNum = 0;
 
 EntityID lastProc = NONE;
 
-DiagnosticStatus DIAGNOSTIC_STATUS = IS_HIT;
+DiagnosticStatus DIAGNOSTIC_STATUS = NORMAL;
 
 int main(int argc, char * argv[])
 {
@@ -194,7 +194,7 @@ Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		bool lig = true;
 
 		//Start of the ray (moved a bit so we won't intercept the object)
-		Point lStart = intercept + 0.00001 * (l->origin - intercept);
+		Point lStart = intercept + numeric_limits<double>::epsilon() * (l->origin - intercept);
 
 		//Direction from the object *to* the light source
 		Vector lDir = l->origin - lStart;
@@ -239,7 +239,7 @@ Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 	//Generate reflected ray
 	Ray reflectRay;
 	reflectRay.dir = reflectVec;
-	reflectRay.start = intercept + 0.0001 * reflectVec;
+	reflectRay.start = intercept + numeric_limits<double>::epsilon() * reflectVec;
 
 	bool lig = false;
 	lastProc = id;
@@ -251,7 +251,7 @@ Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	Ray refractRay;
 	refractRay.dir = r.dir;
-	refractRay.start = intercept + 0.0001 * r.dir;
+	refractRay.start = intercept + numeric_limits<double>::epsilon() * r.dir;
 
 	bool lig = false;
 	lastProc = id;
