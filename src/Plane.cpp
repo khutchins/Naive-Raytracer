@@ -3,7 +3,7 @@
 Plane::Plane(ifstream &f)
 {
 	this->isLight = false;
-	this->isVisible = false;
+	this->isVisible = true;
 	this->hasTexture = false;
 	this->objectType = PLANE;
 

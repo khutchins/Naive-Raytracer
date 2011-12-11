@@ -24,6 +24,10 @@ double dist3(Point x1, Point x2) {
 	return sqrt((x2.x-x1.x)*(x2.x-x1.x) + (x2.y-x1.y)*(x2.y-x1.y) + (x2.z-x1.z)*(x2.z-x1.z));
 }
 
+double dist3Compare(Point x1, Point x2) { //Gives the square of the distance.  Just used for comparisons because it's faster
+	return (x2.x-x1.x)*(x2.x-x1.x) + (x2.y-x1.y)*(x2.y-x1.y) + (x2.z-x1.z)*(x2.z-x1.z);
+}
+
 double discrim(double a, double b, double c) //Discriminant
 {
 	return b*b - 4*a*c;

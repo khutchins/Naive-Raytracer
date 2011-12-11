@@ -107,7 +107,7 @@ int main(int argc, char * argv[])
 		sceneName += ".bmp";
 
 		string sceneName_aa = sceneName.substr(0,sceneName.length()-4)+"_aa_naive.bmp";
-		generateAABMP(image).WriteToFile(sceneName_aa.c_str());
+		if(DIAGNOSTIC_STATUS == NORMAL) generateAABMP(image).WriteToFile(sceneName_aa.c_str());
 
 		image.WriteToFile(sceneName.c_str());
 		cameraQ.pop();
@@ -132,7 +132,7 @@ Color raytrace(Ray* r, bool &light)
 	}
 
 	double oDist;
-	if(closestO)	oDist = dist3(oInt,r->start);
+	if(closestO)	oDist = dist3Compare(oInt,r->start);
 	else			oDist = numeric_limits<double>::max();
 
 	//If >=1 entity found
@@ -149,7 +149,7 @@ Color raytrace(Ray* r, bool &light)
 			norm(normal);
 
 			llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
-			if(closestO->getReflection() != 0)	 reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
+			if(closestO->getReflection() != 0) reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
 			if(closestO->getRefraction() != 0) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
 			if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt);
 						
@@ -274,7 +274,7 @@ SceneObject *findClosestObject(Ray *r, Point &intersect) {
 				closestObject = tempO;
 				intersect = objectIntersect;
 			}
-			else if(dist3(objectIntersect, r->start) < dist3(intersect, r->start)) //If closer than previous
+			else if(dist3Compare(objectIntersect, r->start) < dist3Compare(intersect, r->start)) //If closer than previous
 			{
 				closestObject = tempO;
 				intersect = objectIntersect;
