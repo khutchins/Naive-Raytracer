@@ -2,6 +2,7 @@
 #define _CAMERA_H_
 
 #include "StringProcessing.h"
+#include "SceneObject.h"
 #include "Point.h"
 #include <fstream>
 #include <string>
@@ -9,9 +10,8 @@
 
 using namespace std;
 
-class Camera {
+class Camera : public SceneObject{
 public:
-    Point origin;
     Vector direction;
     Vector up;
     double zmin, zmax; // zmin is also the location of the image plane

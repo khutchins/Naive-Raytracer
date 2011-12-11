@@ -19,3 +19,19 @@ void Color::adjustColorForDiagnosticIsLit() {
 		b = 255;
 	}
 }
+
+Color Color::ColorBlack() {
+	Color black;
+	black.r = 0;
+	black.g = 0;
+	black.b = 0;
+	return black;
+}
+
+Color Color::ColorWhite() {
+	Color white;
+	white.r = 255;
+	white.g = 255;
+	white.b = 255;
+	return white;
+}

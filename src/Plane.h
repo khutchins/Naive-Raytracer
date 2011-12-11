@@ -15,16 +15,20 @@ using namespace std;
 
 class Plane : public SceneObject {
 public:
-    Point center;
     Vector normal;
     Vector up;
     double width;
     double height;
-    bool hastexture;
     Material material;
     BMP texture;
 
 	Plane(std::ifstream &f);
+	bool intersect(Ray* r, Point &intersect);
+	Vector calculateNormalForPoint(Point p);
+	Color calculateTextureFromMaterial(Point intercept);
+	double getReflection();
+	double getRefraction();
+	Color getColor();
 };
 
 #endif

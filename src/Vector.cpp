@@ -59,3 +59,11 @@ Vector Vector::operator *(double k) {
 Vector operator * (double k, Vector& v) {
 	return v*k;
 }
+
+Vector Vector::VectorZero() {
+	Vector zero;
+	zero.x = 0;
+	zero.y = 0;
+	zero.z = 0;
+	return zero;
+}

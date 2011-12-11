@@ -10,6 +10,7 @@ struct Vector {
 
 	Vector();
 	Vector(double x, double y, double z);
+	static Vector VectorZero();
 
 	Vector operator+(Vector &right);
 	Vector operator-(Vector &right);

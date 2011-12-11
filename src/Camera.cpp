@@ -3,6 +3,9 @@
 Camera::Camera(ifstream &f)
 {
 	this->grayscale = false;
+	this->isLight = false;
+	this->isVisible = false;
+	this->hasTexture = false;
 	while(!f.eof())
 	{
 		string line;

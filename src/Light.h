@@ -8,15 +8,18 @@
 #include <fstream>
 #include <string>
 #include <queue>
+#include <limits>
+#include <cmath>
 
 using namespace std;
 
 class Light : public SceneObject{
 public:
-    Point origin;
     Color color;
 
 	Light(ifstream &f);
+	bool intersect(Ray* r, Point &intersect);
+	Color getColor();
 };
 
 #endif

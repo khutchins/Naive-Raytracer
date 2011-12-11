@@ -8,6 +8,8 @@
 #include "Color.h"
 #include "Vector.h"
 #include "Point.h"
+#include "VectorMath.h"
+#include <cmath>
 #include <fstream>
 #include <string>
 #include <queue>
@@ -16,12 +18,15 @@ using namespace std;
 
 class Sphere : public SceneObject {
 public:
-    Point center;
     Material material;
     double radius;
 
 	Sphere(ifstream &f);
 	Vector calculateNormalForPoint(Point p);
+	bool intersect(Ray* r, Point &intersect);
+	double getReflection();
+	double getRefraction();
+	Color getColor();
 };
 
 #endif

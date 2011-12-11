@@ -7,6 +7,8 @@ public:
 
 	Color();
 	Color(double r, double g, double b);
+	static Color ColorBlack();
+	static Color ColorWhite();
 
 	void adjustColorForDiagnosticIsLit();
 } Color;

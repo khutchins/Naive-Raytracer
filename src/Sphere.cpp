@@ -1,13 +1,15 @@
 #include "Sphere.h"
 
 Vector Sphere::calculateNormalForPoint(Point p) {
-	return p - this->center;
+	return p - this->origin;
 }
 
 Sphere::Sphere(ifstream &f)
 {
 	this->isLight = false;
 	this->isVisible = true;
+	this->objectType = SPHERE;
+	this->hasTexture = false;
 	while(!f.eof())
 	{
 		string line;
@@ -40,9 +42,9 @@ Sphere::Sphere(ifstream &f)
 
 			if(word == "origin") //read in the origin coordinates
 			{
-				this->center.x = num1;
-				this->center.y = num2;
-				this->center.z = num3;
+				this->origin.x = num1;
+				this->origin.y = num2;
+				this->origin.z = num3;
 			}
 			else if(word == "color") //read in the color coordinates
 			{
@@ -78,4 +80,52 @@ Sphere::Sphere(ifstream &f)
 		else
 			break;
 	}
+}
+
+bool Sphere::intersect(Ray* r, Point &intersect) {
+	Vector dist = this->origin - r->start;
+
+	norm(dist);
+	norm(r->dir);
+
+	double a = dot3(r->dir,r->dir);
+	double b = 2 * dot3(r->start - this->origin,r->dir);
+	double c = dot3(r->start - this->origin,r->start - this->origin) - this->radius * this->radius;
+
+	double disc = discrim(a,b,c);
+
+	//No intersection, do nothing
+	if(disc < 0) return false;
+	else if(disc >= 0) //Find closest intersection
+	{
+		double discSqrt = sqrt(disc);
+		double quad;
+		if (b < 0)	quad = (-b - discSqrt)/2.f;
+		else quad = (-b + discSqrt)/2.f;
+
+		double t0 = quad/a;
+		double t1 = c/quad;
+		if(t0 > t1) swap(t0,t1);
+
+		double t;
+		if(t0 < 0 && t1 < 0) return false;
+		if(t0 < 0) t = t1;
+		else t = t0;
+
+		intersect = r->start + t * r->dir;
+		return true;
+	}
+	return false;
+}
+
+double Sphere::getReflection() {
+	return this->material.reflection;
+}
+
+double Sphere::getRefraction() {
+	return this->material.transparency;
+}
+
+Color Sphere::getColor() {
+	return this->material.color;
 }

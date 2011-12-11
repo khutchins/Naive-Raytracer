@@ -38,14 +38,8 @@ Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id)
 Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id);
 Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept);
 
-Plane* findClosestPlane(Ray *r, Point &pInt);
-Sphere* findClosestSphere(Ray *r, Point &sInt);
-Light* findClosestLight(Ray *r, Point &lInt);
+SceneObject* findClosestObject(Ray *r, Point &oInt);
 
-Camera* makeCamera(ifstream &f);
-Light* makeLight(ifstream &f);
-Plane* makePlane(ifstream &f);
-Sphere* makeSphere(ifstream &f);
 Color* raytrace(Ray* r, bool &light);
 int processInput(string filename);
 
