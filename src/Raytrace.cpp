@@ -79,6 +79,9 @@ int main(int argc, char * argv[])
 
 				bool lightT = false;
 
+				if(x == 134 && y == 56) {
+					int z = 5;
+				}
 				Color col = raytrace(r,lightT);
 				if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
 
@@ -194,7 +197,7 @@ Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		bool lig = true;
 
 		//Start of the ray (moved a bit so we won't intercept the object)
-		Point lStart = intercept + numeric_limits<double>::epsilon() * (l->origin - intercept);
+		Point lStart = intercept + 0.000001 * (l->origin - intercept);
 
 		//Direction from the object *to* the light source
 		Vector lDir = l->origin - lStart;
@@ -239,7 +242,7 @@ Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 	//Generate reflected ray
 	Ray reflectRay;
 	reflectRay.dir = reflectVec;
-	reflectRay.start = intercept + numeric_limits<double>::epsilon() * reflectVec;
+	reflectRay.start = intercept + 0.000001 * reflectVec;
 
 	bool lig = false;
 	lastProc = id;
@@ -251,7 +254,7 @@ Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	Ray refractRay;
 	refractRay.dir = r.dir;
-	refractRay.start = intercept + numeric_limits<double>::epsilon() * r.dir;
+	refractRay.start = intercept + 0.000001 * r.dir;
 
 	bool lig = false;
 	lastProc = id;
