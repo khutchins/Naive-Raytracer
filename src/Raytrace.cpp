@@ -15,6 +15,8 @@ int cameraNum = 0;
 
 EntityID lastProc = NONE;
 
+DiagnosticStatus DIAGNOSTIC_STATUS = IS_LIT;
+
 int main(int argc, char * argv[])
 {
 	bool manualFilename = false; //If true, use a predefined scene file
@@ -79,6 +81,7 @@ int main(int argc, char * argv[])
 
 				bool lightT = false;
 				Color* col = raytrace(r,lightT);
+				if(DIAGNOSTIC_STATUS & IS_LIT == IS_LIT) col->adjustColorForDiagnosticIsLit();
 
 				if(c->grayscale) {
 					double grayscaleVal = col->r * 0.3 + col->g * 0.59 + col->b * 0.11;
@@ -429,6 +432,7 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 				Point botRight = upRight - (tempP->up * tempP->height);
 
 				//Now see if the ray is inbetween all of these rays
+				//This if statement isn't entirely correct
 				if(tempInt.x <= (max(upLeft.x,max(upRight.x,botLeft.x))) && tempInt.x >= (min(upLeft.x,min(upRight.x,botLeft.x)))
 					&& tempInt.y <= (max(upLeft.y,max(upRight.y,botLeft.y))) && tempInt.y >= (min(upLeft.y,min(upRight.y,botLeft.y)))
 					&& tempInt.z <= (max(upLeft.z,max(upRight.z,botLeft.z))) && tempInt.z >= (min(upLeft.z,min(upRight.z,botLeft.z))))

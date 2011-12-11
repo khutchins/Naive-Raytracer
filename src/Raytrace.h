@@ -34,6 +34,11 @@ typedef enum EntityID {
 	NONE
 };
 
+typedef enum DiagnosticStatus {
+	NORMAL = 0,
+	IS_LIT = 1
+};
+
 Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id);
 Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);
 Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id);

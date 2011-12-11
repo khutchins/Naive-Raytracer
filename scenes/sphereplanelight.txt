@@ -3,7 +3,7 @@ origin 0 3 0
 direction 0 -1 0
 up 0 0 1
 z 2 10
-width 6
+width 5
 perspective 1
 end
 
