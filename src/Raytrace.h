@@ -8,6 +8,7 @@
 #include <string>
 #include <queue>
 #include "EasyBMP\EasyBMP.h"
+#include "SceneObject.h"
 #include "AntiAliasing.h"
 #include "Sphere.h"
 #include "Point.h"
@@ -26,17 +27,10 @@ using namespace std;
 #define W 320
 #define H 240
 
-typedef enum EntityID {
-	SPHERE,
-	PLANE,
-	CAMERA,
-	LIGHT,
-	NONE
-};
-
 typedef enum DiagnosticStatus {
 	NORMAL = 0,
-	IS_LIT = 1
+	IS_LIT = 1,
+	IS_HIT = 2
 };
 
 Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id);

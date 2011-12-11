@@ -1,5 +1,5 @@
-#ifndef _ANTI_ALIASING_
-#define _ANTI_ALIASING_
+#ifndef _ANTI_ALIASING_H_
+#define _ANTI_ALIASING_H_
 
 #include "EasyBMP\EasyBMP.h"
 

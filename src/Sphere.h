@@ -13,13 +13,14 @@
 
 using namespace std;
 
-typedef struct Sphere {
+class Sphere {
+public:
     Point center;
     Material material;
     double radius;
 
 	Sphere(ifstream &f);
 	Vector calculateNormalForPoint(Point p);
-} Sphere;
+};
 
 #endif

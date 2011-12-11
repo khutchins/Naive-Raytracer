@@ -82,7 +82,7 @@ int main(int argc, char * argv[])
 				bool lightT = false;
 
 				Color* col = raytrace(r,lightT);
-				if(DIAGNOSTIC_STATUS & IS_LIT == IS_LIT) col->adjustColorForDiagnosticIsLit();
+				if(DIAGNOSTIC_STATUS == IS_LIT) col->adjustColorForDiagnosticIsLit();
 
 				if(c->grayscale) {
 					double grayscaleVal = col->r * 0.3 + col->g * 0.59 + col->b * 0.11;

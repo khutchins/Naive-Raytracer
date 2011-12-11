@@ -10,11 +10,12 @@
 
 using namespace std;
 
-typedef struct Light {
+class Light {
+public:
     Point origin;
     Color color;
 
 	Light(ifstream &f);
-} Light;
+};
 
 #endif

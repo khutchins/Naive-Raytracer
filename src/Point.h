@@ -5,7 +5,7 @@
 
 struct Vector;
 
-typedef struct Point {
+struct Point {
     double x,y,z;
 	Vector operator+(Point &right);
 	Vector operator-(Point &right);
@@ -14,6 +14,6 @@ typedef struct Point {
 
 	Point operator * (double k);
 	friend Point operator * (double k, Point& v);
-} Point;
+};
 
 #endif

@@ -12,7 +12,8 @@
 
 using namespace std;
 
-typedef struct Plane {
+class Plane {
+public:
     Point center;
     Vector normal;
     Vector up;
@@ -23,6 +24,6 @@ typedef struct Plane {
     BMP texture;
 
 	Plane(std::ifstream &f);
-} Plane;
+};
 
 #endif

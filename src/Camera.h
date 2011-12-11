@@ -9,7 +9,8 @@
 
 using namespace std;
 
-typedef struct Camera {
+class Camera {
+public:
     Point origin;
     Vector direction;
     Vector up;
@@ -19,6 +20,6 @@ typedef struct Camera {
 	bool grayscale;
 
 	Camera(ifstream &f);
-} Camera;
+};
 
 #endif
