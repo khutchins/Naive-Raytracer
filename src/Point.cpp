@@ -1,5 +1,13 @@
 #include "Point.h"
 
+Point Point::PointZero() {
+	Point zero;
+	zero.x = 0;
+	zero.y = 0;
+	zero.z = 0;
+	return zero;
+}
+
 Vector Point::operator+(Point &right)
 {
     Vector result;

@@ -6,6 +6,8 @@
 struct Vector;
 
 struct Point {
+	static Point PointZero();
+
     double x,y,z;
 	Vector operator+(Point &right);
 	Vector operator-(Point &right);
