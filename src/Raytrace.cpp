@@ -13,7 +13,7 @@ int cameraNum = 0;
 
 EntityID lastProc = NONE;
 
-DiagnosticStatus DIAGNOSTIC_STATUS = NORMAL;
+DiagnosticStatus DIAGNOSTIC_STATUS = IS_HIT;
 
 int main(int argc, char * argv[])
 {
@@ -79,24 +79,23 @@ int main(int argc, char * argv[])
 
 				bool lightT = false;
 
-				Color* col = raytrace(r,lightT);
-				if(DIAGNOSTIC_STATUS == IS_LIT) col->adjustColorForDiagnosticIsLit();
+				Color col = raytrace(r,lightT);
+				if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
 
 				if(c->grayscale) {
-					double grayscaleVal = col->r * 0.3 + col->g * 0.59 + col->b * 0.11;
+					double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
 					image(W-x-1,H-y-1)->Red   = (unsigned char)grayscaleVal;
 					image(W-x-1,H-y-1)->Green = (unsigned char)grayscaleVal;
 					image(W-x-1,H-y-1)->Blue  = (unsigned char)grayscaleVal;
 				}
 				else {
-					image(W-x-1,H-y-1)->Red   = (unsigned char)col->r;
-					image(W-x-1,H-y-1)->Green = (unsigned char)col->g;
-					image(W-x-1,H-y-1)->Blue  = (unsigned char)col->b;
+					image(W-x-1,H-y-1)->Red   = (unsigned char)col.r;
+					image(W-x-1,H-y-1)->Green = (unsigned char)col.g;
+					image(W-x-1,H-y-1)->Blue  = (unsigned char)col.b;
 				}
 			    image(W-x-1,H-y-1)->Alpha = 0;
 
 				delete r;
-				delete col;
 			}
 		}
 
@@ -118,15 +117,19 @@ int main(int argc, char * argv[])
     return 0;
 }
 
-Color* raytrace(Ray* r, bool &light)
+Color raytrace(Ray* r, bool &light)
 {
-	Color* c = new Color();
+	Color c = Color::ColorBlack();
 
 	//find nearest intersection
 	SceneObject* closestO = NULL;
 	Point oInt;
 
 	closestO = findClosestObject(r, oInt);
+	if(DIAGNOSTIC_STATUS == IS_HIT) {
+		if(closestO) return Color::ColorWhite();
+		else return Color::ColorBlack();
+	}
 
 	double oDist;
 	if(closestO)	oDist = dist3(oInt,r->start);
@@ -138,9 +141,9 @@ Color* raytrace(Ray* r, bool &light)
 		if(!closestO->isLight && !light) //if not a light
 		{
 			Color materialTexture;
-			Color *llocal = new Color();
-			Color *reflect = new Color();
-			Color *refract = new Color();
+			Color llocal = Color::ColorBlack();
+			Color reflect = Color::ColorBlack();
+			Color refract = Color::ColorBlack();
 
 			Vector normal = closestO->calculateNormalForPoint(oInt);
 			norm(normal);
@@ -152,27 +155,23 @@ Color* raytrace(Ray* r, bool &light)
 						
 			if(closestO->hasTexture)
 			{
-				c->r = llocal->r * materialTexture.r * 255 + closestO->getReflection() * reflect->r + closestO->getRefraction() * refract->r;
-				c->g = llocal->g * materialTexture.g * 255 + closestO->getReflection() * reflect->g + closestO->getRefraction() * refract->g;
-				c->b = llocal->b * materialTexture.b * 255 + closestO->getReflection() * reflect->b + closestO->getRefraction() * refract->b;
+				c.r = llocal.r * materialTexture.r * 255 + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
+				c.g = llocal.g * materialTexture.g * 255 + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
+				c.b = llocal.b * materialTexture.b * 255 + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
 			}
 			else
 			{
-				c->r = llocal->r * closestO->getColor().r * 255 + closestO->getReflection() * reflect->r + closestO->getRefraction() * refract->r;
-				c->g = llocal->g * closestO->getColor().g * 255 + closestO->getReflection() * reflect->g + closestO->getRefraction() * refract->g;
-				c->b = llocal->b * closestO->getColor().b * 255 + closestO->getReflection() * reflect->b + closestO->getRefraction() * refract->b;
+				c.r = llocal.r * closestO->getColor().r * 255 + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
+				c.g = llocal.g * closestO->getColor().g * 255 + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
+				c.b = llocal.b * closestO->getColor().b * 255 + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
 			}
 			light = false;
-
-			delete llocal;
-			delete reflect;
-			delete refract;
 		}
 		else if (closestO->isLight) //Light is closest
 		{
-			c->r = closestO->getColor().r * 255;
-			c->g = closestO->getColor().g * 255;
-			c->b = closestO->getColor().b * 255;
+			c.r = closestO->getColor().r * 255;
+			c.g = closestO->getColor().g * 255;
+			c.b = closestO->getColor().b * 255;
 
 			light = true;
 		}
@@ -182,8 +181,8 @@ Color* raytrace(Ray* r, bool &light)
 	return c;
 }
 
-Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
-	Color* llocal = new Color();
+Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
+	Color llocal = Color::ColorBlack();
 	for(unsigned int i = 0; i < objectQ.size(); i++)
 	{
 		SceneObject* l = objectQ.front();
@@ -204,7 +203,7 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		lightRay->start = lStart;
 
 		lastProc = id;
-		Color* receivedColor = raytrace(lightRay,lig);
+		Color receivedColor = raytrace(lightRay,lig);
 		lastProc = NONE;
 
 		if(lig) //We see the light from the point
@@ -214,27 +213,26 @@ Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 
 			norm(lToObject);
 
-			receivedColor->r /= 255.f;
-			receivedColor->g /= 255.f;
-			receivedColor->b /= 255.f;
+			receivedColor.r /= 255.f;
+			receivedColor.g /= 255.f;
+			receivedColor.b /= 255.f;
 
 			double lightSourceIntensity = cosAngle(lToObject,normal);
 			if(lightSourceIntensity < 0) lightSourceIntensity = 0;
-			llocal->r += receivedColor->r * lightSourceIntensity;
-			llocal->g += receivedColor->g * lightSourceIntensity;
-			llocal->b += receivedColor->b * lightSourceIntensity;
-			if(llocal->r > 1) llocal->r = 1;
-			if(llocal->g > 1) llocal->g = 1;
-			if(llocal->b > 1) llocal->b = 1;
+			llocal.r += receivedColor.r * lightSourceIntensity;
+			llocal.g += receivedColor.g * lightSourceIntensity;
+			llocal.b += receivedColor.b * lightSourceIntensity;
+			if(llocal.r > 1) llocal.r = 1;
+			if(llocal.g > 1) llocal.g = 1;
+			if(llocal.b > 1) llocal.b = 1;
 		}
 		delete lightRay;
-		delete receivedColor;
 	}
 	return llocal;
 }
 
 //Calc reflected vector
-Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
+Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	double angle = dot3(normal,r.dir);
 	Vector reflectVec = -2 * angle * normal + r.dir;
 
@@ -250,7 +248,7 @@ Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id)
 }
 
 //Calc refracted vector
-Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
+Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	Ray refractRay;
 	refractRay.dir = r.dir;
 	refractRay.start = intercept + 0.0001 * r.dir;

@@ -33,14 +33,14 @@ typedef enum DiagnosticStatus {
 	IS_HIT = 2
 };
 
-Color* calculateLocalLighting(Point intercept, Vector normal, EntityID id);
-Color* calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);
-Color* calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id);
-Color* calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept);
+Color calculateLocalLighting(Point intercept, Vector normal, EntityID id);
+Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);
+Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id);
+Color calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept);
 
 SceneObject* findClosestObject(Ray *r, Point &oInt);
 
-Color* raytrace(Ray* r, bool &light);
+Color raytrace(Ray* r, bool &light);
 int processInput(string filename);
 
 #endif
