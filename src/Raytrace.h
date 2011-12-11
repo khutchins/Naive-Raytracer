@@ -1,5 +1,5 @@
-#ifndef _RAYTRACE_MAIN_
-#define _RAYTRACE_MAIN_
+#ifndef _RAYTRACE_H_
+#define _RAYTRACE_H_
 
 #include <stdio.h>
 #include <string.h>

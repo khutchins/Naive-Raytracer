@@ -80,6 +80,7 @@ int main(int argc, char * argv[])
 					r->start = pPointOnImagePlane;
 
 				bool lightT = false;
+
 				Color* col = raytrace(r,lightT);
 				if(DIAGNOSTIC_STATUS & IS_LIT == IS_LIT) col->adjustColorForDiagnosticIsLit();
 
@@ -433,9 +434,15 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 
 				//Now see if the ray is inbetween all of these rays
 				//This if statement isn't entirely correct
-				if(tempInt.x <= (max(upLeft.x,max(upRight.x,botLeft.x))) && tempInt.x >= (min(upLeft.x,min(upRight.x,botLeft.x)))
-					&& tempInt.y <= (max(upLeft.y,max(upRight.y,botLeft.y))) && tempInt.y >= (min(upLeft.y,min(upRight.y,botLeft.y)))
-					&& tempInt.z <= (max(upLeft.z,max(upRight.z,botLeft.z))) && tempInt.z >= (min(upLeft.z,min(upRight.z,botLeft.z))))
+				double maxX = max(upLeft.x,max(upRight.x,botLeft.x)) + 0.0000001;
+				double minX = min(upLeft.x,min(upRight.x,botLeft.x)) - 0.0000001;
+				double maxY = max(upLeft.y,max(upRight.y,botLeft.y)) + 0.0000001;
+				double minY = min(upLeft.y,min(upRight.y,botLeft.y)) - 0.0000001;
+				double maxZ = max(upLeft.z,max(upRight.z,botLeft.z)) + 0.0000001;
+				double minZ = min(upLeft.z,min(upRight.z,botLeft.z)) - 0.0000001;
+				if(tempInt.x <= maxX && tempInt.x >= minX
+					&& tempInt.y <= maxY && tempInt.y >= minY
+					&& tempInt.z <= maxZ && tempInt.z >= minZ)
 				{
 					//See if it's the closest plane so far
 					if(!closestPlane)
