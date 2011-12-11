@@ -433,7 +433,6 @@ Plane *findClosestPlane(Ray *r, Point &pInt) {
 				Point botRight = upRight - (tempP->up * tempP->height);
 
 				//Now see if the ray is inbetween all of these rays
-				//This if statement isn't entirely correct
 				double maxX = max(upLeft.x,max(upRight.x,botLeft.x)) + 0.0000001;
 				double minX = min(upLeft.x,min(upRight.x,botLeft.x)) - 0.0000001;
 				double maxY = max(upLeft.y,max(upRight.y,botLeft.y)) + 0.0000001;
