@@ -1,16 +1,14 @@
 #include "AntiAliasing.h"
 #include "Raytrace.h"
 
-BMP generateAABMP(BMP originalImage) {
+BMP generateAABMP(BMP originalImage, Camera* c) {
 	BMP imageAA;
-	imageAA.SetSize(W,H);
+	imageAA.SetSize(c->imageWidth,c->imageHeight);
 	imageAA.SetBitDepth(32);
 
-	//for each row
-	for(int x=0; x<W; x++)
+	for(int y = 0; y < c->imageHeight; y++)
 	{
-		//for each pixel in row
-		for(int y=0; y<H; y++)
+		for(int x = 0; x < c->imageWidth; x++)
 		{
 			int pixelAvg = 4;
 			int alpha;
@@ -51,7 +49,7 @@ BMP generateAABMP(BMP originalImage) {
 				newVal.b += temp.Blue;
 			}
 			//if not right border, add pixel to right
-			if(x != W - 1)
+			if(x != c->imageWidth - 1)
 			{
 				pixelAvg += 2;
 				temp = originalImage.GetPixel(x+1,y);
@@ -61,7 +59,7 @@ BMP generateAABMP(BMP originalImage) {
 				newVal.b += temp.Blue * 2;				
 			}
 			//if not bottom border, add pixel below
-			if(y != H - 1)
+			if(y != c->imageHeight - 1)
 			{
 				pixelAvg += 2;
 				temp = originalImage.GetPixel(x,y+1);
@@ -71,7 +69,7 @@ BMP generateAABMP(BMP originalImage) {
 				newVal.b += temp.Blue * 2;
 			}
 			//if not bottom right border, add pixel diagonally downright
-			if(x != W - 1 && y != H - 1)
+			if(x != c->imageWidth - 1 && y != c->imageHeight - 1)
 			{
 				pixelAvg += 1;
 				temp = originalImage.GetPixel(x+1,y+1);
@@ -81,7 +79,7 @@ BMP generateAABMP(BMP originalImage) {
 				newVal.b += temp.Blue;
 			}
 			//if not bottom left border, add pixel diagonally downleft
-			if(x != 0 && y != H - 1)
+			if(x != 0 && y != c->imageHeight - 1)
 			{
 				pixelAvg += 1;
 				temp = originalImage.GetPixel(x-1,y+1);
@@ -91,7 +89,7 @@ BMP generateAABMP(BMP originalImage) {
 				newVal.b += temp.Blue;
 			}
 			//if not top right border, add pixel diagonally upright
-			if(x != W - 1 && y != 0)
+			if(x != c->imageWidth - 1 && y != 0)
 			{
 				pixelAvg += 1;
 				temp = originalImage.GetPixel(x+1,y-1);

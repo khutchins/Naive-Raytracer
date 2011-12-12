@@ -4,11 +4,20 @@
 #include "StringProcessing.h"
 #include "SceneObject.h"
 #include "Point.h"
+#include "Raytrace.h"
+#include "Color.h"
+#include "EasyBMP\EasyBMP.h"
+#include "AntiAliasing.h"
 #include <fstream>
 #include <string>
 #include <queue>
 
 using namespace std;
+
+typedef enum AntiAliasingType {
+	NO_AA,
+	NAIVE_AVERAGE
+};
 
 class Camera : public SceneObject{
 public:
@@ -16,10 +25,14 @@ public:
     Vector up;
     double zmin, zmax; // zmin is also the location of the image plane
     double width;      // Width at zmin, the image plane
+	int imageWidth;
+	int imageHeight;
+	AntiAliasingType aa;
     bool perspective;
 	bool grayscale;
 
 	Camera(ifstream &f);
+	void renderScene(string filename, int cameraNum);
 };
 
 #endif

@@ -8,7 +8,6 @@
 #include <string>
 #include <queue>
 #include "Diagnostic.h"
-#include "EasyBMP\EasyBMP.h"
 #include "SceneObject.h"
 #include "AntiAliasing.h"
 #include "Sphere.h"
@@ -24,9 +23,6 @@
 #include <limits>
 
 using namespace std;
-
-#define W 320
-#define H 240
 
 Color calculateLocalLighting(Point intercept, Vector normal, EntityID id);
 Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);

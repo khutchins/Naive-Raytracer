@@ -2,12 +2,10 @@
 #define _ANTI_ALIASING_H_
 
 #include "EasyBMP\EasyBMP.h"
+#include "Camera.h"
 
-typedef enum AntiAliasingType {
-	NO_AA,
-	NAIVE_AVERAGE
-};
+class Camera;
 
-BMP generateAABMP(BMP originalImage);
+BMP generateAABMP(BMP originalImage, Camera* c);
 
 #endif

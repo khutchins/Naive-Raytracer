@@ -6,7 +6,6 @@ using namespace std;
 queue<Camera*> cameraQ;
 queue<SceneObject*> objectQ;
 
-const double aspect = (double)H/(double)W;
 double zmaxG = 1000;
 
 int cameraNum = 0;
@@ -29,93 +28,17 @@ int main(int argc, char * argv[])
 	//Read input from file
 	if(processInput(fn) == 0) return 0;
 
-    BMP image;
-    image.SetSize(W,H);
-    image.SetBitDepth(32);
 	for(int i = 0; cameraQ.size() > 0; i++)
 	{
 		cameraNum = i;
 		Camera* c = cameraQ.front();
+		
 		zmaxG = c->zmax;
-		for(int y = 0; y < H; y++)
-		{
-			for(int x = 0; x < W; x++)
-			{
-				double height = c->width * aspect; //Height of image plane
-				double width = c->width; //Width of image plane
-				bool isPerspective = c->perspective; //False if orthogonal, true if perspective
+		c->renderScene(fn,cameraNum);
 
-				double uc = -1*width/2 + width/2 * 2*x/W;
-				double vr = -1*height/2 + height/2 * 2*y/H;
-
-				norm(c->direction);
-				norm(c->up);
-
-				Vector vLeft = cross3(c->direction,c->up); 
-
-				//Point on image plane
-				Point pPointOnImagePlane = c->origin + c->zmin * c->direction + uc * vLeft + vr * c->up;
-				
-				Vector vCamToImagePlane; //Vector from the camera to the image plane
-
-				if(isPerspective) //If camera is perspective
-				{
-					vCamToImagePlane = pPointOnImagePlane - c->origin;
-				}
-				else //If camera is orthogonal
-				{
-					vCamToImagePlane = c->direction;
-				}
-				//vCamToImagePlane = c->direction;
-
-				Ray* r = new Ray(); //Ray from the camera to the image plane
-				r->dir = vCamToImagePlane;
-				
-				if(isPerspective)
-					r->start = c->origin;
-				else
-					r->start = pPointOnImagePlane;
-
-				bool lightT = false;
-
-				if(x == 134 && y == 56) {
-					int z = 5;
-				}
-				Color col = raytrace(r,lightT);
-				if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
-
-				if(c->grayscale) {
-					double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
-					image(W-x-1,H-y-1)->Red   = (unsigned char)grayscaleVal;
-					image(W-x-1,H-y-1)->Green = (unsigned char)grayscaleVal;
-					image(W-x-1,H-y-1)->Blue  = (unsigned char)grayscaleVal;
-				}
-				else {
-					image(W-x-1,H-y-1)->Red   = (unsigned char)col.r;
-					image(W-x-1,H-y-1)->Green = (unsigned char)col.g;
-					image(W-x-1,H-y-1)->Blue  = (unsigned char)col.b;
-				}
-			    image(W-x-1,H-y-1)->Alpha = 0;
-
-				delete r;
-			}
-		}
-
-		string sceneName = fn.substr(0,fn.length()-4);
-		char temp[33];
-		_itoa_s(i,temp,10);
-		sceneName += "-";
-		sceneName += temp;
-		sceneName += ".bmp";
-
-		string sceneName_aa = sceneName.substr(0,sceneName.length()-4)+"_aa_naive.bmp";
-		if(DIAGNOSTIC_STATUS == NORMAL) generateAABMP(image).WriteToFile(sceneName_aa.c_str());
-
-		image.WriteToFile(sceneName.c_str());
 		cameraQ.pop();
 	}
-	
-    BMP texture;
+
     return 0;
 }
 
