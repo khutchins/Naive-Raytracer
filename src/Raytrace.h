@@ -7,6 +7,7 @@
 #include <fstream>
 #include <string>
 #include <queue>
+#include "Diagnostic.h"
 #include "EasyBMP\EasyBMP.h"
 #include "SceneObject.h"
 #include "AntiAliasing.h"
@@ -26,12 +27,6 @@ using namespace std;
 
 #define W 320
 #define H 240
-
-typedef enum DiagnosticStatus {
-	NORMAL = 0,
-	IS_LIT = 1,
-	IS_HIT = 2
-};
 
 Color calculateLocalLighting(Point intercept, Vector normal, EntityID id);
 Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);

@@ -6,6 +6,7 @@
 #include "StringProcessing.h"
 #include "Point.h"
 #include "Material.h"
+#include "Diagnostic.h"
 #include <fstream>
 #include <string>
 #include <queue>

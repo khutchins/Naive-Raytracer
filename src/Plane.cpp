@@ -160,10 +160,10 @@ bool Plane::intersect(Ray* r, Point &intersect) {
 }
 
 Color Plane::calculateTextureFromMaterial(Point intercept) {
-	BMP temp;
-	temp = this->texture;
-	int height = temp.TellHeight();
-	int width = temp.TellWidth();
+	BMP* temp;
+	temp = &this->texture;
+	int height = temp->TellHeight();
+	int width = temp->TellWidth();
 	double planeHeight = this->height;
 	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
@@ -188,6 +188,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	planeUp.start = intercept;
 
 	// ((p2 - p1)xd1) . (d1xd2) / ||d1xd2||^2
+	//percentage along top of plane
 	double tTopPoint = dot3(cross3((planeUp.start - top.start),planeUp.dir),cross3(top.dir,planeUp.dir))/magnitude2(cross3(top.dir,planeUp.dir));
 
 	Ray side;
@@ -199,6 +200,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	planeLeft.dir = left;
 	planeLeft.start = intercept;
 
+	//percentage along side of plane
 	double tLeftPoint = dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude2(cross3(side.dir,planeLeft.dir));
 	
 	int pixelX = abs((int)(tTopPoint * width));
@@ -206,9 +208,16 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	pixelX %= width;
 	pixelY %= height;
 	Color matColor;
-	matColor.r = temp.GetPixel(pixelX,pixelY).Red/255.f;
-	matColor.g = temp.GetPixel(pixelX,pixelY).Green/255.f;
-	matColor.b = temp.GetPixel(pixelX,pixelY).Blue/255.f;
+	if(DIAGNOSTIC_STATUS == TEXTURE_MAPPING) {
+		matColor.r = tLeftPoint;
+		matColor.b = 1;
+		matColor.g = tTopPoint;
+	}
+	else {
+		matColor.r = temp->GetPixel(pixelX,pixelY).Red/255.f;
+		matColor.g = temp->GetPixel(pixelX,pixelY).Green/255.f;
+		matColor.b = temp->GetPixel(pixelX,pixelY).Blue/255.f;
+	}
 	return matColor;
 }
 

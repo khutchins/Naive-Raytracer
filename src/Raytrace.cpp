@@ -13,8 +13,6 @@ int cameraNum = 0;
 
 EntityID lastProc = NONE;
 
-DiagnosticStatus DIAGNOSTIC_STATUS = NORMAL;
-
 int main(int argc, char * argv[])
 {
 	bool manualFilename = false; //If true, use a predefined scene file
@@ -158,6 +156,12 @@ Color raytrace(Ray* r, bool &light)
 						
 			if(closestO->hasTexture)
 			{
+				if(DIAGNOSTIC_STATUS == TEXTURE_MAPPING) {
+					c.r = materialTexture.r * 255;
+					c.g = materialTexture.g * 255;
+					c.b = materialTexture.b * 255;
+					return c;
+				}
 				c.r = llocal.r * materialTexture.r * 255 + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
 				c.g = llocal.g * materialTexture.g * 255 + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
 				c.b = llocal.b * materialTexture.b * 255 + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
