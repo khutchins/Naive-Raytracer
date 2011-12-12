@@ -10,6 +10,7 @@ const double aspect = (double)H/(double)W;
 double zmaxG = 1000;
 
 int cameraNum = 0;
+int iterations = 0;
 
 EntityID lastProc = NONE;
 
@@ -150,8 +151,10 @@ Color raytrace(Ray* r, bool &light)
 			norm(normal);
 
 			llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
-			if(closestO->getReflection() != 0) reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
-			if(closestO->getRefraction() != 0) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
+			iterations++;
+			if(closestO->getReflection() != 0 && iterations < 5) reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
+			if(closestO->getRefraction() != 0 && iterations < 5) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
+			iterations--;
 			if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt);
 						
 			if(closestO->hasTexture)

@@ -8,6 +8,6 @@ typedef enum DiagnosticStatus {
 	TEXTURE_MAPPING
 };
 
-const DiagnosticStatus DIAGNOSTIC_STATUS = TEXTURE_MAPPING;
+const DiagnosticStatus DIAGNOSTIC_STATUS = NORMAL;
 
 #endif
