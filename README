@@ -12,8 +12,8 @@ Spheres
 Cameras
 Point Lights
 
-Reflection and refraction somewhat work.
-Sphere and Plane diffusive lighting work.
+Reflection and refraction work.
+Sphere and Plane diffusive work.
 Point lights work.
 Perspective and orthogonal cameras work.
 There is very naive anti-aliasing in which each value is averaged with a weighted average across all adjacent values.  It essentially just blurs the image.
