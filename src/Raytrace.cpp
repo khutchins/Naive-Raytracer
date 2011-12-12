@@ -156,7 +156,10 @@ Color raytrace(Ray* r, bool &light)
 			if(closestO->getRefraction() != 0 && iterations < 5) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
 			iterations--;
 			if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt);
-						
+			
+			double percentDiffuse = 1.f - closestO->getReflection() - closestO->getRefraction();
+			if(percentDiffuse < 0) percentDiffuse = 0;
+
 			if(closestO->hasTexture)
 			{
 				if(DIAGNOSTIC_STATUS == TEXTURE_MAPPING) {
@@ -165,15 +168,15 @@ Color raytrace(Ray* r, bool &light)
 					c.b = materialTexture.b * 255;
 					return c;
 				}
-				c.r = llocal.r * materialTexture.r * 255 + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
-				c.g = llocal.g * materialTexture.g * 255 + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
-				c.b = llocal.b * materialTexture.b * 255 + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
+				c.r = llocal.r * materialTexture.r * 255 * percentDiffuse + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
+				c.g = llocal.g * materialTexture.g * 255 * percentDiffuse + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
+				c.b = llocal.b * materialTexture.b * 255 * percentDiffuse + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
 			}
 			else
 			{
-				c.r = llocal.r * closestO->getColor().r * 255 + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
-				c.g = llocal.g * closestO->getColor().g * 255 + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
-				c.b = llocal.b * closestO->getColor().b * 255 + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
+				c.r = llocal.r * closestO->getColor().r * 255 * percentDiffuse + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
+				c.g = llocal.g * closestO->getColor().g * 255 * percentDiffuse + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
+				c.b = llocal.b * closestO->getColor().b * 255 * percentDiffuse + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
 			}
 			light = false;
 		}
