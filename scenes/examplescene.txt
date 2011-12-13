@@ -18,8 +18,10 @@ perspective 1
 grayscale 0
 # size of image result (width,height). Default is 320x240
 imagesize 320 240
-# type of aa.  Choices are "none" for no AA and "naive-average" for an averaging of values. Default is none.
+# type of aa. Default none. Choices are "none" for no AA, "naive-average" for an averaging of values, fsaa4 for 4xFSAA, and fsaa16 for 16xFSAA
 aa none
+# name of output file (of format "<filename>-<name>.bmp") defaults to number of camera
+name example
 end
 
 # multiple cameras are fine.  Each camera will output a new image
