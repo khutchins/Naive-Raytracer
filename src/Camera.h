@@ -16,7 +16,9 @@ using namespace std;
 
 typedef enum AntiAliasingType {
 	NO_AA,
-	NAIVE_AVERAGE
+	NAIVE_AVERAGE, //weighted average of pixels post processing
+	FSAA_4, //full scene anti-aliasing with 4 samples (super-sampling)
+	FSAA_16 //full scene anti-aliasing with 16 samples  (super-sampling)
 };
 
 class Camera : public SceneObject{
@@ -30,6 +32,7 @@ public:
 	AntiAliasingType aa;
     bool perspective;
 	bool grayscale;
+	string name;
 
 	Camera(ifstream &f);
 	void renderScene(string filename, int cameraNum);

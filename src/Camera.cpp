@@ -9,6 +9,7 @@ Camera::Camera(ifstream &f)
 	this->aa = NO_AA;
 	this->imageHeight = 240;
 	this->imageWidth = 320;
+	this->name = "";
 	while(!f.eof())
 	{
 		string line;
@@ -83,7 +84,8 @@ Camera::Camera(ifstream &f)
 		}
 
 		//words with one argument
-		else if(word == "width" || word == "perspective" || word == "grayscale" || word == "aa")
+		else if(word == "width" || word == "perspective" || word == "grayscale" 
+				|| word == "aa"	|| word == "name")
 		{
 			string sNum;
 			double num = 0;
@@ -98,9 +100,12 @@ Camera::Camera(ifstream &f)
 			if(word == "width")				this->width = num;
 			else if(word == "perspective")	this->perspective = bool1;
 			else if(word == "grayscale")	this->grayscale = bool1;
+			else if(word == "name")			this->name = sNum;
 			else if(word == "aa")
 			{
 				if(sNum == "none") this->aa = NO_AA;
+				else if(sNum == "fsaa4") this->aa = FSAA_4;
+				else if(sNum == "fsaa16") this->aa = FSAA_16;
 				else if(sNum == "naive-average") this->aa = NAIVE_AVERAGE;
 			}
 		}
@@ -114,18 +119,28 @@ void Camera::renderScene(string filename, int cameraNum) {
 	BMP image;
 	image.SetSize(this->imageWidth,this->imageHeight);
     image.SetBitDepth(32);
+	int numSamples;
+	if(aa == FSAA_4) numSamples = 4;
+	else if(aa == FSAA_16) numSamples = 16;
+	else numSamples = 1;
+	int sqrtNumSamples = (int)sqrt((float)numSamples);
 	double aspect = (double)imageHeight/(double)imageWidth;
+
+	double width = this->width;
+	double height = this->width * aspect;
+	double width2 = width/2.f;
+	double height2 = height/2.f;
+	double deltawidth = 1/(imageWidth * sqrtNumSamples);
+	double deltaheight = 1/(imageHeight * sqrtNumSamples);
 
 	for(int y = 0; y < this->imageHeight; y++)
 	{
 		for(int x = 0; x < this->imageWidth; x++)
 		{
-			double height = this->width * aspect; //Height of image plane
-			double width = this->width; //Width of image plane
 			bool isPerspective = this->perspective; //False if orthogonal, true if perspective
 
-			double uc = -1*width/2 + width/2 * 2*x/this->imageWidth;
-			double vr = -1*height/2 + height/2 * 2*y/this->imageHeight;
+			double uc = -1*width/2 + width/2 * 2.f*x/imageWidth;
+			double vr = -1*height/2 + height/2 * 2.f*y/imageHeight;
 
 			norm(this->direction);
 			norm(this->up);
@@ -157,7 +172,22 @@ void Camera::renderScene(string filename, int cameraNum) {
 
 			bool lightT = false;
 
-			Color col = raytrace(r,lightT);
+			Color col;
+			if(aa == FSAA_4 || aa == FSAA_16) {
+				Color* colors = new Color[numSamples];
+				for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
+					for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
+						double uc = -width/2 + width/2 * 2*(x+x2)/imageWidth;
+						double vr = -height/2 + height/2 * 2*(y+y2)/imageHeight;
+						pPointOnImagePlane = this->origin + this->zmin * this->direction + uc * vLeft + vr * this->up;
+						if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
+						colors[x2*sqrtNumSamples + y2] = raytrace(r,lightT);
+					}
+				}
+				col = Color::averageValues(colors,numSamples);
+				delete colors;
+			}
+			else col = raytrace(r,lightT);
 			if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
 
 			if(this->grayscale) {
@@ -178,10 +208,13 @@ void Camera::renderScene(string filename, int cameraNum) {
 	}
 
 	string sceneName = filename.substr(0,filename.length()-4);
-	char temp[33];
-	_itoa_s(cameraNum,temp,10);
 	sceneName += "-";
-	sceneName += temp;
+	if(name == "") {
+		char temp[33];
+		_itoa_s(cameraNum,temp,10);
+		sceneName += temp;
+	}
+	else sceneName += name;
 	sceneName += ".bmp";
 
 	if(aa == NAIVE_AVERAGE) generateAABMP(image,this).WriteToFile(sceneName.c_str());
