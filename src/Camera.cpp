@@ -139,8 +139,8 @@ void Camera::renderScene(string filename, int cameraNum) {
 		{
 			bool isPerspective = this->perspective; //False if orthogonal, true if perspective
 
-			double uc = -1*width/2 + width/2 * 2.f*x/imageWidth;
-			double vr = -1*height/2 + height/2 * 2.f*y/imageHeight;
+			double uc = -1*width2 + width*x/imageWidth;
+			double vr = -1*height2 + height*y/imageHeight;
 
 			norm(this->direction);
 			norm(this->up);
@@ -177,10 +177,11 @@ void Camera::renderScene(string filename, int cameraNum) {
 				Color* colors = new Color[numSamples];
 				for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
 					for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
-						double uc = -width/2 + width/2 * 2*(x+x2)/imageWidth;
-						double vr = -height/2 + height/2 * 2*(y+y2)/imageHeight;
+						double uc = -width2 + width*(x+x2)/imageWidth;
+						double vr = -height2 + height*(y+y2)/imageHeight;
 						pPointOnImagePlane = this->origin + this->zmin * this->direction + uc * vLeft + vr * this->up;
 						if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
+						if(!isPerspective) r->start = pPointOnImagePlane;
 						colors[x2*sqrtNumSamples + y2] = raytrace(r,lightT);
 					}
 				}
