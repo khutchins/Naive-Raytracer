@@ -86,29 +86,20 @@ Color raytrace(Ray* r, bool &light)
 			if(closestO->hasTexture)
 			{
 				if(DIAGNOSTIC_STATUS == TEXTURE_MAPPING) {
-					c.r = materialTexture.r * 255;
-					c.g = materialTexture.g * 255;
-					c.b = materialTexture.b * 255;
+					c = materialTexture * 255;
 					return c;
 				}
-				c.r = llocal.r * materialTexture.r * 255 * percentDiffuse + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
-				c.g = llocal.g * materialTexture.g * 255 * percentDiffuse + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
-				c.b = llocal.b * materialTexture.b * 255 * percentDiffuse + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
+				c = llocal * materialTexture * 255 * percentDiffuse + closestO->getReflection() * reflect + closestO->getRefraction() * refract;
 			}
 			else
 			{
-				c.r = llocal.r * closestO->getColor().r * 255 * percentDiffuse + closestO->getReflection() * reflect.r + closestO->getRefraction() * refract.r;
-				c.g = llocal.g * closestO->getColor().g * 255 * percentDiffuse + closestO->getReflection() * reflect.g + closestO->getRefraction() * refract.g;
-				c.b = llocal.b * closestO->getColor().b * 255 * percentDiffuse + closestO->getReflection() * reflect.b + closestO->getRefraction() * refract.b;
+				c = llocal * closestO->getColor() * 255 * percentDiffuse + closestO->getReflection() * reflect + closestO->getRefraction() * refract;
 			}
 			light = false;
 		}
 		else if (closestO->isLight) //Light is closest
 		{
-			c.r = closestO->getColor().r * 255;
-			c.g = closestO->getColor().g * 255;
-			c.b = closestO->getColor().b * 255;
-
+			c = closestO->getColor() * 255;
 			light = true;
 		}
 		else light = false;

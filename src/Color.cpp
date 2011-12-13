@@ -39,12 +39,47 @@ Color Color::ColorWhite() {
 Color Color::averageValues(Color* colors, int numValues) {
 	Color result = ColorBlack();
 	for(int i = 0; i < numValues; i++) {
-		result.r += colors[i].r;
-		result.g += colors[i].g;
-		result.b += colors[i].b;
+		result = result + colors[i];
 	}
-	result.r /= numValues;
-	result.g /= numValues;
-	result.b /= numValues;
+	double divNum = 1.f/numValues;
+	result = result * divNum;
 	return result;
+}
+
+Color Color::operator+(Color &right)
+{
+    Color result;
+    result.r = this->r + right.r;
+	result.g = this->g + right.g;
+	result.b = this->b + right.b;
+    return result;
+}
+
+Color Color::operator-(Color &right)
+{
+    Color result;
+    result.r = this->r - right.r;
+	result.g = this->g - right.g;
+	result.b = this->b - right.b;
+    return result;
+}
+
+Color Color::operator *(double k) {
+	Color result;
+	result.r = this->r * k;
+	result.g = this->g * k;
+	result.b = this->b * k;
+	return result;
+}
+
+Color Color::operator *(Color &right) {
+	Color result;
+	result.r = r * right.r;
+	result.g = g * right.g;
+	result.b = b * right.b;
+	return result;
+}
+
+Color operator * (double k, Color& v) {
+	return v*k;
 }
