@@ -35,3 +35,16 @@ Color Color::ColorWhite() {
 	white.b = 255;
 	return white;
 }
+
+Color Color::averageValues(Color* colors, int numValues) {
+	Color result = ColorBlack();
+	for(int i = 0; i < numValues; i++) {
+		result.r += colors[i].r;
+		result.g += colors[i].g;
+		result.b += colors[i].b;
+	}
+	result.r /= numValues;
+	result.g /= numValues;
+	result.b /= numValues;
+	return result;
+}

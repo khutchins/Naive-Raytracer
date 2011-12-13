@@ -11,6 +11,7 @@ public:
 	static Color ColorWhite();
 
 	void adjustColorForDiagnosticIsLit();
+	static Color averageValues(Color* colors, int numValues);
 } Color;
 
 #endif
