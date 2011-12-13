@@ -1,4 +1,4 @@
-A naive, unfinished, mostly commented, (very) basic raytracing system in C++.
+A naive, mostly commented, basic raytracing system in C++.
 
 The main purposes of this project are to:
 A) Refresh and increase my knowledge of raytracing through the implementation of a raytracer.
@@ -16,9 +16,14 @@ Reflection and refraction work.
 Sphere and Plane diffusive work.
 Point lights work.
 Perspective and orthogonal cameras work.
-There is very naive anti-aliasing in which each value is averaged with a weighted average across all adjacent values.  It essentially just blurs the image.
 
-This currently outputs two .bmp files for each camera in a scene: <scene_name><camera_number>.bmp and <scene_name><camera_number>_aa_naive.bmp
+Anti-aliasing options:
+none - no anti-aliasing
+naive-average - a naive weighted average of a pixel with its neighbors
+fsaa4 - 4xFSAA (scene is sampled at 4x the normal resolution and averaged down to normal)
+fsaa16 - 16xFSAA (scene is sampled at 16x the normal resolution and averaged down to normal)
+
+This currently outputs two .bmp files for each camera in a scene: <scene_name>-<camera_number>.bmp and <scene_name>-<name>.bmp if the camera name parameter is defined.
 
 Usage: ./<program> <path-to-scene-file>
 
