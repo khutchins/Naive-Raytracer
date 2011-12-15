@@ -89,6 +89,14 @@ Tube::Tube(ifstream &f)
 	}
 }
 
+Tube::Tube(Material m, double radius, double height, Vector up, Point origin) {
+	this->material = m;
+	this->radius = radius;
+	this->height = height;
+	this->up = up;
+	this->origin = origin;
+}
+
 bool Tube::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
