@@ -10,6 +10,7 @@ typedef enum EntityID {
 	SPHERE,
 	PLANE,
 	LIGHT,
+	DISK,
 	NONE
 };
 

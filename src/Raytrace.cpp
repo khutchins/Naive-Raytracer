@@ -257,6 +257,11 @@ int processInput(string filename)
 			Light* l = new Light(sceneFile);
 			objectQ.push(l);
 		}
+		else if(word == "disk")
+		{
+			Disk* d = new Disk(sceneFile);
+			objectQ.push(d);
+		}
 		else
 		{
 			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;

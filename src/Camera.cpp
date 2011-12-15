@@ -177,8 +177,8 @@ void Camera::renderScene(string filename, int cameraNum) {
 				Color* colors = new Color[numSamples];
 				for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
 					for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
-						double uc = -width2 + width*(x+x2)/imageWidth;
-						double vr = -height2 + height*(y+y2)/imageHeight;
+						double uc = -width2 + width*(x+x2/sqrtNumSamples)/imageWidth/sqrtNumSamples;
+						double vr = -height2 + height*(y+y2/sqrtNumSamples)/imageHeight/sqrtNumSamples;
 						pPointOnImagePlane = this->origin + this->zmin * this->direction + uc * vLeft + vr * this->up;
 						if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
 						if(!isPerspective) r->start = pPointOnImagePlane;
