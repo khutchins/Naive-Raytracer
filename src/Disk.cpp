@@ -92,6 +92,14 @@ Disk::Disk(ifstream &f)
 	}
 }
 
+Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {
+	this->radius = radius;
+	this->material = m;
+	this->up = up;
+	this->normal = normal;
+	this->origin = origin;
+}
+
 bool Disk::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);
 

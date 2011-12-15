@@ -11,6 +11,9 @@ typedef enum EntityID {
 	PLANE,
 	LIGHT,
 	DISK,
+	CYLINDER,
+	TUBE,
+	BOX,
 	NONE
 };
 

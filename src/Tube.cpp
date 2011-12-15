@@ -1,14 +1,10 @@
-#include "Sphere.h"
+#include "Tube.h"
 
-Vector Sphere::calculateNormalForPoint(Point p, Point raySource) {
-	return p - this->origin;
-}
-
-Sphere::Sphere(ifstream &f)
+Tube::Tube(ifstream &f)
 {
 	this->isLight = false;
 	this->isVisible = true;
-	this->objectType = SPHERE;
+	this->objectType = TUBE;
 	this->hasTexture = false;
 	while(!f.eof())
 	{
@@ -25,7 +21,7 @@ Sphere::Sphere(ifstream &f)
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		//words with three string arguments
-		if(word == "origin" || word == "color")
+		if(word == "origin" || word == "color" || word == "up")
 		{
 			double num1 = 0;
 			double num2 = 0;
@@ -52,10 +48,17 @@ Sphere::Sphere(ifstream &f)
 				this->material.color.g = num2;
 				this->material.color.b = num3;
 			}
+			else if(word == "up")
+			{
+				this->up.x = num1;
+				this->up.y = num2;
+				this->up.z = num3;
+				norm(this->up);
+			}
 		}
 
 		//words with one argument
-		else if(word == "radius" || word == "reflect" || word == "transparency")
+		else if(word == "radius" || word == "reflect" || word == "transparency" || word == "height")
 		{
 			double num1 = 0;
 
@@ -76,13 +79,17 @@ Sphere::Sphere(ifstream &f)
 			{
 				this->material.transparency = num1;
 			}
+			else if(word == "height")
+			{
+				height = num1;
+			}
 		}
 		else
 			break;
 	}
 }
 
-bool Sphere::intersect(Ray* r, Point &intersect) {
+bool Tube::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
 	norm(dist);
@@ -94,8 +101,8 @@ bool Sphere::intersect(Ray* r, Point &intersect) {
 
 	double disc = discrim(a,b,c);
 
-	//No intersection, do nothing
-	if(disc < 0) return false;
+	//Parallel to tube, does not intersect
+	if(dot3(r->dir,this->up) == 0) return false;
 	else if(disc >= 0) //Find closest intersection
 	{
 		double discSqrt = sqrt(disc);
@@ -118,14 +125,18 @@ bool Sphere::intersect(Ray* r, Point &intersect) {
 	return false;
 }
 
-double Sphere::getReflection() {
+Vector Tube::calculateNormalForPoint(Point p, Point raySource) {
+	return p - this->origin;
+}
+
+double Tube::getReflection() {
 	return this->material.reflection;
 }
 
-double Sphere::getRefraction() {
+double Tube::getRefraction() {
 	return this->material.transparency;
 }
 
-Color Sphere::getColor() {
+Color Tube::getColor() {
 	return this->material.color;
 }
