@@ -27,6 +27,6 @@ This currently outputs two .bmp files for each camera in a scene: <scene_name>-<
 
 Usage: ./<program> <path-to-scene-file>
 
-This code is being run in Windows.  Some tweaking may have to be done to run it on Linux/Mac.  I'll try it on there once I get it bug-free.
+This code is being run in Windows and should work on Linux and probably Mac by running the makefile.
 
 An example scene file is in /scenes
