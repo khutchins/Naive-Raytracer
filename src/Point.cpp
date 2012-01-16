@@ -8,7 +8,7 @@ Point Point::PointZero() {
 	return zero;
 }
 
-Vector Point::operator+(Point &right)
+Vector Point::operator+(Point right)
 {
     Vector result;
     result.x = this->x + right.x;
@@ -17,7 +17,7 @@ Vector Point::operator+(Point &right)
     return result;
 }
 
-Vector Point::operator-(Point &right)
+Vector Point::operator-(Point right)
 {
     Vector result;
     result.x = this->x - right.x;
@@ -26,7 +26,7 @@ Vector Point::operator-(Point &right)
     return result;
 }
 
-Point Point::operator+(Vector &right)
+Point Point::operator+(Vector right)
 {
     Point result;
     result.x = this->x + right.x;
@@ -35,7 +35,7 @@ Point Point::operator+(Vector &right)
     return result;
 }
 
-Point Point::operator-(Vector &right)
+Point Point::operator-(Vector right)
 {
     Point result;
     result.x = this->x - right.x;
@@ -52,6 +52,6 @@ Point Point::operator *(double k) {
 	return result;
 }
 
-Point operator * (double k, Point& p) {
+Point operator * (double k, Point p) {
 	return p*k;
 }

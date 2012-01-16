@@ -5,8 +5,9 @@
 #include "Point.h"
 #include "Vector.h"
 #include "Color.h"
+#include <cstdlib>
 
-typedef enum EntityID {
+enum EntityID {
 	SPHERE,
 	PLANE,
 	LIGHT,

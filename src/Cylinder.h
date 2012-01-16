@@ -12,11 +12,14 @@
 #include <fstream>
 #include <string>
 #include <queue>
+#include <cstdlib>
 
 class Cylinder : public SceneObject {
-	Disk top;
-	Disk bottom;
-	Tube tube;
+	Disk *top;
+	Disk *bottom;
+	Tube *tube;
+	Vector up;
+	Material material;
 
 	Cylinder(ifstream &f);
 	Vector calculateNormalForPoint(Point p, Point raySource);

@@ -10,7 +10,7 @@
 #include <fstream>
 #include <string>
 #include <queue>
-#include "EasyBMP\EasyBMP.h"
+#include "EasyBMP/EasyBMP.h"
 
 using namespace std;
 

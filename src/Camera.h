@@ -1,12 +1,13 @@
 #ifndef _CAMERA_H_
 #define _CAMERA_H_
 
+#include <cstdlib>
 #include "StringProcessing.h"
 #include "SceneObject.h"
 #include "Point.h"
 #include "Raytrace.h"
 #include "Color.h"
-#include "EasyBMP\EasyBMP.h"
+#include "EasyBMP/EasyBMP.h"
 #include "AntiAliasing.h"
 #include <fstream>
 #include <string>
@@ -14,7 +15,7 @@
 
 using namespace std;
 
-typedef enum AntiAliasingType {
+enum AntiAliasingType {
 	NO_AA,
 	NAIVE_AVERAGE, //weighted average of pixels post processing
 	FSAA_4, //full scene anti-aliasing with 4 samples (super-sampling)

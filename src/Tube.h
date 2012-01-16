@@ -13,6 +13,7 @@
 #include <cmath>
 
 class Tube : public SceneObject {
+public:
 	double height;
 	double radius;
 	Material material;

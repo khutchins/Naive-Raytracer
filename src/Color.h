@@ -13,11 +13,11 @@ public:
 	void adjustColorForDiagnosticIsLit();
 	static Color averageValues(Color* colors, int numValues);
 
-	Color operator+(Color &right);
-	Color operator-(Color &right);
+	Color operator+(Color right);
+	Color operator-(Color right);
 	Color operator * (double k);
-	Color operator * (Color &right);
-	friend Color operator * (double k, Color& v);
+	Color operator * (Color right);
+	friend Color operator * (double k, Color v);
 } Color;
 
 #endif

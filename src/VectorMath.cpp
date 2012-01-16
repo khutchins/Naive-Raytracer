@@ -53,6 +53,23 @@ Vector cross3(Vector v1, Vector v2) {
 	return cross3(v1.x,v2.x,v1.y,v2.y,v1.z,v2.z);
 }
 
+Vector vectorPerpendicularTo(Vector original) {
+	if(original.x == 0 && original.y == 0 && original.z == 0) {
+		Vector zeroVector;
+		zeroVector.x = 0;
+		zeroVector.y = 0;
+		zeroVector.z = 0;
+		return zeroVector;
+	}
+	if(original.x <= original.y && original.x <= original.z) {
+		return cross3(original.x,1,original.y,0,original.z,0);
+	}
+	else if(original.y <= original.x && original.y <= original.z) {
+		return cross3(original.x,0,original.y,1,original.z,0);
+	}
+	else return cross3(original.x,0,original.y,0,original.z,1);
+}
+
 void norm(double &x, double &y, double &z) //Returns the normalized vector by reference
 {
 	if(x != 0 || y != 0 || z != 0)

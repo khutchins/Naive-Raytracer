@@ -12,7 +12,7 @@ Vector::Vector(double x, double y, double z) {
 	this->z = z;
 }
 
-Vector Vector::operator+(Vector &right)
+Vector Vector::operator+(Vector right)
 {
     Vector result;
     result.x = this->x + right.x;
@@ -21,7 +21,7 @@ Vector Vector::operator+(Vector &right)
     return result;
 }
 
-Vector Vector::operator-(Vector &right)
+Vector Vector::operator-(Vector right)
 {
     Vector result;
     result.x = this->x - right.x;
@@ -30,7 +30,7 @@ Vector Vector::operator-(Vector &right)
     return result;
 }
 
-Point Vector::operator+(Point &right)
+Point Vector::operator+(Point right)
 {
     Point result;
     result.x = this->x + right.x;
@@ -39,7 +39,7 @@ Point Vector::operator+(Point &right)
     return result;
 }
 
-Point Vector::operator-(Point &right)
+Point Vector::operator-(Point right)
 {
     Point result;
     result.x = this->x - right.x;
@@ -56,7 +56,7 @@ Vector Vector::operator *(double k) {
 	return result;
 }
 
-Vector operator * (double k, Vector& v) {
+Vector operator * (double k, Vector v) {
 	return v*k;
 }
 

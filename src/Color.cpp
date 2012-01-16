@@ -46,7 +46,7 @@ Color Color::averageValues(Color* colors, int numValues) {
 	return result;
 }
 
-Color Color::operator+(Color &right)
+Color Color::operator+(Color right)
 {
     Color result;
     result.r = this->r + right.r;
@@ -55,7 +55,7 @@ Color Color::operator+(Color &right)
     return result;
 }
 
-Color Color::operator-(Color &right)
+Color Color::operator-(Color right)
 {
     Color result;
     result.r = this->r - right.r;
@@ -72,7 +72,7 @@ Color Color::operator *(double k) {
 	return result;
 }
 
-Color Color::operator *(Color &right) {
+Color Color::operator *(Color right) {
 	Color result;
 	result.r = r * right.r;
 	result.g = g * right.g;
@@ -80,6 +80,6 @@ Color Color::operator *(Color &right) {
 	return result;
 }
 
-Color operator * (double k, Color& v) {
+Color operator * (double k, Color v) {
 	return v*k;
 }

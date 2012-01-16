@@ -1,4 +1,4 @@
-#include "Sphere.h"
+#include "Cylinder.h"
 
 Cylinder::Cylinder(ifstream &f)
 {
@@ -91,26 +91,26 @@ Cylinder::Cylinder(ifstream &f)
 		else
 			break;
 	}
-	tube = Tube::Tube(material,radius,height,up,origin);
-	top = Disk::Disk(material,radius,0,up,origin+up*(height*0.5);
-	bottom = Disk::Disk(material,radius,0,up,origin-up*(height*0.5);
+	tube = new Tube(material,radius,height,up,origin);
+	top = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin+up*(height*0.5));
+	bottom = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin-up*(height*0.5));
 }
 
 bool Cylinder::intersect(Ray* r, Point &intersect) {
-	SceneObject closestObject = NULL;
+	SceneObject *closestObject = NULL;
 	bool objectHit = false;
 	Point objectIntersect;
-	if(tube->intersect(r,objectIntersect) {
+	if(tube->intersect(r,objectIntersect)) {
 		intersect = objectIntersect;
 		objectHit = true;
 	}
-	if(top->intersect(r,objectIntersect) {
+	if(top->intersect(r,objectIntersect)) {
 		if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
 			intersect = objectIntersect;
 			objectHit = true;
 		}
 	}
-	if(bottom->intersect(r,objectIntersect) {
+	if(bottom->intersect(r,objectIntersect)) {
 		if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
 			intersect = objectIntersect;
 			objectHit = true;

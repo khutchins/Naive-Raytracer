@@ -1,7 +1,7 @@
 #ifndef _DIAGNOSTIC_H_
 #define _DIAGNOSTIC_H_
 
-typedef enum DiagnosticStatus {
+enum DiagnosticStatus {
 	NORMAL,
 	IS_LIT,
 	IS_HIT,

@@ -12,12 +12,12 @@ struct Vector {
 	Vector(double x, double y, double z);
 	static Vector VectorZero();
 
-	Vector operator+(Vector &right);
-	Vector operator-(Vector &right);
-	Point operator+(Point &right);
-	Point operator-(Point &right);
+	Vector operator+(Vector right);
+	Vector operator-(Vector right);
+	Point operator+(Point right);
+	Point operator-(Point right);
 	Vector operator * (double k);
-	friend Vector operator * (double k, Vector& v);
+	friend Vector operator * (double k, Vector v);
 
 };
 

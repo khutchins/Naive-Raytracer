@@ -212,7 +212,7 @@ void Camera::renderScene(string filename, int cameraNum) {
 	sceneName += "-";
 	if(name == "") {
 		char temp[33];
-		_itoa_s(cameraNum,temp,10);
+		sprintf(temp,"%d",cameraNum);
 		sceneName += temp;
 	}
 	else sceneName += name;

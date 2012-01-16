@@ -15,6 +15,7 @@ double quadratic(double a, double b, double c); //Returns the smallest value tha
 double quadratic2(double a, double b, double c); 
 Vector cross3(double x1, double x2, double y1, double y2, double z1, double z2); //Returns the vector of the cross product of 2 3D vectors
 Vector cross3(Vector v1, Vector v2);
+Vector vectorPerpendicularTo(Vector original);
 void norm(double &x, double &y, double &z); //Returns the normalized doubles by reference
 void norm(Vector &v); //Returns the normalized vector by reference
 double magnitude(Vector v); //Returns the magnitude of a vector
