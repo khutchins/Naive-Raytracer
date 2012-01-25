@@ -196,7 +196,7 @@ SceneObject *findClosestObject(Ray *r, Point &intersect) {
 
 		Point objectIntersect;
 		if(tempO->intersect(r,objectIntersect)) {
-			else if(!closestObject || dist3Compare(objectIntersect, r->start) < dist3Compare(intersect, r->start))
+			if(!closestObject || dist3Compare(objectIntersect, r->start) < dist3Compare(intersect, r->start))
 			{
 				closestObject = tempO;
 				intersect = objectIntersect;
@@ -232,33 +232,35 @@ int processInput(string filename)
 
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
-		if(word == "camera")
-		{
+		if(word == "camera") {
 			Camera* c = new Camera(sceneFile);
 			cameraQ.push(c);
 		}
-		else if(word == "plane")
-		{
+		else if(word == "plane") {
 			Plane* p = new Plane(sceneFile);
 			objectQ.push(p);
 		}
-		else if(word == "sphere")
-		{
+		else if(word == "sphere") {
 			Sphere* s = new Sphere(sceneFile);
 			objectQ.push(s);
 		}
-		else if(word == "light")
-		{
+		else if(word == "light") {
 			Light* l = new Light(sceneFile);
 			objectQ.push(l);
 		}
-		else if(word == "disk")
-		{
+		else if(word == "disk") {
 			Disk* d = new Disk(sceneFile);
 			objectQ.push(d);
 		}
-		else
-		{
+		else if(word == "tube") {
+			Tube* t = new Tube(sceneFile);
+			objectQ.push(t);
+		}
+		else if(word == "cylinder") {
+			//Cylinder* c = new Cylinder(sceneFile);
+			//objectQ.push(c);
+		}
+		else {
 			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;
 			return 0;
 		}

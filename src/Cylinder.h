@@ -14,7 +14,10 @@
 #include <queue>
 #include <cstdlib>
 
+using namespace std;
+
 class Cylinder : public SceneObject {
+public:
 	Disk *top;
 	Disk *bottom;
 	Tube *tube;
