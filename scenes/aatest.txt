@@ -7,7 +7,6 @@ width 3
 name none
 aa none
 perspective 1
-imagesize 30 20
 end
 
 camera

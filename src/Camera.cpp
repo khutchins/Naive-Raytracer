@@ -134,8 +134,11 @@ void Camera::renderScene(string filename, int cameraNum) {
 	double deltaheight = 1/(imageHeight * sqrtNumSamples);
 
 	double gapWidth2 = 1.f/((double)imageWidth)/2.f;
+	double gapHeight2 = 1.f/((double)imageHeight)/2.f;
 	double leftGap = 1.f/(imageWidth * sqrtNumSamples*2); //Gap between edge of "square" and leftmost sample.
-	double gapBetweenSamples = 2*leftGap;
+	double topGap = 1.f/(imageHeight * sqrtNumSamples*2);
+	double gapBetweenHorizontalSamples = 2*leftGap;
+	double gapBetweenVerticalSamples = 2*topGap;
 
 	for(int y = 0; y < this->imageHeight; y++)
 	{
@@ -180,9 +183,9 @@ void Camera::renderScene(string filename, int cameraNum) {
 			if(aa == FSAA_4 || aa == FSAA_16) {
 				Color* colors = new Color[numSamples];
 				for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
-					double adjXCoord = xCoord - gapWidth2 + leftGap + (x2-1)*gapBetweenSamples;
+					double adjXCoord = xCoord - gapWidth2 + leftGap + (x2-1)*gapBetweenHorizontalSamples;
 					for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
-						double adjYCoord = yCoord - gapWidth2 + leftGap + (y2-1)*gapBetweenSamples;
+						double adjYCoord = yCoord - gapHeight2 + topGap + (y2-1)*gapBetweenVerticalSamples;
 						pPointOnImagePlane = this->origin + this->zmin * this->direction + adjXCoord * vLeft + adjYCoord * this->up;
 						if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
 						if(!isPerspective) r->start = pPointOnImagePlane;
