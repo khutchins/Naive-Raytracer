@@ -29,4 +29,4 @@ Usage: ./<program> <path-to-scene-file>
 
 This code is being run in Windows and should work on Linux and probably Mac by running the makefile.
 
-An example scene file is in /scenes
+Example scene files are in /scenes.
