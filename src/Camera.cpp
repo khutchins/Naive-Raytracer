@@ -143,8 +143,8 @@ void Camera::renderScene(string filename, int cameraNum) {
 		{
 			bool isPerspective = this->perspective; //False if orthogonal, true if perspective
 
-			double uc = -1*width2 + width*x/imageWidth;
-			double vr = -1*height2 + height*y/imageHeight;
+			double xCoord = -1*width2 + width*x/imageWidth;
+			double yCoord = -1*height2 + height*y/imageHeight;
 
 			norm(this->direction);
 			norm(this->up);
@@ -152,7 +152,7 @@ void Camera::renderScene(string filename, int cameraNum) {
 			Vector vLeft = cross3(this->direction,this->up); 
 
 			//Point on image plane
-			Point pPointOnImagePlane = this->origin + this->zmin * this->direction + uc * vLeft + vr * this->up;
+			Point pPointOnImagePlane = this->origin + this->zmin * this->direction + xCoord * vLeft + yCoord * this->up;
 			
 			Vector vCamToImagePlane; //Vector from the camera to the image plane
 
@@ -180,14 +180,13 @@ void Camera::renderScene(string filename, int cameraNum) {
 			if(aa == FSAA_4 || aa == FSAA_16) {
 				Color* colors = new Color[numSamples];
 				for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
-					double uc2 = uc - gapWidth2 + leftGap + (x2-1)*gapBetweenSamples;
+					double adjXCoord = xCoord - gapWidth2 + leftGap + (x2-1)*gapBetweenSamples;
 					for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
-						double vr2 = vr - gapWidth2 + leftGap + (y2-1)*gapBetweenSamples;
-						pPointOnImagePlane = this->origin + this->zmin * this->direction + uc2 * vLeft + vr2 * this->up;
+						double adjYCoord = yCoord - gapWidth2 + leftGap + (y2-1)*gapBetweenSamples;
+						pPointOnImagePlane = this->origin + this->zmin * this->direction + adjXCoord * vLeft + adjYCoord * this->up;
 						if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
 						if(!isPerspective) r->start = pPointOnImagePlane;
 						colors[x2*sqrtNumSamples + y2] = raytrace(r,lightT);
-						//printf("uc = %f, vr = %f\n",uc2,vr2);
 					}
 				}
 				col = Color::averageValues(colors,numSamples);
