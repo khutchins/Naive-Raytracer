@@ -133,6 +133,10 @@ void Camera::renderScene(string filename, int cameraNum) {
 	double deltawidth = 1/(imageWidth * sqrtNumSamples);
 	double deltaheight = 1/(imageHeight * sqrtNumSamples);
 
+	double gapWidth2 = 1.f/((double)imageWidth)/2.f;
+	double leftGap = 1.f/(imageWidth * sqrtNumSamples*2); //Gap between edge of "square" and leftmost sample.
+	double gapBetweenSamples = 2*leftGap;
+
 	for(int y = 0; y < this->imageHeight; y++)
 	{
 		for(int x = 0; x < this->imageWidth; x++)
@@ -176,13 +180,14 @@ void Camera::renderScene(string filename, int cameraNum) {
 			if(aa == FSAA_4 || aa == FSAA_16) {
 				Color* colors = new Color[numSamples];
 				for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
+					double uc2 = uc - gapWidth2 + leftGap + (x2-1)*gapBetweenSamples;
 					for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
-						double uc = -width2 + width*(x+x2/sqrtNumSamples)/imageWidth/sqrtNumSamples;
-						double vr = -height2 + height*(y+y2/sqrtNumSamples)/imageHeight/sqrtNumSamples;
-						pPointOnImagePlane = this->origin + this->zmin * this->direction + uc * vLeft + vr * this->up;
+						double vr2 = vr - gapWidth2 + leftGap + (y2-1)*gapBetweenSamples;
+						pPointOnImagePlane = this->origin + this->zmin * this->direction + uc2 * vLeft + vr2 * this->up;
 						if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
 						if(!isPerspective) r->start = pPointOnImagePlane;
 						colors[x2*sqrtNumSamples + y2] = raytrace(r,lightT);
+						//printf("uc = %f, vr = %f\n",uc2,vr2);
 					}
 				}
 				col = Color::averageValues(colors,numSamples);
