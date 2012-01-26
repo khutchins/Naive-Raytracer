@@ -13,18 +13,8 @@ int iterations = 0;
 
 EntityID lastProc = NONE;
 
-int main(int argc, char * argv[])
+int start(string fn)
 {
-	bool manualFilename = false; //If true, use a predefined scene file
-	string fn; //name of file
-	if(manualFilename)
-		fn = "K:\\git\\Naive-Raytracer\\scenes";
-
-	if(argc != 2 && !manualFilename)
-		cout << "Incorrect argument amount. Program terminating.\n";
-	else if(argc == 2 && !manualFilename)
-		fn = argv[1];
-
 	//Read input from file
 	if(processInput(fn) == 0) return 0;
 
@@ -257,12 +247,12 @@ int processInput(string filename)
 			objectQ.push(t);
 		}
 		else if(word == "cylinder") {
-			Cylinder* c = new Cylinder(sceneFile);
-			objectQ.push(c);
+			//Cylinder* c = new Cylinder(sceneFile);
+			//objectQ.push(c);
 		}
 		else if(word == "cuboid" || word == "box") {
-			Cuboid* c = new Cuboid(sceneFile);
-			objectQ.push(c);
+			//Cuboid* c = new Cuboid(sceneFile);
+			//objectQ.push(c);
 		}
 		else {
 			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;
