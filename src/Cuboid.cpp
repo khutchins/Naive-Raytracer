@@ -58,7 +58,7 @@ Cuboid::Cuboid(ifstream &f)
 				this->front.x = num1;
 				this->front.y = num2;
 				this->front.z = num3;
-				norm(this->up);
+				norm(this->front);
 			}
 		}
 

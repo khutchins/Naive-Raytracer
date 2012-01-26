@@ -247,12 +247,12 @@ int processInput(string filename)
 			objectQ.push(t);
 		}
 		else if(word == "cylinder") {
-			//Cylinder* c = new Cylinder(sceneFile);
-			//objectQ.push(c);
+			Cylinder* c = new Cylinder(sceneFile);
+			objectQ.push(c);
 		}
 		else if(word == "cuboid" || word == "box") {
-			//Cuboid* c = new Cuboid(sceneFile);
-			//objectQ.push(c);
+			Cuboid* c = new Cuboid(sceneFile);
+			objectQ.push(c);
 		}
 		else {
 			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;
