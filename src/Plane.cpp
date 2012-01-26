@@ -92,14 +92,8 @@ Plane::Plane(ifstream &f)
 			num1 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "reflect") //read in the color coordinates
-			{
-				this->material.reflection = num1;
-			}
-			else if (word == "transparency")
-			{
-				this->material.transparency = num1;
-			}
+			if(word == "reflect")			this->material.reflection = num1;
+			else if (word == "transparency")this->material.transparency = num1;
 		}
 
 		//words with one string argument
@@ -119,6 +113,19 @@ Plane::Plane(ifstream &f)
 			break;
 	}
 }
+
+Plane::Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin) {
+	this->origin = origin;
+	this->width = width;
+	this->height = height;
+	this->material = m;
+	this->up = up;
+	this->normal = normal;
+	if(this->texture.ReadFromFile(textureName.c_str()))	this->hasTexture = true;
+	this->isLight = false;
+	this->isVisible = true;
+}
+
 
 bool Plane::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);

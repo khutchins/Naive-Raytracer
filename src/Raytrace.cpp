@@ -260,6 +260,10 @@ int processInput(string filename)
 			//Cylinder* c = new Cylinder(sceneFile);
 			//objectQ.push(c);
 		}
+		else if(word == "cuboid" || word == "box") {
+			//Cuboid* c = new Cuboid(sceneFile);
+			//objectQ.push(c);
+		}
 		else {
 			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;
 			return 0;

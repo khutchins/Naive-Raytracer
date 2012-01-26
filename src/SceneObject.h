@@ -14,7 +14,7 @@ enum EntityID {
 	DISK,
 	CYLINDER,
 	TUBE,
-	BOX,
+	CUBOID,
 	NONE
 };
 

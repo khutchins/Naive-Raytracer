@@ -11,6 +11,7 @@
 #include "AntiAliasing.h"
 #include "Camera.h"
 #include "Color.h"
+#include "Cuboid.h"
 #include "Cylinder.h"
 #include "Diagnostic.h"
 #include "Disk.h"

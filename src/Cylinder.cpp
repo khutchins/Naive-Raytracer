@@ -71,22 +71,10 @@ Cylinder::Cylinder(ifstream &f)
 			num1 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "radius") //read in the origin coordinates
-			{
-				radius = num1;
-			}
-			else if(word == "reflect") //read in the color coordinates
-			{
-				material.reflection = num1;
-			}
-			else if(word == "transparency")
-			{
-				material.transparency = num1;
-			}
-			else if(word == "height")
-			{
-				height = num1;
-			}
+			if(word == "radius")			radius = num1;
+			else if(word == "reflect")		material.reflection = num1;
+			else if(word == "transparency")	material.transparency = num1;
+			else if(word == "height")		height = num1;
 		}
 		else
 			break;

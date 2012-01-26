@@ -64,18 +64,9 @@ Sphere::Sphere(ifstream &f)
 			num1 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "radius") //read in the origin coordinates
-			{
-				this->radius = num1;
-			}
-			else if(word == "reflect") //read in the color coordinates
-			{
-				this->material.reflection = num1;
-			}
-			else if(word == "transparency")
-			{
-				this->material.transparency = num1;
-			}
+			if(word == "radius")			this->radius = num1;
+			else if(word == "reflect")		this->material.reflection = num1;
+			else if(word == "transparency")	this->material.transparency = num1;
 		}
 		else
 			break;
