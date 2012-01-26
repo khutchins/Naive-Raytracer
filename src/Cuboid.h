@@ -15,7 +15,7 @@
 
 class Cuboid : public SceneObject {
 public:
-	Plane sides[6];
+	Plane* sides[6];
 
 	Vector up;
 	Vector front;

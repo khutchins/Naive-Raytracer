@@ -7,7 +7,7 @@ Cuboid::Cuboid(ifstream &f)
 	this->objectType = CUBOID;
 	this->hasTexture = false;
 	Material material;
-	String textureName;
+	string textureName;
 	
 	while(!f.eof())
 	{
@@ -95,12 +95,12 @@ Cuboid::Cuboid(ifstream &f)
 	Vector left = cross3(up,front);
 	norm(left);
 
-	sides[0] =  Plane(material, length, width, front, up, textureName, origin+up*height/2.f); //Top plane
-	sides[1] =  Plane(material, length, width, front, -up, textureName, origin-up*height/2.f); //Bottom plane
-	sides[2] =  Plane(material, length, height, up, front, textureName, origin+front*width/2.f); //Front plane
-	sides[3] =  Plane(material, length, height, up, -front, textureName, origin-front*width/2.f); //Back plane
-	sides[4] =  Plane(material, width, height, up, left, textureName, origin+left*length/2.f); //left plane
-	sides[5] =  Plane(material, width, height, up, -left, textureName, origin-left*length/2.f); //left plane
+	sides[0] = new Plane(material, length, width, front, up, textureName, origin+up*height*0.5f); //Top plane
+	sides[1] = new Plane(material, length, width, front, -1*up, textureName, origin-up*height*0.5f); //Bottom plane
+	sides[2] = new Plane(material, length, height, up, front, textureName, origin+front*width*0.5f); //Front plane
+	sides[3] = new Plane(material, length, height, up, -1*front, textureName, origin-front*width*0.5f); //Back plane
+	sides[4] = new Plane(material, width, height, up, left, textureName, origin+left*length*0.5f); //left plane
+	sides[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //left plane
 }
 
 bool Cuboid::intersect(Ray* r, Point &intersect) {
@@ -122,29 +122,32 @@ bool Cuboid::intersect(Ray* r, Point &intersect) {
 Vector Cuboid::calculateNormalForPoint(Point p, Point raySource) {
 	bool objectHit = false;
 	Point objectIntersect, intersect;
-	SceneObject* closestObject;
-	Vector r = p-raySource;
+	Plane* closestObject;
+	Ray *r = new Ray();
+	r->start = raySource;
+	r->dir = p-raySource;
 
 	for(int i = 0; i < 6; i++) {
-		if(sides[i].intersect(r,objectIntersect)) {
-			if(!objectHit || dist3Compare(r.start,objectIntersect) < dist3Compare(r.start,intersect)) {
+		if(sides[i]->intersect(r,objectIntersect)) {
+			if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
 				intersect = objectIntersect;
 				objectHit = true;
-				closestObject = &sides[i];
+				closestObject = sides[i];
 			}
 		}
 	}
+	delete r;
 	return closestObject->normal;
 }
 
 double Cuboid::getReflection() {
-	return this->material.reflection;
+	return sides[0]->material.reflection;
 }
 
 double Cuboid::getRefraction() {
-	return this->material.transparency;
+	return sides[0]->material.transparency;
 }
 
 Color Cuboid::getColor() {
-	return this->material.color;
+	return sides[0]->material.color;
 }
