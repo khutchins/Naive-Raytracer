@@ -257,8 +257,8 @@ int processInput(string filename)
 			objectQ.push(t);
 		}
 		else if(word == "cylinder") {
-			//Cylinder* c = new Cylinder(sceneFile);
-			//objectQ.push(c);
+			Cylinder* c = new Cylinder(sceneFile);
+			objectQ.push(c);
 		}
 		else {
 			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;
