@@ -121,7 +121,7 @@ Plane::Plane(Material m, double width, double height, Vector up, Vector normal, 
 	this->material = m;
 	this->up = up;
 	this->normal = normal;
-	if(this->texture.ReadFromFile(textureName.c_str()))	this->hasTexture = true;
+	if(textureName.size() > 0) if(this->texture.ReadFromFile(textureName.c_str())) this->hasTexture = true;
 	this->isLight = false;
 	this->isVisible = true;
 }
