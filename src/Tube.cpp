@@ -85,7 +85,7 @@ Tube::Tube(Material m, double radius, double height, Vector up, Point origin) {
 	this->origin = origin;
 }
 
-bool Tube::intersect(Ray* r, Point &intersect) {
+SceneObject* Tube::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
 	norm(dist);
@@ -116,9 +116,9 @@ bool Tube::intersect(Ray* r, Point &intersect) {
 		else t = t0;
 
 		intersect = r->start + t * r->dir;
-		return true;
+		return this;
 	}
-	return false;
+	return NULL;
 }
 
 Vector Tube::calculateNormalForPoint(Point p, Point raySource) {

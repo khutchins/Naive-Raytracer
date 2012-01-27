@@ -25,7 +25,7 @@ public:
 
 	Plane(std::ifstream &f);
 	Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin);
-	bool intersect(Ray* r, Point &intersect);
+	SceneObject* intersect(Ray* r, Point &intersect);
 	Vector calculateNormalForPoint(Point p, Point raySource);
 	Color calculateTextureFromMaterial(Point intercept);
 	double getReflection();

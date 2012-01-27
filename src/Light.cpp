@@ -51,7 +51,7 @@ Light::Light(ifstream &f)
 	}
 }
 
-bool Light::intersect(Ray* r, Point &intersect) {
+SceneObject* Light::intersect(Ray* r, Point &intersect) {
 	//Four cases here
 	//tempL->origin.x - r->start.x == 0 && r->dir.x == 0.  This is fine, they intersect at all points.  Assign infinity
 	//tempL->origin.x - r->start.x != 0 && r->dir.x == 0.  These will *never* hit. Assign quiet NaN
@@ -69,7 +69,7 @@ bool Light::intersect(Ray* r, Point &intersect) {
 	else															t.z = (this->origin.z - r->start.z) / r->dir.z;
 
 	//if light is behind the camera, no intersection
-	if(t.x < 0 || t.y < 0 || t.z < 0) return false;
+	if(t.x < 0 || t.y < 0 || t.z < 0) return NULL;
 
 	bool txyEquiv = (abs(t.x-t.y) < 0.001) || t.x == std::numeric_limits<double>::infinity() || t.y == std::numeric_limits<double>::infinity();
 	bool tyzEquiv = (abs(t.y-t.z) < 0.001) || t.y == std::numeric_limits<double>::infinity() || t.z == std::numeric_limits<double>::infinity();
@@ -78,9 +78,9 @@ bool Light::intersect(Ray* r, Point &intersect) {
 	if(txyEquiv && tyzEquiv && txzEquiv) //If the ts are roughly the same, we hit the light
 	{
 		intersect = this->origin;
-		return true;
+		return this;
 	}
-	return false;
+	return NULL;
 }
 
 Color Light::getColor() {

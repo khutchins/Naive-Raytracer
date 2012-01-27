@@ -185,7 +185,7 @@ SceneObject *findClosestObject(Ray *r, Point &intersect) {
 		objectQ.push(tempO);
 
 		Point objectIntersect;
-		if(tempO->intersect(r,objectIntersect)) {
+		if(tempO = tempO->intersect(r,objectIntersect)) {
 			if(!closestObject || dist3Compare(objectIntersect, r->start) < dist3Compare(intersect, r->start))
 			{
 				closestObject = tempO;

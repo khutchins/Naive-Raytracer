@@ -24,7 +24,7 @@ public:
 
 	Cuboid(ifstream &f);
 	Vector calculateNormalForPoint(Point p, Point raySource);
-	bool intersect(Ray* r, Point &intersect);
+	SceneObject* intersect(Ray* r, Point &intersect);
 	double getReflection();
 	double getRefraction();
 	Color getColor();

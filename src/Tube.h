@@ -22,7 +22,7 @@ public:
 	Tube(ifstream &f);
 	Tube(Material m, double radius, double height, Vector up, Point origin);
 	Vector calculateNormalForPoint(Point p, Point raySource);
-	bool intersect(Ray* r, Point &intersect);
+	SceneObject* intersect(Ray* r, Point &intersect);
 	double getReflection();
 	double getRefraction();
 	Color getColor();

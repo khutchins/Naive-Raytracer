@@ -103,15 +103,15 @@ Cuboid::Cuboid(ifstream &f)
 	sides[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //left plane
 }
 
-bool Cuboid::intersect(Ray* r, Point &intersect) {
-	bool objectHit = false;
+SceneObject* Cuboid::intersect(Ray* r, Point &intersect) {
+	SceneObject* objectHit = NULL;
 	Point objectIntersect;
 
 	for(int i = 0; i < 6; i++) {
 		if(sides[i]->intersect(r,objectIntersect)) {
 			if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
 				intersect = objectIntersect;
-				objectHit = true;
+				objectHit = sides[i];
 			}
 		}
 	}

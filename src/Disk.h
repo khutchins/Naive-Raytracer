@@ -26,7 +26,7 @@ public:
 	Disk(ifstream &f);
 	Disk(Material m, double radius, Vector up, Vector normal, Point origin);
 	Vector calculateNormalForPoint(Point p, Point raySource);
-	bool intersect(Ray* r, Point &intersect);
+	SceneObject* intersect(Ray* r, Point &intersect);
 	double getReflection();
 	double getRefraction();
 	Color getColor();

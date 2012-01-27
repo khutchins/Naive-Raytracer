@@ -73,7 +73,7 @@ Sphere::Sphere(ifstream &f)
 	}
 }
 
-bool Sphere::intersect(Ray* r, Point &intersect) {
+SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
 	norm(dist);
@@ -104,9 +104,9 @@ bool Sphere::intersect(Ray* r, Point &intersect) {
 		else t = t0;
 
 		intersect = r->start + t * r->dir;
-		return true;
+		return this;
 	}
-	return false;
+	return NULL;
 }
 
 double Sphere::getReflection() {

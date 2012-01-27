@@ -121,13 +121,14 @@ Plane::Plane(Material m, double width, double height, Vector up, Vector normal, 
 	this->material = m;
 	this->up = up;
 	this->normal = normal;
+	this->hasTexture = false;
 	if(textureName.size() > 0) if(this->texture.ReadFromFile(textureName.c_str())) this->hasTexture = true;
 	this->isLight = false;
 	this->isVisible = true;
 }
 
 
-bool Plane::intersect(Ray* r, Point &intersect) {
+SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);
 
 	if(dot != 0) //If the normal and ray aren't perpendicular (ray and plane parallel)
@@ -159,11 +160,11 @@ bool Plane::intersect(Ray* r, Point &intersect) {
 				&& tempInt.z <= maxZ && tempInt.z >= minZ)
 			{
 				intersect = tempInt;
-				return true;
+				return this;
 			}
 		}
 	}
-	return false;
+	return NULL;
 }
 
 Color Plane::calculateTextureFromMaterial(Point intercept) {

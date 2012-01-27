@@ -26,7 +26,7 @@ public:
 	bool hasTexture; //Only can be true for planes currently
 	EntityID objectType;
 
-	virtual bool intersect(Ray* r, Point &intersect) {return false;}
+	virtual SceneObject* intersect(Ray* r, Point &intersect) {return NULL;}
 	virtual Vector calculateNormalForPoint(Point p, Point raySource) {return Vector::VectorZero();}
 	virtual double getReflection() { return 0; }
 	virtual double getRefraction() { return 0; }

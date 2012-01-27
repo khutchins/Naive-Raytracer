@@ -84,7 +84,7 @@ Cylinder::Cylinder(ifstream &f)
 	bottom = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin-up*(height*0.5));
 }
 
-bool Cylinder::intersect(Ray* r, Point &intersect) {
+SceneObject* Cylinder::intersect(Ray* r, Point &intersect) {
 	SceneObject *closestObject = NULL;
 	bool objectHit = false;
 	Point objectIntersect;
@@ -104,7 +104,7 @@ bool Cylinder::intersect(Ray* r, Point &intersect) {
 			objectHit = true;
 		}
 	}
-	return objectHit;
+	return closestObject;
 }
 
 Vector Cylinder::calculateNormalForPoint(Point p, Point raySource) {

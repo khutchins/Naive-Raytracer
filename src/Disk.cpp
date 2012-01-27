@@ -100,7 +100,7 @@ Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {
 	this->origin = origin;
 }
 
-bool Disk::intersect(Ray* r, Point &intersect) {
+SceneObject* Disk::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);
 
 	if(dot != 0) //If the normal and ray aren't perpendicular (ray and disk parallel)
@@ -114,11 +114,11 @@ bool Disk::intersect(Ray* r, Point &intersect) {
 			//See if disk contains the point
 			if(dist3Compare(tempInt,this->origin) < radius*radius) {
 				intersect = tempInt;
-				return true;
+				return this;
 			}
 		}
 	}
-	return false;
+	return NULL;
 }
 
 Vector Disk::calculateNormalForPoint(Point p, Point raySource) {

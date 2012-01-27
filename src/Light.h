@@ -18,7 +18,7 @@ public:
     Color color;
 
 	Light(ifstream &f);
-	bool intersect(Ray* r, Point &intersect);
+	SceneObject* intersect(Ray* r, Point &intersect);
 	Color getColor();
 };
 
