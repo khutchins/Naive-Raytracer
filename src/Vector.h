@@ -2,8 +2,11 @@
 #define _VECTOR_H_
 
 #include "Point.h"
+#include <string>
 
 struct Point;
+
+using namespace std;
 
 struct Vector {
 	double x,y,z;
@@ -11,6 +14,8 @@ struct Vector {
 	Vector();
 	Vector(double x, double y, double z);
 	static Vector VectorZero();
+
+	void print();
 
 	Vector operator+(Vector right);
 	Vector operator-(Vector right);

@@ -90,6 +90,15 @@ Disk::Disk(ifstream &f)
 		else
 			break;
 	}
+
+	//Warning: Vectors are not orthogonal
+	if(abs(dot3(up,normal)) > 0.00001) {
+		printf("Warning: Disk up vector ");
+		up.print();
+		printf(" and normal vector ");
+		normal.print();
+		printf(" are not orthogonal.\n");
+	}
 }
 
 Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {

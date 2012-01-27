@@ -112,6 +112,15 @@ Plane::Plane(ifstream &f)
 		else
 			break;
 	}
+
+	//Warning: Vectors are not orthogonal
+	if(abs(dot3(up,normal)) > 0.00001) {
+		printf("Warning: Plane up vector ");
+		up.print();
+		printf(" and normal vector ");
+		normal.print();
+		printf(" are not orthogonal.\n");
+	}
 }
 
 Plane::Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin) {

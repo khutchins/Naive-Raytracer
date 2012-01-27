@@ -51,12 +51,14 @@ Camera::Camera(ifstream &f)
 				this->direction.x = num1;
 				this->direction.y = num2;
 				this->direction.z = num3;
+				norm(this->direction);
 			}
 			else if(word == "up")
 			{
 				this->up.x = num1;
 				this->up.y = num2;
 				this->up.z = num3;
+				norm(this->up);
 			}
 		}
 
@@ -113,6 +115,15 @@ Camera::Camera(ifstream &f)
 	}
 	if(this->perspective && this->zmin == 0)
 		printf("Warning: Perspective camera with a zmin of zero.\n");
+
+	//Warning: Vectors are not orthogonal
+	if(abs(dot3(up,direction)) > 0.00001) {
+		printf("Warning: Camera up vector ");
+		up.print();
+		printf(" and direction vector ");
+		direction.print();
+		printf(" are not orthogonal.\n");
+	}
 }
 
 void Camera::renderScene(string filename, int cameraNum) {

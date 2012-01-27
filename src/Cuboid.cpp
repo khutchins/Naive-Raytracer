@@ -91,6 +91,15 @@ Cuboid::Cuboid(ifstream &f)
 
 		else break;
 	}
+
+	//Warning: Vectors are not orthogonal
+	if(abs(dot3(up,front)) > 0.00001) {
+		printf("Warning: Cuboid up vector ");
+		up.print();
+		printf(" and front vector ");
+		front.print();
+		printf(" are not orthogonal.\n");
+	}
 	
 	Vector left = cross3(up,front);
 	norm(left);

@@ -12,6 +12,10 @@ Vector::Vector(double x, double y, double z) {
 	this->z = z;
 }
 
+void Vector::print() {
+	printf("{%.2f,%.2f,%.2f}",x,y,z);
+}
+
 Vector Vector::operator+(Vector right)
 {
     Vector result;
