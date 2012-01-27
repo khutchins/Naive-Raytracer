@@ -100,7 +100,7 @@ Cuboid::Cuboid(ifstream &f)
 	sides[2] = new Plane(material, length, height, up, front, textureName, origin+front*width*0.5f); //Front plane
 	sides[3] = new Plane(material, length, height, up, -1*front, textureName, origin-front*width*0.5f); //Back plane
 	sides[4] = new Plane(material, width, height, up, left, textureName, origin+left*length*0.5f); //left plane
-	sides[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //left plane
+	sides[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //right plane
 }
 
 SceneObject* Cuboid::intersect(Ray* r, Point &intersect) {
