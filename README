@@ -12,6 +12,7 @@ Spheres
 Cameras
 Point Lights
 Disks
+Cuboids
 
 Reflection and refraction work.
 Sphere and Plane diffusive work.
