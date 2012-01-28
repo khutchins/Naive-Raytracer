@@ -12,14 +12,13 @@ BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolu
 
 	for(int i_y = 0; i_y < imageConvolution.TellHeight(); i_y++) {
 		for(int i_x = 0; i_x < imageConvolution.TellWidth(); i_x++) {
-
 			Color newColor = Color::ColorBlack();
 			double newAlpha = 0;
 
 			for(int c_y = 0; c_y < convolutionHeight; c_y++) {
 				for(int c_x = 0; c_x < convolutionWidth; c_x++) {
-					int x = min(max(0,i_x+c_x-(c_x-1)/2),imageWidth-1);
-					int y = min(max(0,i_y+c_y-(c_y-1)/2),imageHeight-1);
+					int x = min(max(0,i_x+c_x-(convolutionWidth-1)/2),imageWidth-1);
+					int y = min(max(0,i_y+c_y-(convolutionHeight-1)/2),imageHeight-1);
 
 					RGBApixel tempPixel = originalImage.GetPixel(x,y);
 					newColor.r += tempPixel.Red * convolution[c_y][c_x];
