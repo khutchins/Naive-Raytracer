@@ -18,11 +18,17 @@ BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolu
 
 			for(int c_y = 0; c_y < convolutionHeight; c_y++) {
 				for(int c_x = 0; c_x < convolutionWidth; c_x++) {
-					RGBApixel tempPixel = originalImage.GetPixel(min(max(0,i_x+c_x-c_x/2),imageWidth-1),min(max(0,i_y+c_y-c_y/2),imageHeight-1));
-					newColor.r = tempPixel.Red * convolution.at(c_y).at(c_x);
-					newColor.g = tempPixel.Green * convolution.at(c_y).at(c_x);
-					newColor.b = tempPixel.Blue * convolution.at(c_y).at(c_x);
-					newAlpha = tempPixel.Alpha * convolution.at(c_y).at(c_x);
+					int x = min(max(0,i_x+c_x-(c_x-1)/2),imageWidth-1);
+					int y = min(max(0,i_y+c_y-(c_y-1)/2),imageHeight-1);
+					RGBApixel tempPixel = originalImage.GetPixel(x,y);
+					if(tempPixel.Green > 0)
+					{
+						int x = 5;
+					}
+					newColor.r += tempPixel.Red * convolution[c_y][c_x];
+					newColor.g += tempPixel.Green * convolution[c_y][c_x];
+					newColor.b += tempPixel.Blue * convolution[c_y][c_x];
+					newAlpha += tempPixel.Alpha * convolution[c_y][c_x];
 				}
 			}
 
