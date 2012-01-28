@@ -236,7 +236,7 @@ void Camera::renderScene(string filename, int cameraNum) {
 	else sceneName += name;
 	sceneName += ".bmp";
 
-	if(aa == NAIVE_AVERAGE) generateAABMP(image,this).WriteToFile(sceneName.c_str());
+	if(aa == NAIVE_AVERAGE) generateAABMP(image).WriteToFile(sceneName.c_str());
 	else image.WriteToFile(sceneName.c_str());
 	cout << "Finished rendering file " << sceneName << ".\n";
 }

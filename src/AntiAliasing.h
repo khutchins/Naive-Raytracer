@@ -2,10 +2,9 @@
 #define _ANTI_ALIASING_H_
 
 #include "EasyBMP/EasyBMP.h"
-#include "Camera.h"
+#include "Convolution.h"
+#include <vector>
 
-class Camera;
-
-BMP generateAABMP(BMP originalImage, Camera* c);
+BMP generateAABMP(BMP originalImage);
 
 #endif
