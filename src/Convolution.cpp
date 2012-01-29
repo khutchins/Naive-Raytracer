@@ -28,10 +28,10 @@ BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolu
 				}
 			}
 
-			if(newColor.r > 255) newColor.r = 255;
-			if(newColor.g > 255) newColor.g = 255;
-			if(newColor.b > 255) newColor.b = 255;
-			if(newAlpha > 255) newAlpha = 255;
+			newColor.r = min(max(0,(int)newColor.r),255);
+			newColor.g = min(max(0,(int)newColor.g),255);
+			newColor.b = min(max(0,(int)newColor.b),255);
+			newAlpha = min(max(0,(int)newAlpha),255);
 
 			imageConvolution(i_x,i_y)->Red = (ebmpBYTE)newColor.r;
 			imageConvolution(i_x,i_y)->Green = (ebmpBYTE)newColor.g;
