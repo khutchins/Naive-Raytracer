@@ -7,6 +7,10 @@
 
 using namespace std;
 
-BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolution);
+typedef vector<vector<double>> convolution;
+
+BMP generateConvolutionBitmap(BMP originalImage, convolution &convolution);
+
+convolution getEdgeDetectionConvolution();
 
 #endif

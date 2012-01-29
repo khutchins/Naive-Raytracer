@@ -1,6 +1,6 @@
 #include "Convolution.h"
 
-BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolution) {
+BMP generateConvolutionBitmap(BMP originalImage, convolution &convolution) {
 	BMP imageConvolution;
 	imageConvolution.SetSize(originalImage.TellWidth(),originalImage.TellHeight());
 
@@ -40,4 +40,25 @@ BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolu
 		}
 	}
 	return imageConvolution;
+}
+
+convolution getEdgeDetectionConvolution() {
+	int width = 3;
+	int height = 3;
+	convolution aa2DVector;
+	aa2DVector.resize(width);
+	for(int i = 0; i < width; i++) aa2DVector[i].resize(height);
+
+	aa2DVector[0][0] = 0;
+	aa2DVector[0][1] = 1;
+	aa2DVector[0][2] = 0;
+
+	aa2DVector[1][0] = 1;
+	aa2DVector[1][1] = -4;
+	aa2DVector[1][2] = 1;
+
+	aa2DVector[2][0] = 0;
+	aa2DVector[2][1] = 1;
+	aa2DVector[2][2] = 0;
+	return aa2DVector;
 }

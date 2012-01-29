@@ -2,7 +2,7 @@
 #include "Raytrace.h"
 
 BMP generateAABMP(BMP originalImage) {
-	vector<vector<double>> aa2DVector;
+	convolution aa2DVector;
 	aa2DVector.resize(3);
 	for(int i = 0; i < 3; i++) aa2DVector[i].resize(3);
 
