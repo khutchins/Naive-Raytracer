@@ -7,8 +7,8 @@ BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolu
 	int imageWidth = originalImage.TellWidth();
 	int imageHeight = originalImage.TellHeight();
 	
-	int convolutionHeight = convolution.size();
-	int convolutionWidth = convolution.begin()->size();
+	int convolutionWidth = convolution.size();
+	int convolutionHeight = convolution.begin()->size();
 
 	for(int i_y = 0; i_y < imageConvolution.TellHeight(); i_y++) {
 		for(int i_x = 0; i_x < imageConvolution.TellWidth(); i_x++) {
@@ -21,12 +21,17 @@ BMP generateConvolutionBitmap(BMP originalImage, vector<vector<double>> &convolu
 					int y = min(max(0,i_y+c_y-(convolutionHeight-1)/2),imageHeight-1);
 
 					RGBApixel tempPixel = originalImage.GetPixel(x,y);
-					newColor.r += tempPixel.Red * convolution[c_y][c_x];
-					newColor.g += tempPixel.Green * convolution[c_y][c_x];
-					newColor.b += tempPixel.Blue * convolution[c_y][c_x];
-					newAlpha += tempPixel.Alpha * convolution[c_y][c_x];
+					newColor.r += tempPixel.Red * convolution[c_x][c_y];
+					newColor.g += tempPixel.Green * convolution[c_x][c_y];
+					newColor.b += tempPixel.Blue * convolution[c_x][c_y];
+					newAlpha += tempPixel.Alpha * convolution[c_x][c_y];
 				}
 			}
+
+			if(newColor.r > 255) newColor.r = 255;
+			if(newColor.g > 255) newColor.g = 255;
+			if(newColor.b > 255) newColor.b = 255;
+			if(newAlpha > 255) newAlpha = 255;
 
 			imageConvolution(i_x,i_y)->Red = (ebmpBYTE)newColor.r;
 			imageConvolution(i_x,i_y)->Green = (ebmpBYTE)newColor.g;
