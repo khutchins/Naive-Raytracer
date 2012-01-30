@@ -62,3 +62,27 @@ convolution getEdgeDetectionConvolution() {
 	aa2DVector[2][2] = 0;
 	return aa2DVector;
 }
+
+convolution getGaussianBlurConvolution() {
+	int width = 3;
+	int height = 3;
+	convolution aa2DVector;
+	aa2DVector.resize(width);
+	for(int i = 0; i < width; i++) aa2DVector[i].resize(height);
+
+	double DIV = 16.f;
+
+	aa2DVector[0][0] = 1.f/DIV;
+	aa2DVector[0][1] = 2.f/DIV;
+	aa2DVector[0][2] = 1.f/DIV;
+
+	aa2DVector[1][0] = 2.f/DIV;
+	aa2DVector[1][1] = 4.f/DIV;
+	aa2DVector[1][2] = 2.f/DIV;
+
+	aa2DVector[2][0] = 1.f/DIV;
+	aa2DVector[2][1] = 2.f/DIV;
+	aa2DVector[2][2] = 1.f/DIV;
+
+	return aa2DVector;
+}

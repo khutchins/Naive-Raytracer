@@ -12,5 +12,6 @@ typedef vector<vector<double>> convolution;
 BMP generateConvolutionBitmap(BMP originalImage, convolution &convolution);
 
 convolution getEdgeDetectionConvolution();
+convolution getGaussianBlurConvolution();
 
 #endif
