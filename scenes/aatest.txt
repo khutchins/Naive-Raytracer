@@ -26,6 +26,28 @@ direction 0 0 1
 up 0 1 0
 z 1 10
 width 3
+name edaa04
+aa edaa4
+perspective 1
+end
+
+camera
+origin 0 0 0
+direction 0 0 1
+up 0 1 0
+z 1 10
+width 3
+name edaa16
+aa edaa16
+perspective 1
+end
+
+camera
+origin 0 0 0
+direction 0 0 1
+up 0 1 0
+z 1 10
+width 3
 name fsaa04
 aa fsaa4
 perspective 1
