@@ -35,7 +35,13 @@ public:
 	bool grayscale;
 	string name;
 
+	//Class variables for optimization
+	double height,width2,height2;
+	double gapWidth2,gapHeight2, aspect;
+	int sqrtNumSamples;
+
 	Camera(ifstream &f);
+	Color renderPixel(int x, int y, int numSamples);
 	void renderScene(string filename, int cameraNum);
 };
 

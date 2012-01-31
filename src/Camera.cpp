@@ -124,6 +124,81 @@ Camera::Camera(ifstream &f)
 		direction.print();
 		printf(" are not orthogonal.\n");
 	}
+
+	double aspect = (double)imageHeight/(double)imageWidth;
+
+	height = this->width * aspect;
+	width2 = width/2.f;
+	height2 = height/2.f;
+
+	gapWidth2 = 1.f/((double)imageWidth)/2.f;
+	gapHeight2 = 1.f/((double)imageHeight)/2.f;
+}
+
+Color Camera::renderPixel(int x, int y, int numSamples) {
+	int sqrtNumSamples = (int)sqrt((float)numSamples);
+
+	double deltawidth = 1/(imageWidth * sqrtNumSamples);
+	double deltaheight = 1/(imageHeight * sqrtNumSamples);
+
+	double leftGap = 1.f/(imageWidth * sqrtNumSamples*2); //Gap between edge of "square" and leftmost sample.
+	double topGap = 1.f/(imageHeight * sqrtNumSamples*2);
+	double gapBetweenHorizontalSamples = 2*leftGap;
+	double gapBetweenVerticalSamples = 2*topGap;
+
+	bool isPerspective = this->perspective; //False if orthogonal, true if perspective
+
+	double xCoord = -1*width2 + width*x/imageWidth;
+	double yCoord = -1*height2 + height*y/imageHeight;
+
+	Vector vLeft = cross3(this->direction,this->up); 
+
+	//Point on image plane
+	Point pPointOnImagePlane = this->origin + this->zmin * this->direction + xCoord * vLeft + yCoord * this->up;
+	
+	Vector vCamToImagePlane; //Vector from the camera to the image plane
+
+	if(isPerspective) //If camera is perspective
+	{
+		vCamToImagePlane = pPointOnImagePlane - this->origin;
+	}
+	else //If camera is orthogonal
+	{
+		vCamToImagePlane = this->direction;
+	}
+	//vCamToImagePlane = c->direction;
+
+	Ray* r = new Ray(); //Ray from the camera to the image plane
+	r->dir = vCamToImagePlane;
+	
+	if(isPerspective)
+		r->start = this->origin;
+	else
+		r->start = pPointOnImagePlane;
+
+	bool lightT = false;
+
+	Color col;
+	if(aa == FSAA_4 || aa == FSAA_16) {
+		Color* colors = new Color[numSamples];
+		for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
+			double adjXCoord = xCoord - gapWidth2 + leftGap + (x2-1)*gapBetweenHorizontalSamples;
+			for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
+				double adjYCoord = yCoord - gapHeight2 + topGap + (y2-1)*gapBetweenVerticalSamples;
+				pPointOnImagePlane = this->origin + this->zmin * this->direction + adjXCoord * vLeft + adjYCoord * this->up;
+				if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
+				if(!isPerspective) r->start = pPointOnImagePlane;
+				colors[x2*sqrtNumSamples + y2] = raytrace(r,lightT);
+			}
+		}
+		col = Color::averageValues(colors,numSamples);
+		delete colors;
+	}
+	else col = raytrace(r,lightT);
+	if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
+
+	delete r;
+	return col;
 }
 
 void Camera::renderScene(string filename, int cameraNum) {
@@ -134,80 +209,12 @@ void Camera::renderScene(string filename, int cameraNum) {
 	if(aa == FSAA_4) numSamples = 4;
 	else if(aa == FSAA_16) numSamples = 16;
 	else numSamples = 1;
-	int sqrtNumSamples = (int)sqrt((float)numSamples);
-	double aspect = (double)imageHeight/(double)imageWidth;
-
-	double width = this->width;
-	double height = this->width * aspect;
-	double width2 = width/2.f;
-	double height2 = height/2.f;
-	double deltawidth = 1/(imageWidth * sqrtNumSamples);
-	double deltaheight = 1/(imageHeight * sqrtNumSamples);
-
-	double gapWidth2 = 1.f/((double)imageWidth)/2.f;
-	double gapHeight2 = 1.f/((double)imageHeight)/2.f;
-	double leftGap = 1.f/(imageWidth * sqrtNumSamples*2); //Gap between edge of "square" and leftmost sample.
-	double topGap = 1.f/(imageHeight * sqrtNumSamples*2);
-	double gapBetweenHorizontalSamples = 2*leftGap;
-	double gapBetweenVerticalSamples = 2*topGap;
 
 	for(int y = 0; y < this->imageHeight; y++)
 	{
 		for(int x = 0; x < this->imageWidth; x++)
 		{
-			bool isPerspective = this->perspective; //False if orthogonal, true if perspective
-
-			double xCoord = -1*width2 + width*x/imageWidth;
-			double yCoord = -1*height2 + height*y/imageHeight;
-
-			norm(this->direction);
-			norm(this->up);
-
-			Vector vLeft = cross3(this->direction,this->up); 
-
-			//Point on image plane
-			Point pPointOnImagePlane = this->origin + this->zmin * this->direction + xCoord * vLeft + yCoord * this->up;
-			
-			Vector vCamToImagePlane; //Vector from the camera to the image plane
-
-			if(isPerspective) //If camera is perspective
-			{
-				vCamToImagePlane = pPointOnImagePlane - this->origin;
-			}
-			else //If camera is orthogonal
-			{
-				vCamToImagePlane = this->direction;
-			}
-			//vCamToImagePlane = c->direction;
-
-			Ray* r = new Ray(); //Ray from the camera to the image plane
-			r->dir = vCamToImagePlane;
-			
-			if(isPerspective)
-				r->start = this->origin;
-			else
-				r->start = pPointOnImagePlane;
-
-			bool lightT = false;
-
-			Color col;
-			if(aa == FSAA_4 || aa == FSAA_16) {
-				Color* colors = new Color[numSamples];
-				for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
-					double adjXCoord = xCoord - gapWidth2 + leftGap + (x2-1)*gapBetweenHorizontalSamples;
-					for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
-						double adjYCoord = yCoord - gapHeight2 + topGap + (y2-1)*gapBetweenVerticalSamples;
-						pPointOnImagePlane = this->origin + this->zmin * this->direction + adjXCoord * vLeft + adjYCoord * this->up;
-						if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
-						if(!isPerspective) r->start = pPointOnImagePlane;
-						colors[x2*sqrtNumSamples + y2] = raytrace(r,lightT);
-					}
-				}
-				col = Color::averageValues(colors,numSamples);
-				delete colors;
-			}
-			else col = raytrace(r,lightT);
-			if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
+			Color col = renderPixel(x,y,numSamples);
 
 			if(this->grayscale) {
 				double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
@@ -221,8 +228,6 @@ void Camera::renderScene(string filename, int cameraNum) {
 				image(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)col.b;
 			}
 			image(imageWidth-x-1,imageHeight-y-1)->Alpha = 0;
-
-			delete r;
 		}
 	}
 
