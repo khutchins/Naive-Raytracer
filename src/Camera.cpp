@@ -109,6 +109,8 @@ Camera::Camera(ifstream &f)
 				else if(sNum == "fsaa4") this->aa = FSAA_4;
 				else if(sNum == "fsaa16") this->aa = FSAA_16;
 				else if(sNum == "naive-average") this->aa = NAIVE_AVERAGE;
+				else if(sNum == "edaa4") this->aa = EDAA_4;
+				else if(sNum == "edaa16") this->aa = EDAA_16;
 			}
 		}
 		else break;
@@ -179,7 +181,7 @@ Color Camera::renderPixel(int x, int y, int numSamples) {
 	bool lightT = false;
 
 	Color col;
-	if(aa == FSAA_4 || aa == FSAA_16) {
+	if(numSamples > 1) {
 		Color* colors = new Color[numSamples];
 		for(int x2 = 0; x2 < sqrtNumSamples; x2++) {
 			double adjXCoord = xCoord - gapWidth2 + leftGap + (x2-1)*gapBetweenHorizontalSamples;
@@ -241,7 +243,8 @@ void Camera::renderScene(string filename, int cameraNum) {
 	else sceneName += name;
 	sceneName += ".bmp";
 
-	if(aa == NAIVE_AVERAGE) generateAABMP(image).WriteToFile(sceneName.c_str());
+	if(aa == NAIVE_AVERAGE) generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
+	else if(aa == EDAA_4 || aa == EDAA_16) generateEDAABMP(this,image).WriteToFile(sceneName.c_str());
 	else image.WriteToFile(sceneName.c_str());
 	cout << "Finished rendering file " << sceneName << ".\n";
 }

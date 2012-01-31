@@ -1,6 +1,8 @@
 #ifndef _COLOR_H_
 #define _COLOR_H_
 
+#include "EasyBMP/EasyBMP.h"
+
 typedef class Color {
 public:
     double r,g,b;        // Valid range 0-1
@@ -12,6 +14,7 @@ public:
 
 	void adjustColorForDiagnosticIsLit();
 	static Color averageValues(Color* colors, int numValues);
+	static Color colorFromRGBAPixel(RGBApixel *pix);
 
 	Color operator+(Color right);
 	Color operator-(Color right);

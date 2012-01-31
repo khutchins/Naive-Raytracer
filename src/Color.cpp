@@ -46,6 +46,14 @@ Color Color::averageValues(Color* colors, int numValues) {
 	return result;
 }
 
+Color Color::colorFromRGBAPixel(RGBApixel *pix) {
+	Color col;
+	col.r = pix->Red;
+	col.g = pix->Green;
+	col.b = pix->Blue;
+	return col;
+}
+
 Color Color::operator+(Color right)
 {
     Color result;

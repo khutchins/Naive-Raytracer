@@ -1,6 +1,34 @@
 #include "Convolution.h"
 
-BMP generateConvolutionBitmap(BMP originalImage, convolution &convolution) {
+/*Color convolutePoint(int i_x, int i_y, BMP originalImage, convolution convolution) {
+	Color newColor = Color::ColorBlack();
+
+	int imageWidth = originalImage.TellWidth();
+	int imageHeight = originalImage.TellHeight();
+
+	int convolutionWidth = convolution.size();
+	int convolutionHeight = convolution.begin()->size();
+
+	for(int c_y = 0; c_y < convolutionHeight; c_y++) {
+		for(int c_x = 0; c_x < convolutionWidth; c_x++) {
+			int x = min(max(0,i_x+c_x-(convolutionWidth-1)/2),imageWidth-1);
+			int y = min(max(0,i_y+c_y-(convolutionHeight-1)/2),imageHeight-1);
+
+			RGBApixel tempPixel = originalImage.GetPixel(x,y);
+			newColor.r += tempPixel.Red * convolution[c_x][c_y];
+			newColor.g += tempPixel.Green * convolution[c_x][c_y];
+			newColor.b += tempPixel.Blue * convolution[c_x][c_y];
+		}
+	}
+
+	newColor.r = min(max(0,(int)newColor.r),255);
+	newColor.g = min(max(0,(int)newColor.g),255);
+	newColor.b = min(max(0,(int)newColor.b),255);
+
+	return newColor;
+}*/
+
+BMP generateConvolutionBitmap(BMP originalImage, convolution convolution) {
 	BMP imageConvolution;
 	imageConvolution.SetSize(originalImage.TellWidth(),originalImage.TellHeight());
 
@@ -65,7 +93,7 @@ convolution getEdgeDetectionConvolution() {
 
 convolution getGaussianBlurConvolution() {
 	int width = 3;
-	int height = 3;
+	int height = 3; 
 	convolution aa2DVector;
 	aa2DVector.resize(width);
 	for(int i = 0; i < width; i++) aa2DVector[i].resize(height);
