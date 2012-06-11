@@ -1,5 +1,11 @@
 #include "Cuboid.h"
 
+/*
+====================
+Cuboid::Cuboid
+	Takes in the input stream and creates a cuboid object from the parsed input
+====================
+*/
 Cuboid::Cuboid(ifstream &f)
 {
 	this->isLight = false;
@@ -112,6 +118,14 @@ Cuboid::Cuboid(ifstream &f)
 	sides[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //right plane
 }
 
+/*
+====================
+Cuboid::intersect
+	Computes intersection between the Cuboid and the ray, and returns the 
+	primitive it intersects or NULL if it doesn't intersect along with the 
+	point of intersection
+====================
+*/
 SceneObject* Cuboid::intersect(Ray* r, Point &intersect) {
 	SceneObject* objectHit = NULL;
 	Point objectIntersect;
@@ -128,6 +142,13 @@ SceneObject* Cuboid::intersect(Ray* r, Point &intersect) {
 	return objectHit;
 }
 
+/*
+====================
+Cuboid::calculateNormalForPoint
+	Calculates the normal of the point p on the object as hit from ray r.  
+	If the ray doesn't hit the object, returns VectorZero.
+====================
+*/
 Vector Cuboid::calculateNormalForPoint(Point p, Point raySource) {
 	bool objectHit = false;
 	Point objectIntersect, intersect;
@@ -146,17 +167,36 @@ Vector Cuboid::calculateNormalForPoint(Point p, Point raySource) {
 		}
 	}
 	delete r;
-	return closestObject->normal;
+	if(closestObject)	return closestObject->normal;
+	else				return Vector::VectorZero();
 }
 
+/*
+====================
+Cuboid::getReflection
+	Returns the reflection coefficient
+====================
+*/
 double Cuboid::getReflection() {
 	return sides[0]->material.reflection;
 }
 
+/*
+====================
+Cuboid::getRefraction
+	Returns the refraction coefficient
+====================
+*/
 double Cuboid::getRefraction() {
 	return sides[0]->material.transparency;
 }
 
+/*
+====================
+Cuboid::getColor
+	Returns the color of the object
+====================
+*/
 Color Cuboid::getColor() {
 	return sides[0]->material.color;
 }

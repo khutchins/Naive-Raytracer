@@ -1,5 +1,11 @@
 #include "Point.h"
 
+/*
+====================
+Point::PointZero()
+	returns a point with all of its values set to zero
+====================
+*/
 Point Point::PointZero() {
 	Point zero;
 	zero.x = 0;
@@ -8,15 +14,17 @@ Point Point::PointZero() {
 	return zero;
 }
 
-Vector Point::operator+(Point right)
-{
-    Vector result;
-    result.x = this->x + right.x;
-	result.y = this->y + right.y;
-	result.z = this->z + right.z;
-    return result;
-}
+////Adds a point to a point and returns a vector
+//Vector Point::operator+(Point right)
+//{
+//    Vector result;
+//    result.x = this->x + right.x;
+//	result.y = this->y + right.y;
+//	result.z = this->z + right.z;
+//    return result;
+//}
 
+//Subtracts a point from a point and returns a vector
 Vector Point::operator-(Point right)
 {
     Vector result;
@@ -26,6 +34,7 @@ Vector Point::operator-(Point right)
     return result;
 }
 
+//Adds a vector to a point and returns a point
 Point Point::operator+(Vector right)
 {
     Point result;
@@ -35,6 +44,7 @@ Point Point::operator+(Vector right)
     return result;
 }
 
+//Subtracts a vector from a point and returns a point
 Point Point::operator-(Vector right)
 {
     Point result;
@@ -44,6 +54,7 @@ Point Point::operator-(Vector right)
     return result;
 }
 
+//Multiplies a point by a double
 Point Point::operator *(double k) {
 	Point result;
 	result.x = this->x * k;
@@ -52,6 +63,7 @@ Point Point::operator *(double k) {
 	return result;
 }
 
+//Multiplies a double by a point
 Point operator * (double k, Point p) {
 	return p*k;
 }

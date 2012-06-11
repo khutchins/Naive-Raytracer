@@ -1,5 +1,11 @@
 #include "Disk.h"
 
+/*
+====================
+Disk::Disk
+	Takes in the input stream and creates a Disk object from the parsed input
+====================
+*/
 Disk::Disk(ifstream &f)
 {
 	this->isLight = false;
@@ -101,6 +107,13 @@ Disk::Disk(ifstream &f)
 	}
 }
 
+/*
+====================
+Disk::Disk
+	Takes information for creation from parameters instead of input stream 
+	so that it can be created by a complex object
+====================
+*/
 Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {
 	this->radius = radius;
 	this->material = m;
@@ -109,6 +122,13 @@ Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {
 	this->origin = origin;
 }
 
+/*
+====================
+Disk::intersect
+	Computes intersection between the Disk and the ray, and returns itself if 
+	it is hit or NULL if it is not along with the point of intersection
+====================
+*/
 SceneObject* Disk::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);
 
@@ -130,6 +150,14 @@ SceneObject* Disk::intersect(Ray* r, Point &intersect) {
 	return NULL;
 }
 
+/*
+====================
+Disk::calculateNormalForPoint
+	Calculates the normal of the point p on the object as hit from ray r.  
+	I assume an infinitely wide disk, so this will always return the normal 
+	as if the ray hit the disk
+====================
+*/
 Vector Disk::calculateNormalForPoint(Point p, Point raySource) {
 	double distNormalSide = dist3Compare(p + this->normal, raySource);
 	double distOtherSide = dist3Compare(p + this->normal*-1, raySource);
@@ -137,14 +165,32 @@ Vector Disk::calculateNormalForPoint(Point p, Point raySource) {
 	return this->normal;
 }
 
+/*
+====================
+Disk::getReflection
+	Returns the reflection coefficient
+====================
+*/
 double Disk::getReflection() {
 	return this->material.reflection;
 }
 
+/*
+====================
+Disk::getRefraction
+	Returns the refraction coefficient
+====================
+*/
 double Disk::getRefraction() {
 	return this->material.transparency;
 }
 
+/*
+====================
+Disk::getColor
+	Returns the color of the object
+====================
+*/
 Color Disk::getColor() {
 	return this->material.color;
 }

@@ -1,5 +1,11 @@
 #include "Plane.h"
 
+/*
+====================
+Plane::Plane
+	Takes in the input stream and creates a Plane object from the parsed input
+====================
+*/
 Plane::Plane(ifstream &f)
 {
 	this->isLight = false;
@@ -123,6 +129,13 @@ Plane::Plane(ifstream &f)
 	}
 }
 
+/*
+====================
+Plane::Plane
+	Takes information for creation from parameters instead of input stream 
+	so that it can be created by a complex object
+====================
+*/
 Plane::Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin) {
 	this->origin = origin;
 	this->width = width;
@@ -136,7 +149,13 @@ Plane::Plane(Material m, double width, double height, Vector up, Vector normal, 
 	this->isVisible = true;
 }
 
-
+/*
+====================
+Plane::intersect
+	Computes intersection between the Plane and the ray, and returns itself if 
+	it is hit or NULL if it is not along with the point of intersection
+====================
+*/
 SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);
 
@@ -176,6 +195,13 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 	return NULL;
 }
 
+/*
+====================
+calculateTextureFromMaterial
+	based on the point of interception, calculates what color from the texture 
+	should be returned
+====================
+*/
 Color Plane::calculateTextureFromMaterial(Point intercept) {
 	BMP* temp;
 	temp = &this->texture;
@@ -238,6 +264,14 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	return matColor;
 }
 
+/*
+====================
+Plane::calculateNormalForPoint
+	Calculates the normal of the point p on the object as hit from ray r.  
+	I assume an infinitely wide Plane, so this will always return the normal 
+	as if the ray hit the Plane
+====================
+*/
 Vector Plane::calculateNormalForPoint(Point p, Point raySource) {
 	double distNormalSide = dist3Compare(p + this->normal, raySource);
 	double distOtherSide = dist3Compare(p + this->normal*-1, raySource);
@@ -245,14 +279,32 @@ Vector Plane::calculateNormalForPoint(Point p, Point raySource) {
 	return this->normal;
 }
 
+/*
+====================
+Plane::getReflection
+	Returns the reflection coefficient
+====================
+*/
 double Plane::getReflection() {
 	return this->material.reflection;
 }
 
+/*
+====================
+Plane::getRefraction
+	Returns the refraction coefficient
+====================
+*/
 double Plane::getRefraction() {
 	return this->material.transparency;
 }
 
+/*
+====================
+Plane::getColor
+	Returns the color of the object (ignoring texture color)
+====================
+*/
 Color Plane::getColor() {
 	return this->material.color;
 }

@@ -1,9 +1,11 @@
 #include "Sphere.h"
 
-Vector Sphere::calculateNormalForPoint(Point p, Point raySource) {
-	return p - this->origin;
-}
-
+/*
+====================
+Sphere::Sphere
+	Takes in the input stream and creates a Sphere object from the parsed input
+====================
+*/
 Sphere::Sphere(ifstream &f)
 {
 	this->isLight = false;
@@ -73,6 +75,13 @@ Sphere::Sphere(ifstream &f)
 	}
 }
 
+/*
+====================
+Sphere::intersect
+	Computes intersection between the Sphere and the ray, and returns itself if 
+	it is hit or NULL if it is not along with the point of intersection
+====================
+*/
 SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
@@ -109,14 +118,44 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 	return NULL;
 }
 
+/*
+====================
+Sphere::calculateNormalForPoint
+	Calculates the normal of the point p on the object as hit from ray r.  
+	I assume an infinitely wide Sphere, so this will always return the normal 
+	as if the ray hit the Sphere
+====================
+*/
+Vector Sphere::calculateNormalForPoint(Point p, Point raySource) {
+	return p - this->origin;
+}
+
+/*
+====================
+Sphere::getReflection
+	Returns the reflection coefficient
+====================
+*/
 double Sphere::getReflection() {
 	return this->material.reflection;
 }
 
+/*
+====================
+Sphere::getRefraction
+	Returns the refraction coefficient
+====================
+*/
 double Sphere::getRefraction() {
 	return this->material.transparency;
 }
 
+/*
+====================
+Sphere::getColor
+	Returns the color of the object (ignoring texture color)
+====================
+*/
 Color Sphere::getColor() {
 	return this->material.color;
 }

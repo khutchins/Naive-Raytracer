@@ -28,6 +28,14 @@
 	return newColor;
 }*/
 
+/*
+====================
+generateConvolutionBitmap
+	Takes in a rendered image and a convolution.  It applies the convolution 
+	to the image (if at the edge it repeats the edge pixels) and returns the 
+	convoluted image.
+====================
+*/
 BMP generateConvolutionBitmap(BMP originalImage, convolution convolution) {
 	BMP imageConvolution;
 	imageConvolution.SetSize(originalImage.TellWidth(),originalImage.TellHeight());
@@ -45,6 +53,7 @@ BMP generateConvolutionBitmap(BMP originalImage, convolution convolution) {
 
 			for(int c_y = 0; c_y < convolutionHeight; c_y++) {
 				for(int c_x = 0; c_x < convolutionWidth; c_x++) {
+					//if at the end, just repeat the ending pixel
 					int x = min(max(0,i_x+c_x-(convolutionWidth-1)/2),imageWidth-1);
 					int y = min(max(0,i_y+c_y-(convolutionHeight-1)/2),imageHeight-1);
 
@@ -70,6 +79,15 @@ BMP generateConvolutionBitmap(BMP originalImage, convolution convolution) {
 	return imageConvolution;
 }
 
+/*
+====================
+getEdgeDetectionConvolution
+	returns the edge detection convolution
+	0  1  0
+	1 -4  1
+	0  1  0
+====================
+*/
 convolution getEdgeDetectionConvolution() {
 	int width = 3;
 	int height = 3;
@@ -91,6 +109,15 @@ convolution getEdgeDetectionConvolution() {
 	return aa2DVector;
 }
 
+/*
+====================
+getGaussianBlurConvolution
+	returns the gaussian blur convolution
+	1/16 2/16 1/16
+	2/16 4/16 2/16
+	1/16 2/16 1/16
+====================
+*/
 convolution getGaussianBlurConvolution() {
 	int width = 3;
 	int height = 3; 

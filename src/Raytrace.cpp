@@ -3,16 +3,31 @@
 
 using namespace std;
 
+//Global camera and object queues
 queue<Camera*> cameraQ;
 queue<SceneObject*> objectQ;
 
+//maximum z value (currently ignored)
 double zmaxG = 1000;
 
+//current camera number
 int cameraNum = 0;
+//number of iterations the ray has gone through (this is capped)
 int iterations = 0;
 
+//maximum number of iterations
+#define MAXIMUM_ITERATIONS 5
+
+//Last entity processed
 EntityID lastProc = ENTITY_NONE;
 
+/*
+====================
+start
+	The initiating function.  Processes inputs and has the cameras all render 
+	their scenes
+====================
+*/
 int start(string fn)
 {
 	//Read input from file
@@ -32,6 +47,13 @@ int start(string fn)
     return 0;
 }
 
+/*
+====================
+raytrace
+	computes the color viewable by the ray r.  Light is set to true if the 
+	closest object is a light
+====================
+*/
 Color raytrace(Ray* r, bool &light)
 {
 	Color c = Color::ColorBlack();
@@ -50,11 +72,10 @@ Color raytrace(Ray* r, bool &light)
 	if(closestO)	oDist = dist3Compare(oInt,r->start);
 	else			oDist = numeric_limits<double>::max();
 
-	//If >=1 entity found
-	if(oDist != numeric_limits<double>::max())
-	{
-		if(!closestO->isLight && !light) //if not a light
-		{
+	//If > 0 entities found
+	if(oDist != numeric_limits<double>::max()) {
+		if(!closestO->isLight && !light) { //if not a light
+			//TODO: I don't think !light is necessary.  Look into taking it out.
 			Color materialTexture;
 			Color llocal = Color::ColorBlack();
 			Color reflect = Color::ColorBlack();
@@ -64,31 +85,33 @@ Color raytrace(Ray* r, bool &light)
 			norm(normal);
 
 			llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
+
+			//calculate the reflected and refracted rays (if necessary)
 			iterations++;
-			if(closestO->getReflection() != 0 && iterations < 5) reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
-			if(closestO->getRefraction() != 0 && iterations < 5) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
+			if(closestO->getReflection() != 0 && iterations < MAXIMUM_ITERATIONS) reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
+			if(closestO->getRefraction() != 0 && iterations < MAXIMUM_ITERATIONS) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
 			iterations--;
+
+			//If the object has texture mapping, calculate the texture for the point
 			if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt);
-			
+
+			//Calculate the percent diffusion of the object
 			double percentDiffuse = 1.f - closestO->getReflection() - closestO->getRefraction();
 			if(percentDiffuse < 0) percentDiffuse = 0;
 
-			if(closestO->hasTexture)
-			{
+			if(closestO->hasTexture) {
 				if(DIAGNOSTIC_STATUS == TEXTURE_MAPPING) {
 					c = materialTexture * 255;
 					return c;
 				}
 				c = llocal * materialTexture * 255 * percentDiffuse + closestO->getReflection() * reflect + closestO->getRefraction() * refract;
 			}
-			else
-			{
+			else {
 				c = llocal * closestO->getColor() * 255 * percentDiffuse + closestO->getReflection() * reflect + closestO->getRefraction() * refract;
 			}
 			light = false;
 		}
-		else if (closestO->isLight) //Light is closest
-		{
+		else if (closestO->isLight) { //Light is closest
 			c = closestO->getColor() * 255;
 			light = true;
 		}
@@ -98,10 +121,16 @@ Color raytrace(Ray* r, bool &light)
 	return c;
 }
 
+/*
+====================
+calculateLocalLighting
+	Calculates the lighting on the object given the intercept, the object's 
+	normal, and the ID of the Entity.  Returns the color of the object
+====================
+*/
 Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 	Color llocal = Color::ColorBlack();
-	for(unsigned int i = 0; i < objectQ.size(); i++)
-	{
+	for(unsigned int i = 0; i < objectQ.size(); i++) {
 		SceneObject* l = objectQ.front();
 		objectQ.pop();
 		objectQ.push(l);
@@ -123,8 +152,7 @@ Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 		Color receivedColor = raytrace(lightRay,lig);
 		lastProc = ENTITY_NONE;
 
-		if(lig) //We see the light from the point
-		{
+		if(lig) { //We see the light from the point
 			//Direction from the light source to the plane.  Used for calculating lambert
 			Vector lToObject = lDir;
 
@@ -148,7 +176,14 @@ Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 	return llocal;
 }
 
-//Calc reflected vector
+/*
+====================
+calculateReflectedRay
+	Based on the incoming ray r, the intercept, the normal, and the entity ID, 
+	calculate the color of the reflected ray (not adjusted for the reflectivity 
+	of the object
+====================
+*/
 Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	double angle = dot3(normal,r.dir);
 	Vector reflectVec = -2 * angle * normal + r.dir;
@@ -164,7 +199,14 @@ Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 	lastProc = ENTITY_NONE;
 }
 
-//Calc refracted vector
+/*
+====================
+calculateRefractedRay
+	Based on the incoming ray r, the intercept, the normal, and the entity ID, 
+	calculate the color of the refracted ray (not adjusted for the refractivity 
+	of the object
+====================
+*/
 Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	Ray refractRay;
 	refractRay.dir = r.dir;
@@ -176,18 +218,22 @@ Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 	lastProc = ENTITY_NONE;
 }
 
+/*
+====================
+findClosestObject
+	Iterates through the object queue and locates the closeest object
+====================
+*/
 SceneObject *findClosestObject(Ray *r, Point &intersect) {
 	SceneObject *closestObject = NULL;
-	for(unsigned int i = 0; i < objectQ.size(); i++) //look for closest object
-	{
+	for(unsigned int i = 0; i < objectQ.size(); i++) { //look for closest object
 		SceneObject* tempO = objectQ.front();
 		objectQ.pop();
 		objectQ.push(tempO);
 
 		Point objectIntersect;
 		if(tempO = tempO->intersect(r,objectIntersect)) {
-			if(!closestObject || dist3Compare(objectIntersect, r->start) < dist3Compare(intersect, r->start))
-			{
+			if(!closestObject || dist3Compare(objectIntersect, r->start) < dist3Compare(intersect, r->start)) {
 				closestObject = tempO;
 				intersect = objectIntersect;
 			}
@@ -197,20 +243,23 @@ SceneObject *findClosestObject(Ray *r, Point &intersect) {
 	return closestObject;
 }
 
-int processInput(string filename) 
-{
+/*
+====================
+processInput
+	processes the input file to populate the scene
+====================
+*/
+int processInput(string filename) {
 	ifstream sceneFile;
 	string line; //We will be temporarily storing input here
 
 	sceneFile.open(filename.c_str()); //Open file
 	
-	if(!sceneFile.is_open())
-	{
+	if(!sceneFile.is_open()) {
 		cout << "Scene file failed to open.\n";
 		return 0;
 	}
-	while(!sceneFile.eof()) //Loop through all input
-	{
+	while(!sceneFile.eof()) { //Loop through all input
 		getline(sceneFile,line);
 
 		queue<string> lineContents;

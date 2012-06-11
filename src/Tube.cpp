@@ -1,5 +1,11 @@
 #include "Tube.h"
 
+/*
+====================
+Tube::Tube
+	Takes in the input stream and creates a Tube object from the parsed input
+====================
+*/
 Tube::Tube(ifstream &f)
 {
 	this->isLight = false;
@@ -77,6 +83,13 @@ Tube::Tube(ifstream &f)
 	}
 }
 
+/*
+====================
+Tube::Tube
+	Takes information for creation from parameters instead of input stream 
+	so that it can be created by a complex object
+====================
+*/
 Tube::Tube(Material m, double radius, double height, Vector up, Point origin) {
 	this->material = m;
 	this->radius = radius;
@@ -85,6 +98,13 @@ Tube::Tube(Material m, double radius, double height, Vector up, Point origin) {
 	this->origin = origin;
 }
 
+/*
+====================
+Tube::intersect
+	Computes intersection between the Tube and the ray, and returns itself if 
+	it is hit or NULL if it is not along with the point of intersection
+====================
+*/
 SceneObject* Tube::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
@@ -121,18 +141,44 @@ SceneObject* Tube::intersect(Ray* r, Point &intersect) {
 	return NULL;
 }
 
+/*
+====================
+Tube::calculateNormalForPoint
+	Calculates the normal of the point p on the object as hit from ray r.  
+====================
+*/
 Vector Tube::calculateNormalForPoint(Point p, Point raySource) {
-	return p - this->origin;
+	//TODO: this is not correct, fix
+	//return p - this->origin;
+	return Vector::VectorZero();
 }
 
+/*
+====================
+Tube::getReflection
+	Returns the reflection coefficient
+====================
+*/
 double Tube::getReflection() {
 	return this->material.reflection;
 }
 
+/*
+====================
+Tube::getRefraction
+	Returns the refraction coefficient
+====================
+*/
 double Tube::getRefraction() {
 	return this->material.transparency;
 }
 
+/*
+====================
+Tube::getColor
+	Returns the color of the object
+====================
+*/
 Color Tube::getColor() {
 	return this->material.color;
 }

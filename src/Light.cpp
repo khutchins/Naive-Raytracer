@@ -1,5 +1,11 @@
 #include "Light.h"
 
+/*
+====================
+Light::Light
+	Takes in the input stream and creates a Light object from the parsed input
+====================
+*/
 Light::Light(ifstream &f)
 {
 	this->isVisible = true;
@@ -51,6 +57,13 @@ Light::Light(ifstream &f)
 	}
 }
 
+/*
+====================
+Light::intersect
+	Computes intersection between the Light and the ray, and returns itself if 
+	it is hit or NULL if it is not along with the point of intersection
+====================
+*/
 SceneObject* Light::intersect(Ray* r, Point &intersect) {
 	//Four cases here
 	//tempL->origin.x - r->start.x == 0 && r->dir.x == 0.  This is fine, they intersect at all points.  Assign infinity
@@ -83,6 +96,12 @@ SceneObject* Light::intersect(Ray* r, Point &intersect) {
 	return NULL;
 }
 
+/*
+====================
+Light::getColor
+	Returns the color of the object
+====================
+*/
 Color Light::getColor() {
 	return this->color;
 }

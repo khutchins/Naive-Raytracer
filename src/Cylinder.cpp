@@ -1,5 +1,11 @@
 #include "Cylinder.h"
 
+/*
+====================
+Cylinder::Cylinder
+	Takes in the input stream and creates a Cylinder object from the parsed input
+====================
+*/
 Cylinder::Cylinder(ifstream &f)
 {
 	this->isLight = false;
@@ -84,6 +90,14 @@ Cylinder::Cylinder(ifstream &f)
 	bottom = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin-up*(height*0.5));
 }
 
+/*
+====================
+Cylinder::intersect
+	Computes intersection between the Cylinder and the ray, and returns the 
+	primitive it intersects or NULL if it doesn't intersect along with the 
+	point of intersection
+====================
+*/
 SceneObject* Cylinder::intersect(Ray* r, Point &intersect) {
 	SceneObject *closestObject = NULL;
 	bool objectHit = false;
@@ -107,18 +121,45 @@ SceneObject* Cylinder::intersect(Ray* r, Point &intersect) {
 	return closestObject;
 }
 
+/*
+====================
+Cylinder::calculateNormalForPoint
+	Calculates the normal of the point p on the object as hit from ray r.  
+	If the ray doesn't hit the object, returns VectorZero.
+====================
+*/
 Vector Cylinder::calculateNormalForPoint(Point p, Point raySource) {
-	return p - this->origin;
+	//TODO: This is wrong - compute closest primitive and get it's normal
+	//return p - this->origin;
+	return Vector::VectorZero();
 }
 
+/*
+====================
+Cylinder::getReflection
+	Returns the reflection coefficient
+====================
+*/
 double Cylinder::getReflection() {
 	return this->material.reflection;
 }
 
+/*
+====================
+Cylinder::getRefraction
+	Returns the refraction coefficient
+====================
+*/
 double Cylinder::getRefraction() {
 	return this->material.transparency;
 }
 
+/*
+====================
+Cylinder::getColor
+	Returns the color of the object
+====================
+*/
 Color Cylinder::getColor() {
 	return this->material.color;
 }
