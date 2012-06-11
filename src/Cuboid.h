@@ -1,6 +1,7 @@
 #ifndef _CUBOID_H_
 #define _CUBOID_H_
 
+#include "ContainerObject.h"
 #include "SceneObject.h"
 #include "VectorMath.h"
 #include "StringProcessing.h"
@@ -13,10 +14,8 @@
 #include <queue>
 #include <cmath>
 
-class Cuboid : public SceneObject {
+class Cuboid : public ContainerObject {
 public:
-	Plane*	sides[6];
-
 	Vector	up;
 	Vector	front;
 	Point	origin;
@@ -25,11 +24,8 @@ public:
 	double	length;
 
 	Cuboid(ifstream &f);
-	Vector calculateNormalForPoint(Point p, Point raySource);
-	SceneObject* intersect(Ray* r, Point &intersect);
-	double getReflection();
-	double getRefraction();
-	Color getColor();
+	
+	//Inherited from SceneObject.h
 };
 
 #endif

@@ -16,6 +16,8 @@ Cylinder::Cylinder(ifstream &f)
 	double height;
 	double radius;
 	Vector up;
+
+	children.resize(3);
 	while(!f.eof())
 	{
 		string line;
@@ -85,9 +87,9 @@ Cylinder::Cylinder(ifstream &f)
 		else
 			break;
 	}
-	tube = new Tube(material,radius,height,up,origin);
-	top = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin+up*(height*0.5));
-	bottom = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin-up*(height*0.5));
+	children[0] = new Tube(material,radius,height,up,origin);
+	children[1] = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin+up*(height*0.5));
+	children[2] = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin-up*(height*0.5));
 }
 
 /*
@@ -100,24 +102,17 @@ Cylinder::intersect
 */
 SceneObject* Cylinder::intersect(Ray* r, Point &intersect) {
 	SceneObject *closestObject = NULL;
-	bool objectHit = false;
 	Point objectIntersect;
-	if(tube->intersect(r,objectIntersect)) {
-		intersect = objectIntersect;
-		objectHit = true;
-	}
-	if(top->intersect(r,objectIntersect)) {
-		if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
-			intersect = objectIntersect;
-			objectHit = true;
+
+	for(size_t i = 0; i < children.size(); i++) {
+		if(children[i]->intersect(r,objectIntersect)) {
+			if(!closestObject || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
+				intersect = objectIntersect;
+				closestObject = children[i];
+			}
 		}
 	}
-	if(bottom->intersect(r,objectIntersect)) {
-		if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
-			intersect = objectIntersect;
-			objectHit = true;
-		}
-	}
+
 	return closestObject;
 }
 

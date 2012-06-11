@@ -1,7 +1,7 @@
 #ifndef _CYLINDER_H_
 #define _CYLINDER_H_
 
-#include "SceneObject.h"
+#include "ContainerObject.h"
 #include "VectorMath.h"
 #include "StringProcessing.h"
 #include "Point.h"
@@ -16,11 +16,8 @@
 
 using namespace std;
 
-class Cylinder : public SceneObject {
+class Cylinder : public ContainerObject {
 public:
-	Disk *top;
-	Disk *bottom;
-	Tube *tube;
 	Vector up;
 	Material material;
 

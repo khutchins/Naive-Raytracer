@@ -22,7 +22,7 @@ generateNaiveAABMP
 ====================
 */
 BMP generateNaiveAABMP(BMP originalImage) {
-	convolution aa2DVector = getGaussianBlurConvolution();
+	Convolution aa2DVector = getGaussianBlurConvolution();
 	return generateConvolutionBitmap(originalImage,aa2DVector);
 }
 

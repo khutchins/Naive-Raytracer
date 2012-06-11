@@ -36,7 +36,7 @@ generateConvolutionBitmap
 	convoluted image.
 ====================
 */
-BMP generateConvolutionBitmap(BMP originalImage, convolution convolution) {
+BMP generateConvolutionBitmap(BMP originalImage, Convolution convolution) {
 	BMP imageConvolution;
 	imageConvolution.SetSize(originalImage.TellWidth(),originalImage.TellHeight());
 
@@ -88,10 +88,10 @@ getEdgeDetectionConvolution
 	0  1  0
 ====================
 */
-convolution getEdgeDetectionConvolution() {
+Convolution getEdgeDetectionConvolution() {
 	int width = 3;
 	int height = 3;
-	convolution aa2DVector;
+	Convolution aa2DVector;
 	aa2DVector.resize(width);
 	for(int i = 0; i < width; i++) aa2DVector[i].resize(height);
 
@@ -118,10 +118,10 @@ getGaussianBlurConvolution
 	1/16 2/16 1/16
 ====================
 */
-convolution getGaussianBlurConvolution() {
+Convolution getGaussianBlurConvolution() {
 	int width = 3;
 	int height = 3; 
-	convolution aa2DVector;
+	Convolution aa2DVector;
 	aa2DVector.resize(width);
 	for(int i = 0; i < width; i++) aa2DVector[i].resize(height);
 

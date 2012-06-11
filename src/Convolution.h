@@ -7,11 +7,11 @@
 
 using namespace std;
 
-typedef vector<vector<double>> convolution;
+typedef vector<vector<double>> Convolution;
 
-BMP generateConvolutionBitmap(BMP originalImage, convolution convolution);
+BMP generateConvolutionBitmap(BMP originalImage, Convolution convolution);
 
-convolution getEdgeDetectionConvolution();
-convolution getGaussianBlurConvolution();
+Convolution getEdgeDetectionConvolution();
+Convolution getGaussianBlurConvolution();
 
 #endif
