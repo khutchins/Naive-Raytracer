@@ -10,22 +10,22 @@ ContainerObject::calculateNormalForPoint
 Vector ContainerObject::calculateNormalForPoint(Point p, Point raySource) {
 	bool objectHit = false;
 	Point objectIntersect, intersect;
-	Plane* closestObject;
+	SceneObject* closestObject;
 	Ray *r = new Ray();
 	r->start = raySource;
 	r->dir = p-raySource;
 
-	for(int i = 0; i < children.size(); i++) {
+	for(size_t i = 0; i < children.size(); i++) {
 		if(children[i]->intersect(r,objectIntersect)) {
 			if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
 				intersect = objectIntersect;
 				objectHit = true;
-				closestObject = (Plane *)children[i];
+				closestObject = children[i];
 			}
 		}
 	}
 	delete r;
-	if(closestObject)	return closestObject->normal;
+	if(closestObject)	return closestObject->calculateNormalForPoint(p, raySource);
 	else				return Vector::VectorZero();
 }
 
@@ -46,7 +46,8 @@ SceneObject* ContainerObject::intersect(Ray* r, Point &intersect) {
 		if(children[i]->intersect(r,objectIntersect)) {
 			if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
 				intersect = objectIntersect;
-				objectHit = children[i];
+				closestObject = children[i];
+				objectHit = true;
 			}
 		}
 	}
@@ -61,7 +62,7 @@ ContainerObject::getReflection
 ====================
 */
 double ContainerObject::getReflection() {
-	return ((Plane *)children[0])->material.reflection;
+	return children[0]->material.reflection;
 }
 
 /*
@@ -71,7 +72,7 @@ ContainerObject::getRefraction
 ====================
 */
 double ContainerObject::getRefraction() {
-	return ((Plane *)children[0])->material.transparency;
+	return children[0]->material.transparency;
 }
 
 /*
@@ -81,13 +82,13 @@ ContainerObject::getColor
 ====================
 */
 Color ContainerObject::getColor() {
-	return ((Plane *)children[0])->material.color;
+	return children[0]->material.color;
 }
 
 
-~ContainerObject::~ContainerObject() {
-	while(SceneObject *result = children->at(0)) {
+ContainerObject::~ContainerObject() {
+	while(SceneObject *result = children[0]) {
 		free(result);
-		children->erase(0);
+		children.erase(children.begin());
 	}
 }

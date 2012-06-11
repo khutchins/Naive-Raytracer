@@ -15,8 +15,6 @@ using namespace std;
 
 class Light : public SceneObject{
 public:
-    Color color;
-
 	Light(ifstream &f);
 	SceneObject* intersect(Ray* r, Point &intersect);
 	Color getColor();

@@ -24,8 +24,6 @@ public:
 	double	length;
 
 	Cuboid(ifstream &f);
-	
-	//Inherited from SceneObject.h
 };
 
 #endif

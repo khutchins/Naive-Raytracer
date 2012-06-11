@@ -5,6 +5,7 @@
 #include "Point.h"
 #include "Vector.h"
 #include "Color.h"
+#include "Material.h"
 #include <cstdlib>
 
 enum EntityID {
@@ -25,6 +26,7 @@ public:
 	bool isVisible;
 	bool hasTexture; //Only can be true for planes currently
 	EntityID objectType;
+	Material material;
 
 	virtual SceneObject* intersect(Ray* r, Point &intersect) {return NULL;}
 	virtual Vector calculateNormalForPoint(Point p, Point raySource) {return Vector::VectorZero();}

@@ -12,6 +12,11 @@ Light::Light(ifstream &f)
 	this->isLight = true;
 	this->objectType = ENTITY_LIGHT;
 	this->hasTexture = false;
+	this->material.color.r = 0;
+	this->material.color.g = 0;
+	this->material.color.b = 0;
+	this->material.reflection = 0;
+	this->material.transparency = 0;
 	while(!f.eof())
 	{
 		string line;
@@ -47,9 +52,9 @@ Light::Light(ifstream &f)
 		}
 		else if(word == "color") //read in the color coordinates
 		{
-			this->color.r = num1;
-			this->color.g = num2;
-			this->color.b = num3;
+			this->material.color.r = num1;
+			this->material.color.g = num2;
+			this->material.color.b = num3;
 		}
 		else
 			break;
@@ -103,5 +108,5 @@ Light::getColor
 ====================
 */
 Color Light::getColor() {
-	return this->color;
+	return this->material.color;
 }

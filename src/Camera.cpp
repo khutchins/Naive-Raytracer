@@ -8,6 +8,7 @@ Camera::Camera
 */
 Camera::Camera(ifstream &f)
 {
+	//TODO: refactor this so it doesn't have a material component
 	this->grayscale = false;
 	this->isLight = false;
 	this->isVisible = false;
@@ -16,6 +17,12 @@ Camera::Camera(ifstream &f)
 	this->imageHeight = 240;
 	this->imageWidth = 320;
 	this->name = "";
+
+	this->material.color.r = 0;
+	this->material.color.g = 0;
+	this->material.color.b = 0;
+	this->material.reflection = 0;
+	this->material.transparency = 0;
 
 	while(!f.eof())
 	{
