@@ -19,7 +19,6 @@ using namespace std;
 class Cylinder : public ContainerObject {
 public:
 	Vector up;
-	Material material;
 
 	Cylinder(ifstream &f);
 };
