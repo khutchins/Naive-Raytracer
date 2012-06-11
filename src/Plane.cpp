@@ -105,6 +105,7 @@ Plane::Plane(ifstream &f)
 		//words with one string argument
 		else if(word == "texture")
 		{
+			//TODO: attempt load texture from local directory first
 			string textureName;
 
 			if(lineContents.size() < 1) break;
