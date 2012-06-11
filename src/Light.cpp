@@ -4,7 +4,7 @@ Light::Light(ifstream &f)
 {
 	this->isVisible = true;
 	this->isLight = true;
-	this->objectType = LIGHT;
+	this->objectType = ENTITY_LIGHT;
 	this->hasTexture = false;
 	while(!f.eof())
 	{

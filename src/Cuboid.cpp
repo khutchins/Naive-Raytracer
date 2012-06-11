@@ -4,7 +4,7 @@ Cuboid::Cuboid(ifstream &f)
 {
 	this->isLight = false;
 	this->isVisible = true;
-	this->objectType = CUBOID;
+	this->objectType = ENTITY_CUBOID;
 	this->hasTexture = false;
 	Material material;
 	string textureName;

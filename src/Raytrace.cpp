@@ -11,7 +11,7 @@ double zmaxG = 1000;
 int cameraNum = 0;
 int iterations = 0;
 
-EntityID lastProc = NONE;
+EntityID lastProc = ENTITY_NONE;
 
 int start(string fn)
 {
@@ -121,7 +121,7 @@ Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 
 		lastProc = id;
 		Color receivedColor = raytrace(lightRay,lig);
-		lastProc = NONE;
+		lastProc = ENTITY_NONE;
 
 		if(lig) //We see the light from the point
 		{
@@ -161,7 +161,7 @@ Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 	bool lig = false;
 	lastProc = id;
 	return raytrace(&reflectRay,lig);
-	lastProc = NONE;
+	lastProc = ENTITY_NONE;
 }
 
 //Calc refracted vector
@@ -173,7 +173,7 @@ Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 	bool lig = false;
 	lastProc = id;
 	return raytrace(&refractRay,lig);
-	lastProc = NONE;
+	lastProc = ENTITY_NONE;
 }
 
 SceneObject *findClosestObject(Ray *r, Point &intersect) {

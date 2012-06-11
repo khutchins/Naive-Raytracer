@@ -8,14 +8,14 @@
 #include <cstdlib>
 
 enum EntityID {
-	SPHERE,
-	PLANE,
-	LIGHT,
-	DISK,
-	CYLINDER,
-	TUBE,
-	CUBOID,
-	NONE
+	ENTITY_SPHERE,
+	ENTITY_PLANE,
+	ENTITY_LIGHT,
+	ENTITY_DISK,
+	ENTITY_CYLINDER,
+	ENTITY_TUBE,
+	ENTITY_CUBOID,
+	ENTITY_NONE
 };
 
 class SceneObject {

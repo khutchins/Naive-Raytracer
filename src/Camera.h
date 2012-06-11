@@ -16,13 +16,13 @@
 using namespace std;
 
 enum AntiAliasingType {
-	NO_AA,
-	NAIVE_AVERAGE, //weighted average of pixels post processing
-	FSAA_4, //full scene anti-aliasing with 4 samples (super-sampling)
-	FSAA_16, //full scene anti-aliasing with 16 samples  (super-sampling)
-	EDAA_4, //super-sampling with 4 samples on pixels that are detected at edges using the ED convolution
-	EDAA_16, //super-sampling with 16 samples on pixels that are detected at edges using the ED convolution
-	EDBAA //gaussian blur convolution on pixels that are detected to be an edge using the ED convolution
+	AA_TYPE_NONE,
+	AA_TYPE_NAIVE_AVERAGE, //weighted average of pixels post processing
+	AA_TYPE_FSAA_4, //full scene anti-aliasing with 4 samples (super-sampling)
+	AA_TYPE_FSAA_16, //full scene anti-aliasing with 16 samples  (super-sampling)
+	AA_TYPE_EDAA_4, //super-sampling with 4 samples on pixels that are detected at edges using the ED convolution
+	AA_TYPE_EDAA_16, //super-sampling with 16 samples on pixels that are detected at edges using the ED convolution
+	AA_TYPE_EDBAA //gaussian blur convolution on pixels that are detected to be an edge using the ED convolution
 };
 
 class Camera : public SceneObject{

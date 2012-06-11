@@ -4,7 +4,7 @@ Cylinder::Cylinder(ifstream &f)
 {
 	this->isLight = false;
 	this->isVisible = true;
-	this->objectType = CYLINDER;
+	this->objectType = ENTITY_CYLINDER;
 	this->hasTexture = false;
 	Material material;
 	double height;

@@ -4,7 +4,7 @@ Disk::Disk(ifstream &f)
 {
 	this->isLight = false;
 	this->isVisible = true;
-	this->objectType = DISK;
+	this->objectType = ENTITY_DISK;
 	this->hasTexture = false;
 	while(!f.eof())
 	{

@@ -2,6 +2,17 @@
 
 using namespace std;
 
+/*
+====================
+explode
+	Takes a string, a deliminator string, and a queue to place the exploded 
+	string in.  It then splits up the string by the deliminator and stores 
+	the resulting strings in results.
+
+	Examples: explode("Test/delimit/ foo /ba/r","/",results) would return 
+	with { "Test", "delimit", " foo ", "ba", "r" } in the queue.
+====================
+*/
 void explode(string str, string deliminator, queue<string>* results){
     size_t idx;
     idx = str.find_first_of(deliminator);

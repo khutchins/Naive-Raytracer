@@ -15,12 +15,14 @@
 
 class Cuboid : public SceneObject {
 public:
-	Plane* sides[6];
+	Plane*	sides[6];
 
-	Vector up;
-	Vector front;
-	Point origin;
-	double height,width,length;
+	Vector	up;
+	Vector	front;
+	Point	origin;
+	double	height;
+	double	width;
+	double	length;
 
 	Cuboid(ifstream &f);
 	Vector calculateNormalForPoint(Point p, Point raySource);

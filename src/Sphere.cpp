@@ -8,7 +8,7 @@ Sphere::Sphere(ifstream &f)
 {
 	this->isLight = false;
 	this->isVisible = true;
-	this->objectType = SPHERE;
+	this->objectType = ENTITY_SPHERE;
 	this->hasTexture = false;
 	while(!f.eof())
 	{

@@ -98,7 +98,7 @@ convolution getGaussianBlurConvolution() {
 	aa2DVector.resize(width);
 	for(int i = 0; i < width; i++) aa2DVector[i].resize(height);
 
-	double DIV = 16.f;
+	const double DIV = 16.f;
 
 	aa2DVector[0][0] = 1.f/DIV;
 	aa2DVector[0][1] = 2.f/DIV;

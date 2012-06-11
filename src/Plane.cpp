@@ -5,7 +5,7 @@ Plane::Plane(ifstream &f)
 	this->isLight = false;
 	this->isVisible = true;
 	this->hasTexture = false;
-	this->objectType = PLANE;
+	this->objectType = ENTITY_PLANE;
 
 	while(!f.eof())
 	{

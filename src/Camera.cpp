@@ -1,15 +1,22 @@
 #include "Camera.h"
 
+/*
+====================
+Camera::Camera
+	Takes in the input stream and creates a camera object from the parsed input
+====================
+*/
 Camera::Camera(ifstream &f)
 {
 	this->grayscale = false;
 	this->isLight = false;
 	this->isVisible = false;
 	this->hasTexture = false;
-	this->aa = NO_AA;
+	this->aa = AA_TYPE_NONE;
 	this->imageHeight = 240;
 	this->imageWidth = 320;
 	this->name = "";
+
 	while(!f.eof())
 	{
 		string line;
@@ -105,12 +112,12 @@ Camera::Camera(ifstream &f)
 			else if(word == "name")			this->name = sNum;
 			else if(word == "aa")
 			{
-				if(sNum == "none") this->aa = NO_AA;
-				else if(sNum == "fsaa4") this->aa = FSAA_4;
-				else if(sNum == "fsaa16") this->aa = FSAA_16;
-				else if(sNum == "naive-average") this->aa = NAIVE_AVERAGE;
-				else if(sNum == "edaa4") this->aa = EDAA_4;
-				else if(sNum == "edaa16") this->aa = EDAA_16;
+				if(sNum == "none") this->aa = AA_TYPE_NONE;
+				else if(sNum == "fsaa4") this->aa = AA_TYPE_FSAA_4;
+				else if(sNum == "fsaa16") this->aa = AA_TYPE_FSAA_16;
+				else if(sNum == "naive-average") this->aa = AA_TYPE_NAIVE_AVERAGE;
+				else if(sNum == "edaa4") this->aa = AA_TYPE_EDAA_4;
+				else if(sNum == "edaa16") this->aa = AA_TYPE_EDAA_16;
 			}
 		}
 		else break;
@@ -137,6 +144,14 @@ Camera::Camera(ifstream &f)
 	gapHeight2 = 1.f/((double)imageHeight)/2.f;
 }
 
+/*
+====================
+Camera::renderPixel
+	Takes in the (x,y) coordinates of the pixel to be rendered as well as the 
+	number of samples to average for that pixel.  It returns the color of the 
+	raytraced pixel.
+====================
+*/
 Color Camera::renderPixel(int x, int y, int numSamples) {
 	int sqrtNumSamples = (int)sqrt((float)numSamples);
 
@@ -170,13 +185,13 @@ Color Camera::renderPixel(int x, int y, int numSamples) {
 	}
 	//vCamToImagePlane = c->direction;
 
-	Ray* r = new Ray(); //Ray from the camera to the image plane
-	r->dir = vCamToImagePlane;
+	Ray* ray = new Ray(); //Ray from the camera to the image plane
+	ray->dir = vCamToImagePlane;
 	
 	if(isPerspective)
-		r->start = this->origin;
+		ray->start = this->origin;
 	else
-		r->start = pPointOnImagePlane;
+		ray->start = pPointOnImagePlane;
 
 	bool lightT = false;
 
@@ -188,34 +203,41 @@ Color Camera::renderPixel(int x, int y, int numSamples) {
 			for(int y2 = 0; y2 < sqrtNumSamples; y2++) {
 				double adjYCoord = yCoord - gapHeight2 + topGap + (y2-1)*gapBetweenVerticalSamples;
 				pPointOnImagePlane = this->origin + this->zmin * this->direction + adjXCoord * vLeft + adjYCoord * this->up;
-				if(isPerspective) r->dir = pPointOnImagePlane - this->origin;
-				if(!isPerspective) r->start = pPointOnImagePlane;
-				colors[x2*sqrtNumSamples + y2] = raytrace(r,lightT);
+				if(isPerspective) ray->dir = pPointOnImagePlane - this->origin;
+				if(!isPerspective) ray->start = pPointOnImagePlane;
+				colors[x2*sqrtNumSamples + y2] = raytrace(ray,lightT);
 			}
 		}
 		col = Color::averageValues(colors,numSamples);
 		delete colors;
 	}
-	else col = raytrace(r,lightT);
+	else col = raytrace(ray,lightT);
 	if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
 
-	delete r;
+	delete ray;
 	return col;
 }
 
+/*
+====================
+Camera::renderScene
+	Takes in the scene file location as well as the camera number (used if the 
+	camera doesn't have a name).  Renders the scene completely (including any 
+	anti-aliasing/convolutions and saves the file.  This is the meat of this 
+	application.
+====================
+*/
 void Camera::renderScene(string filename, int cameraNum) {
 	BMP image;
 	image.SetSize(this->imageWidth,this->imageHeight);
     image.SetBitDepth(32);
 	int numSamples;
-	if(aa == FSAA_4) numSamples = 4;
-	else if(aa == FSAA_16) numSamples = 16;
+	if(aa == AA_TYPE_FSAA_4) numSamples = 4;
+	else if(aa == AA_TYPE_FSAA_16) numSamples = 16;
 	else numSamples = 1;
 
-	for(int y = 0; y < this->imageHeight; y++)
-	{
-		for(int x = 0; x < this->imageWidth; x++)
-		{
+	for(int y = 0; y < this->imageHeight; y++) {
+		for(int x = 0; x < this->imageWidth; x++) {
 			Color col = renderPixel(x,y,numSamples);
 
 			if(this->grayscale) {
@@ -243,8 +265,9 @@ void Camera::renderScene(string filename, int cameraNum) {
 	else sceneName += name;
 	sceneName += ".bmp";
 
-	if(aa == NAIVE_AVERAGE) generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
-	else if(aa == EDAA_4 || aa == EDAA_16) generateEDAABMP(this,image).WriteToFile(sceneName.c_str());
-	else image.WriteToFile(sceneName.c_str());
+	if(aa == AA_TYPE_NAIVE_AVERAGE)							generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
+	else if(aa == AA_TYPE_EDAA_4 || aa == AA_TYPE_EDAA_16)	generateEDAABMP(this,image).WriteToFile(sceneName.c_str());
+	else													image.WriteToFile(sceneName.c_str());
+
 	cout << "Finished rendering file " << sceneName << ".\n";
 }

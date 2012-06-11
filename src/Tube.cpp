@@ -4,7 +4,7 @@ Tube::Tube(ifstream &f)
 {
 	this->isLight = false;
 	this->isVisible = true;
-	this->objectType = TUBE;
+	this->objectType = ENTITY_TUBE;
 	this->hasTexture = false;
 	while(!f.eof())
 	{
