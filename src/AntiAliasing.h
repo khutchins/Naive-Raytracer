@@ -4,14 +4,16 @@
 #include "EasyBMP/EasyBMP.h"
 #include "Convolution.h"
 #include <vector>
-#include "Camera.h"
+#include "ObjCamera.h"
+#include "Raytracer.h"
 
 const int EDAA_THRESHHOLD = 10;
 
 class Camera;
+class Raytracer;
 
 BMP generateNaiveAABMP(BMP originalImage);
-BMP generateEDAABMP(Camera *c, BMP &originalImage);
+BMP generateEDAABMP(Camera *c, BMP &originalImage, Raytracer *raytracer);
 //BMP generateEDBAABMP(Camera *c, BMP originalImage);
 
 #endif

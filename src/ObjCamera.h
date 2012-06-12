@@ -3,9 +3,9 @@
 
 #include <cstdlib>
 #include "StringProcessing.h"
-#include "SceneObject.h"
+#include "ObjSceneObject.h"
 #include "Point.h"
-#include "Raytrace.h"
+#include "Raytracer.h"
 #include "Color.h"
 #include "EasyBMP/EasyBMP.h"
 #include "AntiAliasing.h"
@@ -14,6 +14,8 @@
 #include <queue>
 
 using namespace std;
+
+class Raytracer;
 
 enum AntiAliasingType {
 	AA_TYPE_NONE,
@@ -44,8 +46,8 @@ public:
 	int sqrtNumSamples;
 
 	Camera(ifstream &f);
-	Color renderPixel(int x, int y, int numSamples);
-	void renderScene(string filename, int cameraNum);
+	Color renderPixel(int x, int y, int numSamples, Raytracer *raytracer);
+	void renderScene(string filename, int cameraNum, Raytracer *raytracer);
 };
 
 #endif

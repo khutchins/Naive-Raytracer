@@ -1,7 +1,7 @@
 #ifndef _TUBE_H_
 #define _TUBE_H_
 
-#include "SceneObject.h"
+#include "ObjSceneObject.h"
 #include "VectorMath.h"
 #include "StringProcessing.h"
 #include "Point.h"

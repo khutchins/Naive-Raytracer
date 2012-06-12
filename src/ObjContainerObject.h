@@ -1,7 +1,7 @@
 #ifndef _CONTAINER_OBJECT_H_
 #define _CONTAINER_OBJECT_H_
 
-#include "SceneObject.h"
+#include "ObjSceneObject.h"
 #include "VectorMath.h"
 #include <vector>
 

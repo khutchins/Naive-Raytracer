@@ -1,7 +1,7 @@
-#ifndef _DISK_H_
-#define _DISK_H_
+#ifndef _SPHERE_H_
+#define _SPHERE_H_
 
-#include "SceneObject.h"
+#include "ObjSceneObject.h"
 #include "StringProcessing.h"
 #include "Point.h"
 #include "Material.h"
@@ -16,15 +16,12 @@
 
 using namespace std;
 
-class Disk : public SceneObject {
+class Sphere : public SceneObject {
 public:
     Material material;
     double radius;
-	Vector up;
-	Vector normal;
 
-	Disk(ifstream &f);
-	Disk(Material m, double radius, Vector up, Vector normal, Point origin);
+	Sphere(ifstream &f);
 	Vector calculateNormalForPoint(Point p, Point raySource);
 	SceneObject* intersect(Ray* r, Point &intersect);
 	double getReflection();

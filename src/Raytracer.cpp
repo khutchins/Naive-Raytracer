@@ -1,47 +1,59 @@
-#include "Raytrace.h"
+#include "Raytracer.h"
 #include "VectorMath.h"
 
 using namespace std;
 
-//Global camera and object queues
-queue<Camera*> cameraQ;
-queue<SceneObject*> objectQ;
-
-//maximum z value (currently ignored)
-double zmaxG = 1000;
-
-//current camera number
-int cameraNum = 0;
-//number of iterations the ray has gone through (this is capped)
-int iterations = 0;
-
 //maximum number of iterations
 #define MAXIMUM_ITERATIONS 5
 
-//Last entity processed
-EntityID lastProc = ENTITY_NONE;
+/*
+====================
+Raytracer::Raytracer()
+	Initializes values for raytracer's execution
+====================
+*/
+Raytracer::Raytracer() {
+	zmaxG = 1000;
+	cameraNum = 0;
+	iterations = 0;
+	lastProc = ENTITY_NONE;
+}
 
 /*
 ====================
-start
+Raytracer::~Raytracer()
+	Releases raytracer's memory
+====================
+*/
+Raytracer::~Raytracer() {
+	for(int i = 0; objectQ.size() > 0; i++) {
+		SceneObject* object = objectQ.front();
+		objectQ.pop();
+		delete object;
+	}
+}
+
+/*
+====================
+Raytracer::start
 	The initiating function.  Processes inputs and has the cameras all render 
 	their scenes
 ====================
 */
-int start(string fn)
-{
+int Raytracer::start(string fn) {
 	//Read input from file
 	if(processInput(fn) == 0) return 0;
 
-	for(int i = 0; cameraQ.size() > 0; i++)
-	{
+	for(int i = 0; cameraQ.size() > 0; i++) {
 		cameraNum = i;
 		Camera* c = cameraQ.front();
 		
 		zmaxG = c->zmax;
-		c->renderScene(fn,cameraNum);
+		c->renderScene(fn,cameraNum,this);
 
 		cameraQ.pop();
+
+		delete c;
 	}
 
     return 0;
@@ -49,13 +61,12 @@ int start(string fn)
 
 /*
 ====================
-raytrace
+Raytracer::raytrace
 	computes the color viewable by the ray r.  Light is set to true if the 
 	closest object is a light
 ====================
 */
-Color raytrace(Ray* r, bool &light)
-{
+Color Raytracer::raytrace(Ray* r, bool &light) {
 	Color c = Color::ColorBlack();
 
 	//find nearest intersection
@@ -63,7 +74,7 @@ Color raytrace(Ray* r, bool &light)
 	Point oInt;
 
 	closestO = findClosestObject(r, oInt);
-	if(DIAGNOSTIC_STATUS == IS_HIT) {
+	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_IS_HIT) {
 		if(closestO) return Color::ColorWhite();
 		else return Color::ColorBlack();
 	}
@@ -100,7 +111,7 @@ Color raytrace(Ray* r, bool &light)
 			if(percentDiffuse < 0) percentDiffuse = 0;
 
 			if(closestO->hasTexture) {
-				if(DIAGNOSTIC_STATUS == TEXTURE_MAPPING) {
+				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_TEXTURE_MAPPING) {
 					c = materialTexture * 255;
 					return c;
 				}
@@ -123,12 +134,12 @@ Color raytrace(Ray* r, bool &light)
 
 /*
 ====================
-calculateLocalLighting
+Raytracer::calculateLocalLighting
 	Calculates the lighting on the object given the intercept, the object's 
 	normal, and the ID of the Entity.  Returns the color of the object
 ====================
 */
-Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
+Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 	Color llocal = Color::ColorBlack();
 	for(unsigned int i = 0; i < objectQ.size(); i++) {
 		SceneObject* l = objectQ.front();
@@ -178,13 +189,13 @@ Color calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 
 /*
 ====================
-calculateReflectedRay
+Raytracer::calculateReflectedRay
 	Based on the incoming ray r, the intercept, the normal, and the entity ID, 
 	calculate the color of the reflected ray (not adjusted for the reflectivity 
 	of the object
 ====================
 */
-Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
+Color Raytracer::calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	double angle = dot3(normal,r.dir);
 	Vector reflectVec = -2 * angle * normal + r.dir;
 
@@ -201,13 +212,13 @@ Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 
 /*
 ====================
-calculateRefractedRay
+Raytracer::calculateRefractedRay
 	Based on the incoming ray r, the intercept, the normal, and the entity ID, 
 	calculate the color of the refracted ray (not adjusted for the refractivity 
 	of the object
 ====================
 */
-Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
+Color Raytracer::calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
 	Ray refractRay;
 	refractRay.dir = r.dir;
 	refractRay.start = intercept + 0.000001 * r.dir;
@@ -220,11 +231,11 @@ Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) 
 
 /*
 ====================
-findClosestObject
+Raytracer::findClosestObject
 	Iterates through the object queue and locates the closeest object
 ====================
 */
-SceneObject *findClosestObject(Ray *r, Point &intersect) {
+SceneObject *Raytracer::findClosestObject(Ray *r, Point &intersect) {
 	SceneObject *closestObject = NULL;
 	for(unsigned int i = 0; i < objectQ.size(); i++) { //look for closest object
 		SceneObject* tempO = objectQ.front();
@@ -245,11 +256,11 @@ SceneObject *findClosestObject(Ray *r, Point &intersect) {
 
 /*
 ====================
-processInput
+Raytracer::processInput
 	processes the input file to populate the scene
 ====================
 */
-int processInput(string filename) {
+int Raytracer::processInput(string filename) {
 	ifstream sceneFile;
 	string line; //We will be temporarily storing input here
 

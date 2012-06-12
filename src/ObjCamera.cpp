@@ -1,4 +1,4 @@
-#include "Camera.h"
+#include "ObjCamera.h"
 
 /*
 ====================
@@ -159,7 +159,7 @@ Camera::renderPixel
 	raytraced pixel.
 ====================
 */
-Color Camera::renderPixel(int x, int y, int numSamples) {
+Color Camera::renderPixel(int x, int y, int numSamples, Raytracer *raytracer) {
 	int sqrtNumSamples = (int)sqrt((float)numSamples);
 
 	double deltawidth = 1/(imageWidth * sqrtNumSamples);
@@ -212,14 +212,14 @@ Color Camera::renderPixel(int x, int y, int numSamples) {
 				pPointOnImagePlane = this->origin + this->zmin * this->direction + adjXCoord * vLeft + adjYCoord * this->up;
 				if(isPerspective) ray->dir = pPointOnImagePlane - this->origin;
 				if(!isPerspective) ray->start = pPointOnImagePlane;
-				colors[x2*sqrtNumSamples + y2] = raytrace(ray,lightT);
+				colors[x2*sqrtNumSamples + y2] = raytracer->raytrace(ray,lightT);
 			}
 		}
 		col = Color::averageValues(colors,numSamples);
 		delete colors;
 	}
-	else col = raytrace(ray,lightT);
-	if(DIAGNOSTIC_STATUS == IS_LIT) col.adjustColorForDiagnosticIsLit();
+	else col = raytracer->raytrace(ray,lightT);
+	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_IS_LIT) col.adjustColorForDiagnosticIsLit();
 
 	delete ray;
 	return col;
@@ -231,10 +231,11 @@ Camera::renderScene
 	Takes in the scene file location as well as the camera number (used if the 
 	camera doesn't have a name).  Renders the scene completely (including any 
 	anti-aliasing/convolutions and saves the file.  This is the meat of this 
-	application.
+	application.  It also takes in a reference to the raytracer in order to 
+	render the scene
 ====================
 */
-void Camera::renderScene(string filename, int cameraNum) {
+void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	BMP image;
 	image.SetSize(this->imageWidth,this->imageHeight);
     image.SetBitDepth(32);
@@ -245,7 +246,7 @@ void Camera::renderScene(string filename, int cameraNum) {
 
 	for(int y = 0; y < this->imageHeight; y++) {
 		for(int x = 0; x < this->imageWidth; x++) {
-			Color col = renderPixel(x,y,numSamples);
+			Color col = renderPixel(x,y,numSamples,raytracer);
 
 			if(this->grayscale) {
 				double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
@@ -273,7 +274,7 @@ void Camera::renderScene(string filename, int cameraNum) {
 	sceneName += ".bmp";
 
 	if(aa == AA_TYPE_NAIVE_AVERAGE)							generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
-	else if(aa == AA_TYPE_EDAA_4 || aa == AA_TYPE_EDAA_16)	generateEDAABMP(this,image).WriteToFile(sceneName.c_str());
+	else if(aa == AA_TYPE_EDAA_4 || aa == AA_TYPE_EDAA_16)	generateEDAABMP(this,image,raytracer).WriteToFile(sceneName.c_str());
 	else													image.WriteToFile(sceneName.c_str());
 
 	cout << "Finished rendering file " << sceneName << ".\n";

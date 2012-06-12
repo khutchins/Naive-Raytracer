@@ -1,12 +1,12 @@
 #ifndef _CUBOID_H_
 #define _CUBOID_H_
 
-#include "ContainerObject.h"
-#include "SceneObject.h"
+#include "ObjContainerObject.h"
+#include "ObjSceneObject.h"
 #include "VectorMath.h"
 #include "StringProcessing.h"
 #include "Point.h"
-#include "Plane.h"
+#include "ObjPlane.h"
 #include "Material.h"
 #include "Diagnostic.h"
 #include <fstream>

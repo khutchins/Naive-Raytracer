@@ -1,4 +1,4 @@
-#include "Raytrace.h"
+#include "Raytracer.h"
 #include <string>
 
 using namespace std;
@@ -15,5 +15,8 @@ int main(int argc, char * argv[])
 	else if(argc == 2 && !manualFilename)
 		fn = argv[1];
 
-	return start(fn);
+	Raytracer *raytracer = new Raytracer();
+	int retValue = raytracer->start(fn);
+	delete raytracer;
+	return retValue;
 }

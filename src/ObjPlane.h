@@ -1,7 +1,7 @@
 #ifndef _PLANE_H_
 #define _PLANE_H_
 
-#include "SceneObject.h"
+#include "ObjSceneObject.h"
 #include "VectorMath.h"
 #include "StringProcessing.h"
 #include "Point.h"

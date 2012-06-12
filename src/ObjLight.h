@@ -1,7 +1,7 @@
 #ifndef _LIGHT_H_
 #define _LIGHT_H_
 
-#include "SceneObject.h"
+#include "ObjSceneObject.h"
 #include "StringProcessing.h"
 #include "Point.h"
 #include "Color.h"

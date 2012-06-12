@@ -1,4 +1,4 @@
-#include "Disk.h"
+#include "ObjDisk.h"
 
 /*
 ====================

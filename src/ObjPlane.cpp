@@ -1,4 +1,4 @@
-#include "Plane.h"
+#include "ObjPlane.h"
 
 /*
 ====================
@@ -252,7 +252,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	pixelX %= width;
 	pixelY %= height;
 	Color matColor;
-	if(DIAGNOSTIC_STATUS == TEXTURE_MAPPING) {
+	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_TEXTURE_MAPPING) {
 		matColor.r = tLeftPoint;
 		matColor.b = 1;
 		matColor.g = tTopPoint;

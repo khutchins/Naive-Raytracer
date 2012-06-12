@@ -1,5 +1,5 @@
 #include "AntiAliasing.h"
-#include "Raytrace.h"
+#include "Raytracer.h"
 #include "Convolution.h"
 
 /*
@@ -35,7 +35,7 @@ generateEDAABMP
 	to be.  The result is returned in the original BMP passed in.
 ====================
 */
-BMP generateEDAABMP(Camera *c, BMP& originalImage) {
+BMP generateEDAABMP(Camera *c, BMP& originalImage, Raytracer* raytracer) {
 	int numSamples;
 	if(c->aa == AA_TYPE_EDAA_4) numSamples = 4;
 	else				numSamples = 16;
@@ -49,7 +49,7 @@ BMP generateEDAABMP(Camera *c, BMP& originalImage) {
 		for(int y = 0; y < imageHeight; y++) {
 			Color edc = Color::colorFromRGBAPixel(edgeDetectionBMP(x,y));
 			if(pixelExceedsThreshhold(edc,EDAA_THRESHHOLD)) {
-				Color col = c->renderPixel(x,y,numSamples);
+				Color col = c->renderPixel(x,y,numSamples,raytracer);
 
 				if(c->grayscale) {
 					double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;

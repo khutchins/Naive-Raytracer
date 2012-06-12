@@ -1,14 +1,14 @@
 #ifndef _CYLINDER_H_
 #define _CYLINDER_H_
 
-#include "ContainerObject.h"
+#include "ObjContainerObject.h"
 #include "VectorMath.h"
 #include "StringProcessing.h"
 #include "Point.h"
 #include "Material.h"
 #include "Diagnostic.h"
-#include "Disk.h"
-#include "Tube.h"
+#include "ObjDisk.h"
+#include "ObjTube.h"
 #include <fstream>
 #include <string>
 #include <queue>
