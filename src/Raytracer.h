@@ -44,8 +44,8 @@ public:
 private:
 	///Variables
 	//Global camera and object queues
-	queue<Camera*> cameraQ;
-	queue<SceneObject*> objectQ;
+	queue<Camera*> cameraQueue;
+	queue<SceneObject*> objectQueue;
 
 	//maximum z value (currently ignored)
 	double zmaxG;

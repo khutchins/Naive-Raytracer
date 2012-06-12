@@ -26,9 +26,9 @@ Raytracer::~Raytracer()
 ====================
 */
 Raytracer::~Raytracer() {
-	for(int i = 0; objectQ.size() > 0; i++) {
-		SceneObject* object = objectQ.front();
-		objectQ.pop();
+	for(int i = 0; objectQueue.size() > 0; i++) {
+		SceneObject* object = objectQueue.front();
+		objectQueue.pop();
 		delete object;
 	}
 }
@@ -44,14 +44,14 @@ int Raytracer::start(string fn) {
 	//Read input from file
 	if(processInput(fn) == 0) return 0;
 
-	for(int i = 0; cameraQ.size() > 0; i++) {
+	for(int i = 0; cameraQueue.size() > 0; i++) {
 		cameraNum = i;
-		Camera* c = cameraQ.front();
+		Camera* c = cameraQueue.front();
 		
 		zmaxG = c->zmax;
 		c->renderScene(fn,cameraNum,this);
 
-		cameraQ.pop();
+		cameraQueue.pop();
 
 		delete c;
 	}
@@ -141,10 +141,10 @@ Raytracer::calculateLocalLighting
 */
 Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
 	Color llocal = Color::ColorBlack();
-	for(unsigned int i = 0; i < objectQ.size(); i++) {
-		SceneObject* l = objectQ.front();
-		objectQ.pop();
-		objectQ.push(l);
+	for(unsigned int i = 0; i < objectQueue.size(); i++) {
+		SceneObject* l = objectQueue.front();
+		objectQueue.pop();
+		objectQueue.push(l);
 		if(!l->isLight) continue;
 
 		Ray* lightRay = new Ray();
@@ -237,10 +237,10 @@ Raytracer::findClosestObject
 */
 SceneObject *Raytracer::findClosestObject(Ray *r, Point &intersect) {
 	SceneObject *closestObject = NULL;
-	for(unsigned int i = 0; i < objectQ.size(); i++) { //look for closest object
-		SceneObject* tempO = objectQ.front();
-		objectQ.pop();
-		objectQ.push(tempO);
+	for(unsigned int i = 0; i < objectQueue.size(); i++) { //look for closest object
+		SceneObject* tempO = objectQueue.front();
+		objectQueue.pop();
+		objectQueue.push(tempO);
 
 		Point objectIntersect;
 		if(tempO = tempO->intersect(r,objectIntersect)) {
@@ -284,35 +284,35 @@ int Raytracer::processInput(string filename) {
 
 		if(word == "camera") {
 			Camera* c = new Camera(sceneFile);
-			cameraQ.push(c);
+			cameraQueue.push(c);
 		}
 		else if(word == "plane") {
 			Plane* p = new Plane(sceneFile);
-			objectQ.push(p);
+			objectQueue.push(p);
 		}
 		else if(word == "sphere") {
 			Sphere* s = new Sphere(sceneFile);
-			objectQ.push(s);
+			objectQueue.push(s);
 		}
 		else if(word == "light") {
 			Light* l = new Light(sceneFile);
-			objectQ.push(l);
+			objectQueue.push(l);
 		}
 		else if(word == "disk") {
 			Disk* d = new Disk(sceneFile);
-			objectQ.push(d);
+			objectQueue.push(d);
 		}
 		else if(word == "tube") {
 			Tube* t = new Tube(sceneFile);
-			objectQ.push(t);
+			objectQueue.push(t);
 		}
 		else if(word == "cylinder") {
 			Cylinder* c = new Cylinder(sceneFile);
-			objectQ.push(c);
+			objectQueue.push(c);
 		}
 		else if(word == "cuboid" || word == "box") {
 			Cuboid* c = new Cuboid(sceneFile);
-			objectQ.push(c);
+			objectQueue.push(c);
 		}
 		else {
 			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;

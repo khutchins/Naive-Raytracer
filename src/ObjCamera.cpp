@@ -18,11 +18,7 @@ Camera::Camera(ifstream &f)
 	this->imageWidth = 320;
 	this->name = "";
 
-	this->material.color.r = 0;
-	this->material.color.g = 0;
-	this->material.color.b = 0;
-	this->material.reflection = 0;
-	this->material.transparency = 0;
+	//Material doesn't matter for the camera
 
 	while(!f.eof())
 	{
