@@ -8,7 +8,6 @@ Camera::Camera
 */
 Camera::Camera(ifstream &f)
 {
-	//TODO: refactor this so it doesn't have a material component
 	this->grayscale = false;
 	this->isLight = false;
 	this->isVisible = false;
