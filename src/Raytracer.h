@@ -55,9 +55,6 @@ private:
 	//number of iterations the ray has gone through (this is capped)
 	int iterations;
 
-	//Last entity processed
-	EntityID lastProc;
-
 	///Methods
 	//Parse input file
 	int processInput(string filename);

@@ -16,7 +16,6 @@ Raytracer::Raytracer() {
 	zmaxG = 1000;
 	cameraNum = 0;
 	iterations = 0;
-	lastProc = ENTITY_NONE;
 }
 
 /*
@@ -159,9 +158,7 @@ Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID
 		lightRay->dir = lDir;
 		lightRay->start = lStart;
 
-		lastProc = id;
 		Color receivedColor = raytrace(lightRay,lig);
-		lastProc = ENTITY_NONE;
 
 		if(lig) { //We see the light from the point
 			//Direction from the light source to the plane.  Used for calculating lambert
@@ -205,9 +202,7 @@ Color Raytracer::calculateReflectedRay(Ray r, Point intercept, Vector normal, En
 	reflectRay.start = intercept + 0.000001 * reflectVec;
 
 	bool lig = false;
-	lastProc = id;
 	return raytrace(&reflectRay,lig);
-	lastProc = ENTITY_NONE;
 }
 
 /*
@@ -224,9 +219,7 @@ Color Raytracer::calculateRefractedRay(Ray r, Point intercept, Vector normal, En
 	refractRay.start = intercept + 0.000001 * r.dir;
 
 	bool lig = false;
-	lastProc = id;
 	return raytrace(&refractRay,lig);
-	lastProc = ENTITY_NONE;
 }
 
 /*
