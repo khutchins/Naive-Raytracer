@@ -243,18 +243,8 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 		for(int x = 0; x < this->imageWidth; x++) {
 			Color col = renderPixel(x,y,numSamples,raytracer);
 
-			if(this->grayscale) {
-				double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
-				image(imageWidth-x-1,imageHeight-y-1)->Red   = (unsigned char)grayscaleVal;
-				image(imageWidth-x-1,imageHeight-y-1)->Green = (unsigned char)grayscaleVal;
-				image(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)grayscaleVal;
-			}
-			else {
-				image(imageWidth-x-1,imageHeight-y-1)->Red   = (unsigned char)col.r;
-				image(imageWidth-x-1,imageHeight-y-1)->Green = (unsigned char)col.g;
-				image(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)col.b;
-			}
-			image(imageWidth-x-1,imageHeight-y-1)->Alpha = 0;
+			if(this->grayscale) image.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorGrayscale(col.grayscaleValue()).RGBAPixel());
+			else				image.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
 		}
 	}
 

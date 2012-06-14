@@ -68,12 +68,8 @@ BMP generateConvolutionBitmap(BMP originalImage, Convolution convolution) {
 			newColor.r = min(max(0,(int)newColor.r),255);
 			newColor.g = min(max(0,(int)newColor.g),255);
 			newColor.b = min(max(0,(int)newColor.b),255);
-			newAlpha = min(max(0,(int)newAlpha),255);
 
-			imageConvolution(i_x,i_y)->Red = (ebmpBYTE)newColor.r;
-			imageConvolution(i_x,i_y)->Green = (ebmpBYTE)newColor.g;
-			imageConvolution(i_x,i_y)->Blue = (ebmpBYTE)newColor.b;
-			imageConvolution(i_x,i_y)->Alpha = (ebmpBYTE)newAlpha;
+			imageConvolution.SetPixel(i_x,i_y,newColor.RGBAPixel());
 		}
 	}
 	return imageConvolution;

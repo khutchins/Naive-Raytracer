@@ -47,33 +47,15 @@ BMP generateEDAABMP(Camera *c, BMP& originalImage, Raytracer* raytracer) {
 
 	for(int x = 0; x < imageWidth; x++) {
 		for(int y = 0; y < imageHeight; y++) {
-			Color edc = Color::colorFromRGBAPixel(edgeDetectionBMP(x,imageHeight-1-y));
+			Color edc = Color::colorFromRGBAPixel(edgeDetectionBMP(imageWidth-x-1,imageHeight-y-1));
 			if(pixelExceedsThreshhold(edc,EDAA_THRESHHOLD)) {
 				Color col = c->renderPixel(x,y,numSamples,raytracer);
 
-				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD) {
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Red   = 255;
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Green = 255;
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Blue  = 255;
-				}
-				else if(c->grayscale) {
-					double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Red   = (unsigned char)grayscaleVal;
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Green = (unsigned char)grayscaleVal;
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)grayscaleVal;
-				}
-				else {
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Red   = (unsigned char)col.r;
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Green = (unsigned char)col.g;
-					originalImage(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)col.b;
-				}
-				originalImage(imageWidth-x-1,imageHeight-y-1)->Alpha = 0;
+				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD)		originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorWhite().RGBAPixel());
+				else if(c->grayscale)									originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorGrayscale(col.grayscaleValue()).RGBAPixel());
+				else													originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
 			}
-			else if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD) {
-				originalImage(imageWidth-x-1,imageHeight-y-1)->Red   = 0;
-				originalImage(imageWidth-x-1,imageHeight-y-1)->Green = 0;
-				originalImage(imageWidth-x-1,imageHeight-y-1)->Blue  = 0;
-			}
+			else if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorBlack().RGBAPixel());
 		}
 	}
 	return originalImage;

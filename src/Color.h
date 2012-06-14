@@ -11,10 +11,13 @@ public:
 	Color(double r, double g, double b);
 	static Color ColorBlack();
 	static Color ColorWhite();
+	static Color ColorGrayscale(unsigned char whiteness);
 
 	void adjustColorForDiagnosticIsLit();
 	static Color averageValues(Color* colors, int numValues);
 	static Color colorFromRGBAPixel(RGBApixel *pix);
+	RGBApixel RGBAPixel();
+	unsigned char grayscaleValue();
 
 	Color operator+(Color right);
 	Color operator-(Color right);

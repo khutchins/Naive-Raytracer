@@ -55,6 +55,21 @@ Color Color::ColorWhite() {
 
 /*
 ====================
+Color::ColorGrayscale
+	Returns an object with the specified grayscale (unsigned char)
+====================
+*/
+Color Color::ColorGrayscale(unsigned char whiteness) {
+	Color col;
+	col.r = whiteness;
+	col.g = whiteness;
+	col.b = whiteness;
+	return col;
+}
+
+
+/*
+====================
 Color::adjustColorForDiagnosticIsLit
 	Adjusts the color values for the IS_LIT diagnostic to be either white 
 	(if there is any color on the pixel) or black (if there isn't)
@@ -96,6 +111,32 @@ Color Color::colorFromRGBAPixel(RGBApixel *pix) {
 	col.g = pix->Green;
 	col.b = pix->Blue;
 	return col;
+}
+
+/*
+====================
+Color::RGBAPixel()
+	This converts the color object into an RGBApixel (used for EasyBMP)
+====================
+*/
+RGBApixel Color::RGBAPixel() {
+	RGBApixel pix;
+	pix.Alpha = 255;
+	pix.Red =	(unsigned char)this->r;
+	pix.Green = (unsigned char)this->g;
+	pix.Blue =	(unsigned char)this->b;
+
+	return pix;
+}
+
+/*
+====================
+Color::grayscaleValue()
+	Returns the grayscale value of the current color as an unsigned char (0-255)
+====================
+*/
+unsigned char Color::grayscaleValue() {
+	return this->r * 0.3 + this->g * 0.59 + this->b * 0.11;
 }
 
 //Color with color addition
