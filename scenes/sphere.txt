@@ -1,0 +1,39 @@
+# Comment.  Must be on a new line
+
+# Type of object.  Can be "camera", "light", "sphere", or "plane".
+camera
+# origin (x,y,z)
+origin 0 0 0
+# direction vector (x,y,z)
+direction 0 0 1
+# up vector (x,y,z)
+up 0 1 0
+# limits on z depth (min,max)
+z 1 10
+# width at zmin (the image plane)
+width 3
+# 0 if orthogonal, 1 if perspective
+perspective 1
+# 0 if full color, anything else if grayscale
+grayscale 0
+# size of image result (width,height). Default is 320x240
+imagesize 640 640
+# type of aa. Default none. Choices are "none" for no AA, "naive-average" for an averaging of values, fsaa4 for 4xFSAA, and fsaa16 for 16xFSAA
+aa none
+end
+
+light
+# origin of light (x,y,z)
+origin 1 1 -1
+# color of light rays (r,g,b) (0 to 1)
+color 1 1 1
+end
+
+cylinder
+origin 0 0 5
+radius 3
+height 3
+color 1 0 0
+reflect 0
+transparency 0
+end

@@ -195,7 +195,7 @@ Color Camera::renderPixel(int x, int y, int numSamples, Raytracer *raytracer) {
 	else
 		ray->start = pPointOnImagePlane;
 
-	bool lightT = false;
+	bool lightWasSeen = false;
 
 	Color col;
 	if(numSamples > 1) {
@@ -207,13 +207,13 @@ Color Camera::renderPixel(int x, int y, int numSamples, Raytracer *raytracer) {
 				pPointOnImagePlane = this->origin + this->zmin * this->direction + adjXCoord * vLeft + adjYCoord * this->up;
 				if(isPerspective) ray->dir = pPointOnImagePlane - this->origin;
 				if(!isPerspective) ray->start = pPointOnImagePlane;
-				colors[x2*sqrtNumSamples + y2] = raytracer->raytrace(ray,lightT);
+				colors[x2*sqrtNumSamples + y2] = raytracer->raytrace(ray,lightWasSeen);
 			}
 		}
 		col = Color::averageValues(colors,numSamples);
 		delete colors;
 	}
-	else col = raytracer->raytrace(ray,lightT);
+	else col = raytracer->raytrace(ray,lightWasSeen);
 	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_IS_LIT) col.adjustColorForDiagnosticIsLit();
 
 	delete ray;

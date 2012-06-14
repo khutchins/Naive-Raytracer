@@ -39,7 +39,7 @@ public:
 	Raytracer();
 	~Raytracer();
 	int start(string fn);
-	Color raytrace(Ray* r, bool &light);
+	Color raytrace(Ray* r, bool &lightWasSeen);
 
 private:
 	///Variables

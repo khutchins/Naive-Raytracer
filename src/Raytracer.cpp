@@ -65,7 +65,7 @@ Raytracer::raytrace
 	closest object is a light
 ====================
 */
-Color Raytracer::raytrace(Ray* r, bool &light) {
+Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 	Color c = Color::ColorBlack();
 
 	//find nearest intersection
@@ -84,8 +84,7 @@ Color Raytracer::raytrace(Ray* r, bool &light) {
 
 	//If > 0 entities found
 	if(oDist != numeric_limits<double>::max()) {
-		if(!closestO->isLight && !light) { //if not a light
-			//TODO: I don't think !light is necessary.  Look into taking it out.
+		if(!closestO->isLight) { //if not a light
 			Color materialTexture;
 			Color llocal = Color::ColorBlack();
 			Color reflect = Color::ColorBlack();
@@ -119,13 +118,13 @@ Color Raytracer::raytrace(Ray* r, bool &light) {
 			else {
 				c = llocal * closestO->getColor() * 255 * percentDiffuse + closestO->getReflection() * reflect + closestO->getRefraction() * refract;
 			}
-			light = false;
+			lightWasSeen = false;
 		}
 		else if (closestO->isLight) { //Light is closest
 			c = closestO->getColor() * 255;
-			light = true;
+			lightWasSeen = true;
 		}
-		else light = false;
+		else lightWasSeen = false;
 	}
 
 	return c;
@@ -147,7 +146,7 @@ Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID
 		if(!l->isLight) continue;
 
 		Ray* lightRay = new Ray();
-		bool lig = true;
+		bool lightWasSeen = true;
 
 		//Start of the ray (moved a bit so we won't intercept the object)
 		Point lStart = intercept + 0.000001 * (l->origin - intercept);
@@ -158,9 +157,9 @@ Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID
 		lightRay->dir = lDir;
 		lightRay->start = lStart;
 
-		Color receivedColor = raytrace(lightRay,lig);
+		Color receivedColor = raytrace(lightRay,lightWasSeen);
 
-		if(lig) { //We see the light from the point
+		if(lightWasSeen) { //We see the light from the point
 			//Direction from the light source to the plane.  Used for calculating lambert
 			Vector lToObject = lDir;
 
@@ -201,8 +200,8 @@ Color Raytracer::calculateReflectedRay(Ray r, Point intercept, Vector normal, En
 	reflectRay.dir = reflectVec;
 	reflectRay.start = intercept + 0.000001 * reflectVec;
 
-	bool lig = false;
-	return raytrace(&reflectRay,lig);
+	bool lightWasSeen = false;
+	return raytrace(&reflectRay,lightWasSeen);
 }
 
 /*
@@ -218,8 +217,8 @@ Color Raytracer::calculateRefractedRay(Ray r, Point intercept, Vector normal, En
 	refractRay.dir = r.dir;
 	refractRay.start = intercept + 0.000001 * r.dir;
 
-	bool lig = false;
-	return raytrace(&refractRay,lig);
+	bool lightWasSeen = false;
+	return raytrace(&refractRay,lightWasSeen);
 }
 
 /*
