@@ -268,7 +268,8 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	else sceneName += name;
 	sceneName += ".bmp";
 
-	if(aa == AA_TYPE_NAIVE_AVERAGE)							generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
+	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDGE_DETECTION)		generateConvolutionBitmap(image,getEdgeDetectionConvolution()).WriteToFile(sceneName.c_str());
+	else if(aa == AA_TYPE_NAIVE_AVERAGE)					generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_EDAA_4 || aa == AA_TYPE_EDAA_16)	generateEDAABMP(this,image,raytracer).WriteToFile(sceneName.c_str());
 	else													image.WriteToFile(sceneName.c_str());
 

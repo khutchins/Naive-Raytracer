@@ -38,7 +38,7 @@ generateEDAABMP
 BMP generateEDAABMP(Camera *c, BMP& originalImage, Raytracer* raytracer) {
 	int numSamples;
 	if(c->aa == AA_TYPE_EDAA_4) numSamples = 4;
-	else				numSamples = 16;
+	else						numSamples = 16;
 
 	int imageWidth = originalImage.TellWidth();
 	int imageHeight = originalImage.TellHeight();
@@ -47,11 +47,16 @@ BMP generateEDAABMP(Camera *c, BMP& originalImage, Raytracer* raytracer) {
 
 	for(int x = 0; x < imageWidth; x++) {
 		for(int y = 0; y < imageHeight; y++) {
-			Color edc = Color::colorFromRGBAPixel(edgeDetectionBMP(x,y));
+			Color edc = Color::colorFromRGBAPixel(edgeDetectionBMP(x,imageHeight-1-y));
 			if(pixelExceedsThreshhold(edc,EDAA_THRESHHOLD)) {
 				Color col = c->renderPixel(x,y,numSamples,raytracer);
 
-				if(c->grayscale) {
+				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD) {
+					originalImage(imageWidth-x-1,imageHeight-y-1)->Red   = 255;
+					originalImage(imageWidth-x-1,imageHeight-y-1)->Green = 255;
+					originalImage(imageWidth-x-1,imageHeight-y-1)->Blue  = 255;
+				}
+				else if(c->grayscale) {
 					double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
 					originalImage(imageWidth-x-1,imageHeight-y-1)->Red   = (unsigned char)grayscaleVal;
 					originalImage(imageWidth-x-1,imageHeight-y-1)->Green = (unsigned char)grayscaleVal;
@@ -63,6 +68,11 @@ BMP generateEDAABMP(Camera *c, BMP& originalImage, Raytracer* raytracer) {
 					originalImage(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)col.b;
 				}
 				originalImage(imageWidth-x-1,imageHeight-y-1)->Alpha = 0;
+			}
+			else if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD) {
+				originalImage(imageWidth-x-1,imageHeight-y-1)->Red   = 0;
+				originalImage(imageWidth-x-1,imageHeight-y-1)->Green = 0;
+				originalImage(imageWidth-x-1,imageHeight-y-1)->Blue  = 0;
 			}
 		}
 	}

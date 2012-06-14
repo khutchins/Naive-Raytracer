@@ -6,7 +6,7 @@ up 0 1 0
 z 0 10
 width 10
 perspective 0
-aa naive-average
+aa fsaa4
 end
    
 light
@@ -22,8 +22,6 @@ reflect 0
 transparency 0
 end
 
-# planes can optionally have a texture which shold be mapped onto the surface
-# instead of the color (commented out below)
 disk
 origin 0 0 10
 normal -0.3 0 -1
