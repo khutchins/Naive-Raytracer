@@ -12,8 +12,7 @@ Tube::Tube(ifstream &f)
 	this->isVisible = true;
 	this->objectType = ENTITY_TUBE;
 	this->hasTexture = false;
-	while(!f.eof())
-	{
+	while(!f.eof()) {
 		string line;
 		getline(f,line);
 
@@ -27,8 +26,7 @@ Tube::Tube(ifstream &f)
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		//words with three string arguments
-		if(word == "origin" || word == "color" || word == "up")
-		{
+		if(word == "origin" || word == "color" || word == "up") {
 			double num1 = 0;
 			double num2 = 0;
 			double num3 = 0;
@@ -42,30 +40,16 @@ Tube::Tube(ifstream &f)
 			num3 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "origin") //read in the origin coordinates
-			{
-				this->origin.x = num1;
-				this->origin.y = num2;
-				this->origin.z = num3;
-			}
-			else if(word == "color") //read in the color coordinates
-			{
-				this->material.color.r = num1;
-				this->material.color.g = num2;
-				this->material.color.b = num3;
-			}
-			else if(word == "up")
-			{
-				this->up.x = num1;
-				this->up.y = num2;
-				this->up.z = num3;
+			if(word == "origin") this->origin = Point(num1,num2,num3);
+			else if(word == "color") this->material.color = Color(num1,num2,num3);
+			else if(word == "up") {
+				this->up = Vector(num1,num2,num3);
 				norm(this->up);
 			}
 		}
 
 		//words with one argument
-		else if(word == "radius" || word == "reflect" || word == "transparency" || word == "height")
-		{
+		else if(word == "radius" || word == "reflect" || word == "transparency" || word == "height") {
 			double num1 = 0;
 
 			if(lineContents.size() < 1) break;
@@ -78,8 +62,7 @@ Tube::Tube(ifstream &f)
 			else if(word == "transparency") this->material.transparency = num1;
 			else if(word == "height")		this->height = num1;
 		}
-		else
-			break;
+		else break;
 	}
 }
 
@@ -119,8 +102,7 @@ SceneObject* Tube::intersect(Ray* r, Point &intersect) {
 
 	//Parallel to tube, does not intersect
 	if(dot3(r->dir,this->up) == 0) return false;
-	else if(disc >= 0) //Find closest intersection
-	{
+	else if(disc >= 0) { //Find closest intersection
 		double discSqrt = sqrt(disc);
 		double quad;
 		if (b < 0)	quad = (-b - discSqrt)/2.f;

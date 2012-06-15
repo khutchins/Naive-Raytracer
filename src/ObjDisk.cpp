@@ -12,8 +12,7 @@ Disk::Disk(ifstream &f)
 	this->isVisible = true;
 	this->objectType = ENTITY_DISK;
 	this->hasTexture = false;
-	while(!f.eof())
-	{
+	while(!f.eof()) {
 		string line;
 		getline(f,line);
 
@@ -27,8 +26,7 @@ Disk::Disk(ifstream &f)
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		//words with three string arguments
-		if(word == "origin" || word == "color" || word == "normal" || word == "up")
-		{
+		if(word == "origin" || word == "color" || word == "normal" || word == "up") {
 			double num1 = 0;
 			double num2 = 0;
 			double num3 = 0;
@@ -42,37 +40,24 @@ Disk::Disk(ifstream &f)
 			num3 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "origin") //read in the origin coordinates
-			{
-				this->origin.x = num1;
-				this->origin.y = num2;
-				this->origin.z = num3;
+			if(word == "origin") { //read in the origin coordinates
+				this->origin = Point(num1,num2,num3);
 			}
-			else if(word == "color") //read in the color coordinates
-			{
-				this->material.color.r = num1;
-				this->material.color.g = num2;
-				this->material.color.b = num3;
+			else if(word == "color") { //read in the color coordinates
+				this->material.color = Color(num1,num2,num3);
 			}
-			else if(word == "normal")
-			{
-				this->normal.x = num1;
-				this->normal.y = num2;
-				this->normal.z = num3;
+			else if(word == "normal") {
+				this->normal = Vector(num1,num2,num3);
 				norm(this->normal);
 			}
-			else if(word == "up")
-			{
-				this->up.x = num1;
-				this->up.y = num2;
-				this->up.z = num3;
+			else if(word == "up") {
+				this->up = Vector(num1,num2,num3);
 				norm(this->up);
 			}
 		}
 
 		//words with one argument
-		else if(word == "radius" || word == "reflect" || word == "transparency")
-		{
+		else if(word == "radius" || word == "reflect" || word == "transparency") {
 			double num1 = 0;
 
 			if(lineContents.size() < 1) break;
@@ -80,21 +65,11 @@ Disk::Disk(ifstream &f)
 			num1 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "radius") //read in the origin coordinates
-			{
-				this->radius = num1;
-			}
-			else if(word == "reflect") //read in the color coordinates
-			{
-				this->material.reflection = num1;
-			}
-			else
-			{
-				this->material.transparency = num1;
-			}
+			if(word == "radius")		this->radius = num1;
+			else if(word == "reflect")	this->material.reflection = num1;
+			else						this->material.transparency = num1;
 		}
-		else
-			break;
+		else break;
 	}
 
 	//Warning: Vectors are not orthogonal
@@ -132,11 +107,9 @@ Disk::intersect
 SceneObject* Disk::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);
 
-	if(dot != 0) //If the normal and ray aren't perpendicular (ray and disk parallel)
-	{
+	if(dot != 0) { //If the normal and ray aren't perpendicular (ray and disk parallel)
 		double t = dot3(this->normal,this->origin - r->start) / dot;
-		if(t >= 0) //If the ray is pointing toward the disk
-		{
+		if(t >= 0) { //If the ray is pointing toward the disk
 			//Calculate point of intersection on disk
 			Point tempInt = r->dir * t + r->start;
 

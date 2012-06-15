@@ -17,8 +17,7 @@ Light::Light(ifstream &f)
 	this->material.color.b = 0;
 	this->material.reflection = 0;
 	this->material.transparency = 0;
-	while(!f.eof())
-	{
+	while(!f.eof()) {
 		string line;
 		getline(f,line);
 
@@ -44,20 +43,9 @@ Light::Light(ifstream &f)
 		num3 = (double)atof(lineContents.front().c_str());
 		lineContents.pop();
 
-		if(word == "origin") //read in the origin coordinates
-		{
-			this->origin.x = num1;
-			this->origin.y = num2;
-			this->origin.z = num3;
-		}
-		else if(word == "color") //read in the color coordinates
-		{
-			this->material.color.r = num1;
-			this->material.color.g = num2;
-			this->material.color.b = num3;
-		}
-		else
-			break;
+		if(word == "origin")		this->origin = Point(num1,num2,num3);
+		else if(word == "color")	this->material.color = Color(num1,num2,num3);
+		else break;
 
 	}
 }
@@ -93,8 +81,7 @@ SceneObject* Light::intersect(Ray* r, Point &intersect) {
 	bool tyzEquiv = (abs(t.y-t.z) < 0.001) || t.y == std::numeric_limits<double>::infinity() || t.z == std::numeric_limits<double>::infinity();
 	bool txzEquiv = (abs(t.x-t.z) < 0.001) || t.x == std::numeric_limits<double>::infinity() || t.z == std::numeric_limits<double>::infinity();
 
-	if(txyEquiv && tyzEquiv && txzEquiv) //If the ts are roughly the same, we hit the light
-	{
+	if(txyEquiv && tyzEquiv && txzEquiv) { //If the ts are roughly the same, we hit the light
 		intersect = this->origin;
 		return this;
 	}

@@ -24,6 +24,7 @@ public:
 	double	length;
 
 	Cuboid(ifstream &f);
+	~Cuboid();
 };
 
 #endif

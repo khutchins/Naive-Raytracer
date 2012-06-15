@@ -12,8 +12,7 @@ Sphere::Sphere(ifstream &f)
 	this->isVisible = true;
 	this->objectType = ENTITY_SPHERE;
 	this->hasTexture = false;
-	while(!f.eof())
-	{
+	while(!f.eof()) {
 		string line;
 		getline(f,line);
 
@@ -27,8 +26,7 @@ Sphere::Sphere(ifstream &f)
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		//words with three string arguments
-		if(word == "origin" || word == "color")
-		{
+		if(word == "origin" || word == "color") {
 			double num1 = 0;
 			double num2 = 0;
 			double num3 = 0;
@@ -42,23 +40,12 @@ Sphere::Sphere(ifstream &f)
 			num3 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "origin") //read in the origin coordinates
-			{
-				this->origin.x = num1;
-				this->origin.y = num2;
-				this->origin.z = num3;
-			}
-			else if(word == "color") //read in the color coordinates
-			{
-				this->material.color.r = num1;
-				this->material.color.g = num2;
-				this->material.color.b = num3;
-			}
+			if(word == "origin")		this->origin = Point(num1,num2,num3);
+			else if(word == "color")	this->material.color = Color(num1,num2,num3);
 		}
 
 		//words with one argument
-		else if(word == "radius" || word == "reflect" || word == "transparency")
-		{
+		else if(word == "radius" || word == "reflect" || word == "transparency") {
 			double num1 = 0;
 
 			if(lineContents.size() < 1) break;
@@ -70,8 +57,7 @@ Sphere::Sphere(ifstream &f)
 			else if(word == "reflect")		this->material.reflection = num1;
 			else if(word == "transparency")	this->material.transparency = num1;
 		}
-		else
-			break;
+		else break;
 	}
 }
 
@@ -96,8 +82,7 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 
 	//No intersection, do nothing
 	if(disc < 0) return false;
-	else if(disc >= 0) //Find closest intersection
-	{
+	else if(disc >= 0) { //Find closest intersection
 		double discSqrt = sqrt(disc);
 		double quad;
 		if (b < 0)	quad = (-b - discSqrt)/2.f;

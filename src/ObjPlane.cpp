@@ -13,8 +13,7 @@ Plane::Plane(ifstream &f)
 	this->hasTexture = false;
 	this->objectType = ENTITY_PLANE;
 
-	while(!f.eof())
-	{
+	while(!f.eof()) {
 		string line;
 		getline(f,line);
 
@@ -28,8 +27,7 @@ Plane::Plane(ifstream &f)
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		//words with three arguments
-		if(word == "origin" || word == "color" || word == "normal" || word == "up")
-		{
+		if(word == "origin" || word == "color" || word == "normal" || word == "up") {
 			double num1 = 0;
 			double num2 = 0;
 			double num3 = 0;
@@ -43,37 +41,20 @@ Plane::Plane(ifstream &f)
 			num3 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "origin") //read in the origin coordinates
-			{
-				this->origin.x = num1;
-				this->origin.y = num2;
-				this->origin.z = num3;
-			}
-			else if(word == "color") //read in the color coordinates
-			{
-				this->material.color.r = num1;
-				this->material.color.g = num2;
-				this->material.color.b = num3;
-			}
-			else if(word == "normal")
-			{
-				this->normal.x = num1;
-				this->normal.y = num2;
-				this->normal.z = num3;
-				norm(this->normal);
-			}
-			else if(word == "up")
-			{
-				this->up.x = num1;
-				this->up.y = num2;
-				this->up.z = num3;
+			if(word == "origin")		this->origin = Point(num1,num2,num3);
+			else if(word == "color")	material.color = Color(num1,num2,num3);
+			else if(word == "up") {
+				this->up = Vector(num1,num2,num3);
 				norm(this->up);
+			}
+			else if(word == "normal") {
+				this->normal = Vector(num1,num2,num3);
+				norm(this->normal);
 			}
 		}
 
 		//words with two arguments
-		else if(word == "size")
-		{
+		else if(word == "size") {
 			double num1 = 0;
 			double num2 = 0;
 
@@ -89,8 +70,7 @@ Plane::Plane(ifstream &f)
 		}
 
 		//words with one double argument
-		else if(word == "reflect" || word == "transparency")
-		{
+		else if(word == "reflect" || word == "transparency") {
 			double num1 = 0;
 
 			if(lineContents.size() < 1) break;
@@ -103,8 +83,7 @@ Plane::Plane(ifstream &f)
 		}
 
 		//words with one string argument
-		else if(word == "texture")
-		{
+		else if(word == "texture") {
 			//TODO: attempt load texture from local directory first
 			string textureName;
 
@@ -116,8 +95,7 @@ Plane::Plane(ifstream &f)
 			if(this->texture.ReadFromFile(textureName.c_str()))
 				this->hasTexture = true;
 		}
-		else
-			break;
+		else break;
 	}
 
 	//Warning: Vectors are not orthogonal
@@ -160,11 +138,9 @@ Plane::intersect
 SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 	double dot = dot3(this->normal,r->dir);
 
-	if(dot != 0) //If the normal and ray aren't perpendicular (ray and plane parallel)
-	{
+	if(dot != 0) { //If the normal and ray aren't perpendicular (ray and plane parallel)
 		double t = dot3(this->normal,this->origin - r->start) / dot;
-		if(t >= 0) //If the ray is pointing toward the plane
-		{
+		if(t >= 0) { //If the ray is pointing toward the plane
 			//Calculate point of intersection on plane
 			Point tempInt = r->dir * t + r->start;
 
@@ -253,9 +229,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	pixelY %= height;
 	Color matColor;
 	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_TEXTURE_MAPPING) {
-		matColor.r = tLeftPoint;
-		matColor.b = 1;
-		matColor.g = tTopPoint;
+		matColor = Color(tLeftPoint,1,tTopPoint);
 	}
 	else {
 		matColor.r = temp->GetPixel(pixelX,pixelY).Red/255.f;

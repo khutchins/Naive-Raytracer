@@ -49,24 +49,15 @@ Camera::Camera(ifstream &f)
 			num3 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "origin") //read in the origin coordinates
-			{
-				this->origin.x = num1;
-				this->origin.y = num2;
-				this->origin.z = num3;
+			if(word == "origin") {
+				this->origin = Point(num1,num2,num3);
 			}
-			else if(word == "direction")
-			{
-				this->direction.x = num1;
-				this->direction.y = num2;
-				this->direction.z = num3;
+			else if(word == "direction") {
+				this->direction = Vector(num1,num2,num3);
 				norm(this->direction);
 			}
-			else if(word == "up")
-			{
-				this->up.x = num1;
-				this->up.y = num2;
-				this->up.z = num3;
+			else if(word == "up") {
+				this->up = Vector(num1,num2,num3);
 				norm(this->up);
 			}
 		}
@@ -112,8 +103,7 @@ Camera::Camera(ifstream &f)
 			else if(word == "perspective")	this->perspective = bool1;
 			else if(word == "grayscale")	this->grayscale = bool1;
 			else if(word == "name")			this->name = sNum;
-			else if(word == "aa")
-			{
+			else if(word == "aa") {
 				if(sNum == "none") this->aa = AA_TYPE_NONE;
 				else if(sNum == "fsaa4") this->aa = AA_TYPE_FSAA_4;
 				else if(sNum == "fsaa16") this->aa = AA_TYPE_FSAA_16;
@@ -177,12 +167,10 @@ Color Camera::renderPixel(int x, int y, int numSamples, Raytracer *raytracer) {
 	
 	Vector vCamToImagePlane; //Vector from the camera to the image plane
 
-	if(isPerspective) //If camera is perspective
-	{
+	if(isPerspective) { //If camera is perspective
 		vCamToImagePlane = pPointOnImagePlane - this->origin;
 	}
-	else //If camera is orthogonal
-	{
+	else { //If camera is orthogonal
 		vCamToImagePlane = this->direction;
 	}
 	//vCamToImagePlane = c->direction;

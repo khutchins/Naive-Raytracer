@@ -45,26 +45,14 @@ Cuboid::Cuboid(ifstream &f) {
 			num3 = (double)atof(lineContents.front().c_str());
 			lineContents.pop();
 
-			if(word == "origin") {
-				this->origin.x = num1;
-				this->origin.y = num2;
-				this->origin.z = num3;
-			}
-			else if(word == "color") {
-				material.color.r = num1;
-				material.color.g = num2;
-				material.color.b = num3;
-			}
+			if(word == "origin")		this->origin = Point(num1,num2,num3);
+			else if(word == "color")	material.color = Color(num1,num2,num3);
 			else if(word == "up") {
-				this->up.x = num1;
-				this->up.y = num2;
-				this->up.z = num3;
+				this->up = Vector(num1,num2,num3);
 				norm(this->up);
 			}
 			else if(word == "front") {
-				this->front.x = num1;
-				this->front.y = num2;
-				this->front.z = num3;
+				this->front = Vector(num1,num2,num3);
 				norm(this->front);
 			}
 		}
@@ -117,4 +105,10 @@ Cuboid::Cuboid(ifstream &f) {
 	children[3] = new Plane(material, length, height, up, -1*front, textureName, origin-front*width*0.5f); //Back plane
 	children[4] = new Plane(material, width, height, up, left, textureName, origin+left*length*0.5f); //left plane
 	children[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //right plane
+}
+
+Cuboid::~Cuboid() {
+	for(int i = 0; i < children.size(); i++) {
+		delete children[i];
+	}
 }

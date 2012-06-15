@@ -7,6 +7,9 @@
 struct Ray {
 	Point start;
 	Vector dir;
+
+	Ray();
+	Ray(Point start, Vector direction);
 };
 
 #endif

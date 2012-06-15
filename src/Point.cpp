@@ -14,6 +14,31 @@ Point Point::PointZero() {
 	return zero;
 }
 
+/*
+====================
+Point::Point
+	Returns a point with zero coordinates
+====================
+*/
+Point::Point() {
+	this->x = 0;
+	this->y = 0;
+	this->z = 0;
+}
+
+/*
+====================
+Point::Point
+	Returns a point with the following coordinates
+====================
+*/
+
+Point::Point(double x, double y, double z) {
+	this->x = x;
+	this->y = y;
+	this->z = z;
+}
+
 ////Adds a point to a point and returns a vector
 //Vector Point::operator+(Point right)
 //{
