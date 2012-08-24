@@ -136,7 +136,7 @@ Color::grayscaleValue()
 ====================
 */
 unsigned char Color::grayscaleValue() {
-	return this->r * 0.3 + this->g * 0.59 + this->b * 0.11;
+	return (unsigned char)(this->r * 0.3 + this->g * 0.59 + this->b * 0.11);
 }
 
 //Color with color addition

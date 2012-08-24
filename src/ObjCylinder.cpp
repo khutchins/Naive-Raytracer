@@ -76,7 +76,7 @@ Cylinder::Cylinder(ifstream &f)
 }
 
 Cylinder::~Cylinder() {
-	for(int i = 0; i < children.size(); i++) {
+	for(size_t i = 0; i < children.size(); i++) {
 		delete children[i];
 	}
 }
