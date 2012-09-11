@@ -9,6 +9,7 @@ using namespace std;
 
 typedef vector<vector<double>> Convolution;
 
+Color convolutePoint(int i_x, int i_y, BMP *originalImage, Convolution convolution);
 BMP generateConvolutionBitmap(BMP originalImage, Convolution convolution);
 
 Convolution getEdgeDetectionConvolution();

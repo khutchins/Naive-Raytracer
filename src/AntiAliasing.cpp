@@ -61,42 +61,34 @@ BMP generateEDAABMP(Camera *c, BMP& originalImage, Raytracer* raytracer) {
 	return originalImage;
 }
 
-/*BMP generateEDBAABMP(Camera *c, BMP originalImage) {
-	BMP image;
-	image.SetSize(originalImage.TellWidth(),originalImage.TellHeight());
-    image.SetBitDepth(32);
-
-	int imageWidth = c->imageWidth;
-	int imageHeight = c->imageHeight;
+/*
+====================
+generateFXAABMP
+	Takes the BMP object containing the rendered image.  FXAA generates an 
+	edge detection bitmap first and then smooths the image where the edges 
+	are calculated to be.  The result is returned in the original BMP passed in.
+	It's similar to EDAA, but smooths the object instead of rendering additional 
+	samples.  It should be less computationally expensive.
+====================
+*/
+BMP generateFXAABMP(BMP& originalImage) {
+	int imageWidth = originalImage.TellWidth();
+	int imageHeight = originalImage.TellHeight();
 
 	BMP edgeDetectionBMP = generateConvolutionBitmap(originalImage,getEdgeDetectionConvolution());
+	Convolution gaussianBlurConvolution = getGaussianBlurConvolution();
 
-	for(int y = 0; y < c->imageHeight; y++) {
-		for(int x = 0; x < c->imageWidth; x++) {
-			Color col;
+	for(int x = 0; x < imageWidth; x++) {
+		for(int y = 0; y < imageHeight; y++) {
+			Color edc = Color::colorFromRGBAPixel(edgeDetectionBMP(imageWidth-x-1,imageHeight-y-1));
+			if(pixelExceedsThreshhold(edc,EDAA_THRESHHOLD)) {
+				Color col = convolutePoint(x,y,&originalImage,gaussianBlurConvolution);
 
-			if(originalImage(x,y)->Red + originalImage(x,y)->Green + originalImage(x,y)->Blue >= EDAA_THRESHHOLD) {
-				col = c->renderPixel(x,y,1);
-
-				if(c->grayscale) {
-					double grayscaleVal = col.r * 0.3 + col.g * 0.59 + col.b * 0.11;
-					image(imageWidth-x-1,imageHeight-y-1)->Red   = (unsigned char)grayscaleVal;
-					image(imageWidth-x-1,imageHeight-y-1)->Green = (unsigned char)grayscaleVal;
-					image(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)grayscaleVal;
-				}
-				else {
-					image(imageWidth-x-1,imageHeight-y-1)->Red   = (unsigned char)col.r;
-					image(imageWidth-x-1,imageHeight-y-1)->Green = (unsigned char)col.g;
-					image(imageWidth-x-1,imageHeight-y-1)->Blue  = (unsigned char)col.b;
-				}
+				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorWhite().RGBAPixel());
+				else												originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
 			}
-			else {
-				image(imageWidth-x-1,imageHeight-y-1)->Red   = originalImage(imageWidth-x-1,imageHeight-y-1)->Red;
-				image(imageWidth-x-1,imageHeight-y-1)->Green = originalImage(imageWidth-x-1,imageHeight-y-1)->Green;
-				image(imageWidth-x-1,imageHeight-y-1)->Blue  = originalImage(imageWidth-x-1,imageHeight-y-1)->Blue;
-			}
-			image(imageWidth-x-1,imageHeight-y-1)->Alpha = 0;
+			else if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD) originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorBlack().RGBAPixel());
 		}
 	}
 	return originalImage;
-}*/
+}

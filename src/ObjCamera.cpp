@@ -104,12 +104,13 @@ Camera::Camera(ifstream &f)
 			else if(word == "grayscale")	this->grayscale = bool1;
 			else if(word == "name")			this->name = sNum;
 			else if(word == "aa") {
-				if(sNum == "none") this->aa = AA_TYPE_NONE;
-				else if(sNum == "fsaa4") this->aa = AA_TYPE_FSAA_4;
-				else if(sNum == "fsaa16") this->aa = AA_TYPE_FSAA_16;
-				else if(sNum == "naive-average") this->aa = AA_TYPE_NAIVE_AVERAGE;
-				else if(sNum == "edaa4") this->aa = AA_TYPE_EDAA_4;
-				else if(sNum == "edaa16") this->aa = AA_TYPE_EDAA_16;
+					 if(sNum == "none")				this->aa = AA_TYPE_NONE;
+				else if(sNum == "fsaa4")			this->aa = AA_TYPE_FSAA_4;
+				else if(sNum == "fsaa16")			this->aa = AA_TYPE_FSAA_16;
+				else if(sNum == "naive-average")	this->aa = AA_TYPE_NAIVE_AVERAGE;
+				else if(sNum == "edaa4")			this->aa = AA_TYPE_EDAA_4;
+				else if(sNum == "edaa16")			this->aa = AA_TYPE_EDAA_16;
+				else if(sNum == "fxaa")				this->aa = AA_TYPE_FXAA;
 			}
 		}
 		else break;
@@ -249,6 +250,7 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDGE_DETECTION)		generateConvolutionBitmap(image,getEdgeDetectionConvolution()).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_NAIVE_AVERAGE)					generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_EDAA_4 || aa == AA_TYPE_EDAA_16)	generateEDAABMP(this,image,raytracer).WriteToFile(sceneName.c_str());
+	else if(aa == AA_TYPE_FXAA)								generateFXAABMP(image).WriteToFile(sceneName.c_str());
 	else													image.WriteToFile(sceneName.c_str());
 
 	cout << "Finished rendering file " << sceneName << ".\n";
