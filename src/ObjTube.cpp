@@ -91,36 +91,60 @@ Tube::intersect
 SceneObject* Tube::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
-	norm(dist);
-	norm(r->dir);
+	//norm(dist);
+	//norm(r->dir);
 
-	double a = dot3(r->dir,r->dir);
-	double b = 2 * dot3(r->start - this->origin,r->dir);
-	double c = dot3(r->start - this->origin,r->start - this->origin) - this->radius * this->radius;
+	//double a = dot3(r->dir,r->dir);
+	//double b = 2 * dot3(r->start - this->origin,r->dir);
+	//double c = dot3(r->start - this->origin,r->start - this->origin) - this->radius * this->radius;
 
-	double disc = discrim(a,b,c);
+	//double disc = discrim(a,b,c);
 
-	//Parallel to tube, does not intersect
-	if(dot3(r->dir,this->up) == 0) return false;
-	else if(disc >= 0) { //Find closest intersection
-		double discSqrt = sqrt(disc);
-		double quad;
-		if (b < 0)	quad = (-b - discSqrt)/2.f;
-		else quad = (-b + discSqrt)/2.f;
+	////Parallel to tube, does not intersect
+	//if(dot3(r->dir,this->up) == 0) return false;
+	//else if(disc >= 0) { //Find closest intersection
+	//	double discSqrt = sqrt(disc);
+	//	double quad;
+	//	if (b < 0)	quad = (-b - discSqrt)/2.f;
+	//	else quad = (-b + discSqrt)/2.f;
 
-		double t0 = quad/a;
-		double t1 = c/quad;
-		if(t0 > t1) swap(t0,t1);
+	//	double t0 = quad/a;
+	//	double t1 = c/quad;
+	//	if(t0 > t1) swap(t0,t1);
 
-		double t;
-		if(t0 < 0 && t1 < 0) return false;
-		if(t0 < 0) t = t1;
-		else t = t0;
+	//	double t;
+	//	if(t0 < 0 && t1 < 0) return false;
+	//	if(t0 < 0) t = t1;
+	//	else t = t0;
 
-		intersect = r->start + t * r->dir;
-		return this;
-	}
-	return NULL;
+	//	intersect = r->start + t * r->dir;
+	//	return this;
+	//}
+	//return NULL;
+	
+	/* 
+	Ray: O + V * t
+	Cylinder: [this->origin,this->up,this->radius]
+	A = this->origin
+	O = r->start
+	V = r->dir
+	*/
+
+	Vector AB = this->up;
+	Vector AO = r->start - this->origin;
+	Vector AOxAB = cross3(AO,AB);
+	Vector VxAB = cross3(r->dir,AB);
+	double ab2 = dot3(AB,AB);
+
+	double a = dot3(VxAB,VxAB);
+	double b = 2 * dot3(VxAB,AOxAB);
+	double c = dot3(AOxAB,AOxAB) - this->radius*this->radius * ab2;
+
+	double t = quadratic(a,b,c);
+	if(t < 0) return NULL;
+
+	intersect = r->start + t * r->dir;
+	return this;
 }
 
 /*
