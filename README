@@ -31,6 +31,6 @@ This currently outputs a .bmp file for each camera in a scene: <scene_name>-<cam
 
 Usage: ./<program> <path-to-scene-file>
 
-This code is being run in Windows and should work on Linux and probably Mac by running the makefile.
+This code is being run in Windows. Doesn't currently work on Linux/Mac. Sorry.
 
 Example scene files are in /scenes.
