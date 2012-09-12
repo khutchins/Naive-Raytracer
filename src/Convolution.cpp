@@ -8,7 +8,7 @@ convolutePoint
 	convoluted point.
 ====================
 */
-Color convolutePoint(int i_x, int i_y, BMP *originalImage, Convolution convolution) {
+Color convolutePoint(int i_x, int i_y, BMP *originalImage, const Convolution &convolution) {
 	Color newColor = Color::ColorBlack();
 
 	int imageWidth = originalImage->TellWidth();
@@ -45,7 +45,7 @@ generateConvolutionBitmap
 	convoluted image.
 ====================
 */
-BMP generateConvolutionBitmap(BMP originalImage, Convolution convolution) {
+BMP generateConvolutionBitmap(BMP originalImage, const Convolution &convolution) {
 	BMP imageConvolution;
 	imageConvolution.SetSize(originalImage.TellWidth(),originalImage.TellHeight());
 

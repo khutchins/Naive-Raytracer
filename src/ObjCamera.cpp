@@ -1,4 +1,5 @@
 #include "ObjCamera.h"
+#include <time.h>
 
 /*
 ====================
@@ -220,6 +221,7 @@ Camera::renderScene
 ====================
 */
 void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
+	clock_t startTime = clock();
 	BMP image;
 	image.SetSize(this->imageWidth,this->imageHeight);
     image.SetBitDepth(32);
@@ -253,5 +255,9 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	else if(aa == AA_TYPE_FXAA)								generateFXAABMP(image).WriteToFile(sceneName.c_str());
 	else													image.WriteToFile(sceneName.c_str());
 
-	cout << "Finished rendering file " << sceneName << ".\n";
+	clock_t endTime = clock();
+
+	double seconds = (endTime - startTime) / (double)CLOCKS_PER_SEC;
+
+	cout << "Finished rendering file " << sceneName << " in " << seconds << " seconds.\n";
 }

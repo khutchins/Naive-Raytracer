@@ -18,5 +18,9 @@ int main(int argc, char * argv[])
 	Raytracer *raytracer = new Raytracer();
 	int retValue = raytracer->start(fn);
 	delete raytracer;
+
+	std::cout << "Press ENTER to continue...";
+	std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
+
 	return retValue;
 }
