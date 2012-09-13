@@ -90,6 +90,13 @@ Disk::Disk
 ====================
 */
 Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {
+	//Constant parameters for all disks
+	this->isLight = false;
+	this->isVisible = true;
+	this->objectType = ENTITY_DISK;
+	this->hasTexture = false;
+
+	//Variable parameters for specific disk
 	this->radius = radius;
 	this->material = m;
 	this->up = up;
@@ -133,7 +140,7 @@ Disk::calculateNormalForPoint
 */
 Vector Disk::calculateNormalForPoint(Point p, Point raySource) {
 	double distNormalSide = dist3Compare(p + this->normal, raySource);
-	double distOtherSide = dist3Compare(p + this->normal*-1, raySource);
+	double distOtherSide = dist3Compare(p - this->normal, raySource);
 	if(distOtherSide < distNormalSide) return this->normal * -1;
 	return this->normal;
 }

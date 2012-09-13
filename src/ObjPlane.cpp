@@ -249,7 +249,7 @@ Plane::calculateNormalForPoint
 */
 Vector Plane::calculateNormalForPoint(Point p, Point raySource) {
 	double distNormalSide = dist3Compare(p + this->normal, raySource);
-	double distOtherSide = dist3Compare(p + this->normal*-1, raySource);
+	double distOtherSide = dist3Compare(p - this->normal, raySource);
 	if(distOtherSide < distNormalSide) return this->normal * -1;
 	return this->normal;
 }

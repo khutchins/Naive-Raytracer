@@ -70,6 +70,7 @@ Triangle::Triangle(ifstream &f)
 	}
 
 	this->normal = cross3(vertex3 - vertex1, vertex2 - vertex1);
+	this->origin = vertex1;
 	norm(this->normal);
 }
 
@@ -81,11 +82,19 @@ Triangle::Triangle
 ====================
 */
 Triangle::Triangle(Material m, Point vertex1, Point vertex2, Point vertex3) {
+	//Constant parameters for all triangles
+	this->isLight = false;
+	this->isVisible = true;
+	this->objectType = ENTITY_TRIANGLE;
+	this->hasTexture = false;
+
+	//Variable parameters for specific triangle
 	this->material = m;
 	this->vertex1 = vertex1;
 	this->vertex2 = vertex2;
 	this->vertex3 = vertex3;
 	this->normal = cross3(vertex3 - vertex1, vertex2 - vertex1);
+	this->origin = vertex1;
 	norm(this->normal);
 }
 
@@ -100,7 +109,7 @@ SceneObject* Triangle::intersect(Ray* r, Point &intersect) {
 	//TODO
 	double dot = dot3(this->normal,r->dir);
 
-	if(dot != 0) { //If the normal and ray aren't perpendicular (ray and Triangle parallel)
+	if(dot != 0) { //If the normal and ray aren't perpendicular (which would mean ray and triangle are parallel)
 		double t = dot3(this->normal,this->origin - r->start) / dot;
 		if(t >= 0) { //If the ray is pointing toward the Triangle
 			//Calculate point of intersection on Triangle
@@ -128,7 +137,7 @@ Triangle::calculateNormalForPoint
 */
 Vector Triangle::calculateNormalForPoint(Point p, Point raySource) {
 	double distNormalSide = dist3Compare(p + this->normal, raySource);
-	double distOtherSide = dist3Compare(p + this->normal*-1, raySource);
+	double distOtherSide = dist3Compare(p - this->normal, raySource);
 	if(distOtherSide < distNormalSide) return this->normal * -1;
 	return this->normal;
 }
