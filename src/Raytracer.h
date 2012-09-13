@@ -18,6 +18,7 @@
 #include "ObjPlane.h"
 #include "ObjSceneObject.h"
 #include "ObjSphere.h"
+#include "ObjTriangle.h"
 #include "ObjTube.h"
 
 #include "Color.h"

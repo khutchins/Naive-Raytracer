@@ -201,3 +201,21 @@ angle
 double angle(Vector v1, Vector v2) { //Returns the angle between two vectors
 	return acos(cosAngle(v1,v2));
 }
+
+/*
+====================
+pointsOnSameSide
+	Checks if two points are on the same side of a line segment.  Returns true if 
+	same side, false if opposite sides
+====================
+*/
+bool pointsOnSameSideOfLine(Point point1, Point point2, Point vertex1, Point vertex2) {
+	Vector side = vertex2 - vertex1;
+
+	Vector crossProduct1 = cross3(side, point1 - vertex1);
+	Vector crossProduct2 = cross3(side, point2 - vertex1);
+
+	//if the cross products point in the same direction, on same side (positive dot product)
+	//if they point in opposite directions, on opposite sides (negative dot product)
+	return (dot3(crossProduct1,crossProduct2) >= 0);
+}

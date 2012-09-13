@@ -306,8 +306,12 @@ int Raytracer::processInput(string filename) {
 			Cuboid* c = new Cuboid(sceneFile);
 			objectQueue.push(c);
 		}
+		else if(word == "triangle") {
+			Triangle* t = new Triangle(sceneFile);
+			objectQueue.push(t);
+		}
 		else {
-			cout << "Incorrect syntax in line \n\"" << line << "\"." << endl;
+			cout << "Incorrect syntax on or before line \n\"" << line << "\"." << endl;
 			return 0;
 		}
 	}

@@ -39,16 +39,6 @@ Point::Point(double x, double y, double z) {
 	this->z = z;
 }
 
-////Adds a point to a point and returns a vector
-//Vector Point::operator+(Point right)
-//{
-//    Vector result;
-//    result.x = this->x + right.x;
-//	result.y = this->y + right.y;
-//	result.z = this->z + right.z;
-//    return result;
-//}
-
 //Subtracts a point from a point and returns a vector
 Vector Point::operator-(Point right)
 {

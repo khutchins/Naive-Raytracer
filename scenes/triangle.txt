@@ -1,0 +1,24 @@
+camera
+origin 0 0 0
+direction 0 0 1
+up 0 1 0
+z 0 15
+width 20
+perspective 0
+end
+
+light
+origin 0 0 -1
+color 1 1 1
+end
+
+triangle
+vertex1 0 5 4
+vertex2 5 0 4
+vertex3 -5 0 4
+color 1 0 0
+reflect 0
+transparency 0
+end
+
+plane
