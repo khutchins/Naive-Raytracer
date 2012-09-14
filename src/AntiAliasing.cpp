@@ -82,7 +82,7 @@ BMP generateFXAABMP(BMP& originalImage) {
 		for(int y = 0; y < imageHeight; y++) {
 			Color edc = Color::colorFromRGBAPixel(edgeDetectionBMP(imageWidth-x-1,imageHeight-y-1));
 			if(pixelExceedsThreshhold(edc,EDAA_THRESHHOLD)) {
-				Color col = convolutePoint(x,y,&originalImage,gaussianBlurConvolution);
+				Color col = convolutePoint(imageWidth-x-1,imageHeight-y-1,&originalImage,gaussianBlurConvolution);
 
 				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorWhite().RGBAPixel());
 				else												originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());

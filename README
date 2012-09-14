@@ -13,11 +13,11 @@ Cameras
 Point Lights
 Disks
 Cuboids
+Triangles
 
 The following scene elements are currently being implemented:
 Tubes
 Cylinders
-Triangles
 
 Anti-aliasing options:
 none - no anti-aliasing

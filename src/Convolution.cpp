@@ -23,7 +23,7 @@ Color convolutePoint(int i_x, int i_y, BMP *originalImage, const Convolution &co
 			int x = min(max(0,i_x+c_x-(convolutionWidth-1)/2),imageWidth-1);
 			int y = min(max(0,i_y+c_y-(convolutionHeight-1)/2),imageHeight-1);
 
-			RGBApixel tempPixel = originalImage->GetPixel(imageWidth-x-1,imageHeight-y-1);
+			RGBApixel tempPixel = originalImage->GetPixel(x,y);
 			newColor.r += tempPixel.Red * convolution[c_x][c_y];
 			newColor.g += tempPixel.Green * convolution[c_x][c_y];
 			newColor.b += tempPixel.Blue * convolution[c_x][c_y];

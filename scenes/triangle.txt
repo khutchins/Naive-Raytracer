@@ -14,7 +14,7 @@ color 1 1 1
 end
 
 triangle
-vertex1 1 8 4
+vertex1 1 7 4
 vertex2 6 0 4
 vertex3 -5 -2 2
 color 1 0 0
