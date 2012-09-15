@@ -31,6 +31,12 @@ public:
 	double getReflection();
 	double getRefraction();
 	Color getColor();
+
+private:
+	Point vertex1;
+	Point vertex2;
+	Point vertex3;
+	Point vertex4;
 };
 
 #endif
