@@ -106,16 +106,6 @@ Plane::Plane(ifstream &f)
 		normal.print();
 		printf(" are not orthogonal.\n");
 	}
-
-	Vector left = cross3(this->normal,this->up);
-	Point upMid = (this->up * this->height * 0.5) + this->origin;
-	Point upLeft = upMid + (left * this->width * 0.5);
-	Point upRight = upMid - (left * this->width * 0.5);
-
-	vertex1 = upMid + (left * this->width * 0.5);
-	vertex2 = upMid - (left * this->width * 0.5);
-	vertex3 = vertex1 - (this->up * this->height);
-	vertex4 = vertex2 - (this->up * this->height);
 }
 
 /*
@@ -136,16 +126,6 @@ Plane::Plane(Material m, double width, double height, Vector up, Vector normal, 
 	if(textureName.size() > 0) if(this->texture.ReadFromFile(textureName.c_str())) this->hasTexture = true;
 	this->isLight = false;
 	this->isVisible = true;
-
-	Vector left = cross3(this->normal,this->up);
-	Point upMid = (this->up * this->height * 0.5) + this->origin;
-	Point upLeft = upMid + (left * this->width * 0.5);
-	Point upRight = upMid - (left * this->width * 0.5);
-
-	vertex1 = upMid + (left * this->width * 0.5);
-	vertex2 = upMid - (left * this->width * 0.5);
-	vertex3 = upLeft - (this->up * this->height);
-	vertex4 = upRight - (this->up * this->height);
 }
 
 /*
@@ -164,10 +144,19 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 			//Calculate point of intersection on plane
 			Point tempInt = r->dir * t + r->start;
 
+			//See if the point of intersection is actually on the finite plane
+			//First, find coordinates of vertices that make up the quad
+			Vector left = cross3(this->normal,this->up);
+			Point upMid = (this->up * this->height * 0.5) + this->origin;
+			Point upLeft = upMid + (left * this->width * 0.5);
+			Point upRight = upMid - (left * this->width * 0.5);
+			Point botLeft = upLeft - (this->up * this->height);
+			Point botRight = upRight - (this->up * this->height);
+
 			//Calculate vectors that define the rectangle and vector to point
-			Vector leftV = vertex2 - vertex1;
-			Vector up = vertex3 - vertex2;
-			Vector cornerToPoint = tempInt - vertex1;
+			Vector leftV = upRight - upLeft;
+			Vector up = botLeft - upLeft;
+			Vector cornerToPoint = tempInt - upLeft;
 
 			double dotUpCTP = dot3(up,cornerToPoint);
 			double dotUpUp = dot3(up,up);
