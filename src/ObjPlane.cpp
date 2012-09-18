@@ -99,7 +99,7 @@ Plane::Plane(ifstream &f)
 	}
 
 	//Warning: Vectors are not orthogonal
-	if(abs(dot3(up,normal)) > 0.00001) {
+	if(abs(up.dot(normal)) > 0.00001) {
 		printf("Warning: Plane up vector ");
 		up.print();
 		printf(" and normal vector ");
@@ -136,10 +136,10 @@ Plane::intersect
 ====================
 */
 SceneObject* Plane::intersect(Ray* r, Point &intersect) {
-	double dot = dot3(this->normal,r->dir);
+	double dot = normal.dot(r->dir);
 
 	if(dot != 0) { //If the normal and ray aren't perpendicular (ray and plane parallel)
-		double t = dot3(this->normal,this->origin - r->start) / dot;
+		double t = normal.dot(origin - r->start) / dot;
 		if(t >= 0) { //If the ray is pointing toward the plane
 			//Calculate point of intersection on plane
 			Point tempInt = r->dir * t + r->start;
@@ -158,10 +158,10 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 			Vector up = botLeft - upLeft;
 			Vector cornerToPoint = tempInt - upLeft;
 
-			double dotUpCTP = dot3(up,cornerToPoint);
-			double dotUpUp = dot3(up,up);
-			double dotLeftCTP = dot3(leftV,cornerToPoint);
-			double dotLeftLeft = dot3(leftV,leftV);
+			double dotUpCTP = up.dot(cornerToPoint);
+			double dotUpUp = up.dot(up);
+			double dotLeftCTP = leftV.dot(cornerToPoint);
+			double dotLeftLeft = leftV.dot(leftV);
 
 			if(0 <= dotUpCTP && dotUpCTP <= dotUpUp && 0 <= dotLeftCTP && dotLeftCTP <= dotLeftLeft) {
 				intersect = tempInt;
@@ -209,7 +209,8 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 
 	// ((p2 - p1)xd1) . (d1xd2) / ||d1xd2||^2
 	//percentage along top of plane
-	double tTopPoint = dot3((planeUp.start - top.start).cross(planeUp.dir), top.dir.cross(planeUp.dir))/magnitude2(top.dir.cross(planeUp.dir));
+	double tTopPoint = (planeUp.start - top.start).cross(planeUp.dir).dot(top.dir.cross(planeUp.dir)) / top.dir.cross(planeUp.dir).magnitude();
+	//double tTopPoint = dot3((planeUp.start - top.start).cross(planeUp.dir), top.dir.cross(planeUp.dir))/magnitude2(top.dir.cross(planeUp.dir));
 
 	Ray side;
 	side.dir = upLeft - botLeft;
@@ -221,7 +222,8 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	planeLeft.start = intercept;
 
 	//percentage along side of plane
-	double tLeftPoint = 1 - (1.f/this->height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
+	double tLeftPoint = 1 - (1.f/this->height) * (planeLeft.start - side.start).cross(planeLeft.dir).dot(side.dir.cross(planeLeft.dir)) / magnitude2(side.dir.cross(planeLeft.dir));
+	//double tLeftPoint = 1 - (1.f/this->height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
 
 	int pixelX = abs((int)(tTopPoint * width));
 	int pixelY = abs((int)(tLeftPoint * height));

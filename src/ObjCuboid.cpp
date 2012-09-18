@@ -88,7 +88,7 @@ Cuboid::Cuboid(ifstream &f) {
 	}
 
 	//Warning: Vectors are not orthogonal
-	if(abs(dot3(up,front)) > 0.00001) {
+	if(abs(up.dot(front)) > 0.00001) {
 		printf("Warning: Cuboid up vector ");
 		up.print();
 		printf(" and front vector ");

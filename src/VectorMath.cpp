@@ -4,38 +4,6 @@
 
 /*
 ====================
-dot3
-	computes a 3D dot product from individual variables
-====================
-*/
-double dot3(double x1,double x2,double y1,double y2,double z1,double z2)
-{
-	return x1*x2 + y1*y2 + z1*z2;
-}
-
-/*
-====================
-dot3
-	computes a 3D dot product from two vectors
-====================
-*/
-double dot3(Vector v1, Vector v2) {
-	return dot3(v1.x,v2.x,v1.y,v2.y,v1.z,v2.z);
-}
-
-/*
-====================
-dot2
-	computes a 2D dot product from individual variables
-====================
-*/
-double dot2(double x1,double x2,double y1,double y2)
-{
-	return dot3(x1,x2,y1,y2,0,0);
-}
-
-/*
-====================
 dist3
 	computes the 3D distance between individual variables
 ====================
@@ -92,22 +60,12 @@ double quadratic(double a, double b, double c) //Returns the smallest value (gre
 
 /*
 ====================
-magnitude
-	returns the magnitude of a vector (pop pop!)
-====================
-*/
-double magnitude(Vector v) { //Returns the magnitude of a vector
-	return sqrt(dot3(v,v));
-}
-
-/*
-====================
 magnitude2
 	returns the square of the magnitude (dot product of it with itself)
 ====================
 */
 double magnitude2(Vector v) { //Returns the magnitude of a vector squared
-	return dot3(v,v);
+	return v.dot(v);
 }
 
 /*
@@ -117,7 +75,7 @@ cosAngle
 ====================
 */
 double cosAngle(Vector v1, Vector v2) { //Returns cos(angle) between two vectors
-	return dot3(v1,v2)/magnitude(v1)/magnitude(v2);
+	return v1.dot(v2)/v1.magnitude()/v2.magnitude();
 }
 
 /*
@@ -145,5 +103,5 @@ bool pointsOnSameSideOfLine(Point point1, Point point2, Point vertex1, Point ver
 
 	//if the cross products point in the same direction, on same side (positive dot product)
 	//if they point in opposite directions, on opposite sides (negative dot product)
-	return (dot3(crossProduct1,crossProduct2) >= 0);
+	return (crossProduct1.dot(crossProduct2) >= 0);
 }

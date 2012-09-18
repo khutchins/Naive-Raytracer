@@ -120,7 +120,7 @@ Camera::Camera(ifstream &f)
 		printf("Warning: Perspective camera with a zmin of zero.\n");
 
 	//Warning: Vectors are not orthogonal
-	if(abs(dot3(up,direction)) > 0.00001) {
+	if(abs(up.dot(direction)) > 0.00001) {
 		printf("Warning: Camera up vector ");
 		up.print();
 		printf(" and direction vector ");

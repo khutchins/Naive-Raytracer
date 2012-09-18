@@ -74,9 +74,9 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 	dist.normalize();
 	r->dir.normalize();
 
-	double a = dot3(r->dir,r->dir);
-	double b = 2 * dot3(r->start - this->origin,r->dir);
-	double c = dot3(r->start - this->origin,r->start - this->origin) - this->radius * this->radius;
+	double a = r->dir.dot(r->dir);
+	double b = 2 * (r->start - this->origin).dot(r->dir);
+	double c = (r->start - this->origin).dot(r->start - this->origin) - this->radius * this->radius;
 
 	double disc = discrim(a,b,c);
 

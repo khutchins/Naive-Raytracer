@@ -192,7 +192,7 @@ Raytracer::calculateReflectedRay
 ====================
 */
 Color Raytracer::calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id) {
-	double angle = dot3(normal,r.dir);
+	double angle = normal.dot(r.dir);
 	Vector reflectVec = -2 * angle * normal + r.dir;
 
 	//Generate reflected ray

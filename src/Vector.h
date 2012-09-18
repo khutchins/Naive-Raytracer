@@ -19,6 +19,9 @@ struct Vector {
 	Vector perpendicularVector();
 	Vector cross(const double x, const double y, const double z);
 	Vector cross(const Vector other);
+	double dot(const double x, const double y, const double z);
+	double dot(const Vector other);
+	double magnitude();
 
 	void print();
 

@@ -134,11 +134,11 @@ SceneObject* Tube::intersect(Ray* r, Point &intersect) {
 	Vector AO = r->start - this->origin;
 	Vector AOxAB = AO.cross(AB);
 	Vector VxAB = r->dir.cross(AB);
-	double ab2 = dot3(AB,AB);
+	double ab2 = AB.dot(AB);
 
-	double a = dot3(VxAB,VxAB);
-	double b = 2 * dot3(VxAB,AOxAB);
-	double c = dot3(AOxAB,AOxAB) - this->radius*this->radius * ab2;
+	double a = VxAB.dot(VxAB);
+	double b = 2 * VxAB.dot(AOxAB);
+	double c = AOxAB.dot(AOxAB) - this->radius*this->radius * ab2;
 
 	double t = quadratic(a,b,c);
 	if(t < 0) return NULL;

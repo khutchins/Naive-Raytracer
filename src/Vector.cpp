@@ -106,6 +106,38 @@ Vector Vector::cross(const Vector other) {
 	return this->cross(other.x,other.y,other.z);
 }
 
+/*
+====================
+dot3
+	computes a 3D dot product from individual variables
+====================
+*/
+double Vector::dot(const double x2,const double y2,const double z2)
+{
+	return x*x2 + y*y2 + z*z2;
+}
+
+/*
+====================
+dot3
+	computes a 3D dot product from two vectors
+====================
+*/
+double Vector::dot(const Vector other) {
+	return this->dot(other.x,other.y,other.z);
+}
+
+/*
+====================
+magnitude
+	returns the magnitude of the vector (pop pop!)
+====================
+*/
+double Vector::magnitude() { //Returns the magnitude of the vector
+	//return sqrt(this->dot(this));
+	return sqrt(this->dot(this->x,this->y,this->z));
+}
+
 //Vector with vector addition
 Vector Vector::operator+(Vector right)
 {

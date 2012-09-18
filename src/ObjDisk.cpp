@@ -73,7 +73,7 @@ Disk::Disk(ifstream &f)
 	}
 
 	//Warning: Vectors are not orthogonal
-	if(abs(dot3(up,normal)) > 0.00001) {
+	if(abs(up.dot(normal)) > 0.00001) {
 		printf("Warning: Disk up vector ");
 		up.print();
 		printf(" and normal vector ");
@@ -112,10 +112,10 @@ Disk::intersect
 ====================
 */
 SceneObject* Disk::intersect(Ray* r, Point &intersect) {
-	double dot = dot3(this->normal,r->dir);
+	double dot = normal.dot(r->dir);
 
 	if(dot != 0) { //If the normal and ray aren't perpendicular (ray and disk parallel)
-		double t = dot3(this->normal,this->origin - r->start) / dot;
+		double t = normal.dot(origin - r->start) / dot;
 		if(t >= 0) { //If the ray is pointing toward the disk
 			//Calculate point of intersection on disk
 			Point tempInt = r->dir * t + r->start;
