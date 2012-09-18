@@ -7,7 +7,6 @@
 double dot3(double x1,double x2,double y1,double y2,double z1,double z2); //Dot product for 3D
 double dot3(Vector v1, Vector v2);
 double dot2(double x1,double x2,double y1,double y2); //Dot product for 2D
-Vector cross3(Vector v1, Vector v2);
 double dist3(double x1,double x2,double y1,double y2,double z1,double z2); //3D distance
 double dist3(Point p1, Point p2);
 double dist3Compare(Point p1, Point p2); //Distance between two objects squared (faster than dist3)

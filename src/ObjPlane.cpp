@@ -221,9 +221,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	planeLeft.start = intercept;
 
 	//percentage along side of plane
-	double tLeftPoint = 1 - (1.f/this->height) * dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude2(cross3(side.dir,planeLeft.dir));
-	//double tLeftPoint = 1 - (1.f/height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
-	//double tLeftPoint = 1 - (1.f/height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
+	double tLeftPoint = 1 - (1.f/this->height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
 
 	int pixelX = abs((int)(tTopPoint * width));
 	int pixelY = abs((int)(tLeftPoint * height));

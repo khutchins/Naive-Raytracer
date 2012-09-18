@@ -92,31 +92,6 @@ double quadratic(double a, double b, double c) //Returns the smallest value (gre
 
 /*
 ====================
-cross3
-	computes the cross product of individual variables
-====================
-*/
-Vector cross3(double x1, double x2, double y1, double y2, double z1, double z2) //Returns the vector of the cross product of 2 3D vectors
-{
-	Vector v;
-	v.x = y1*z2 - z1*y2;
-	v.y = z1*x2 - x1*z2;
-	v.z = x1*y2 - y1*x2;
-	return v;
-}
-
-/*
-====================
-cross3
-	computes the cross product of two vectors
-====================
-*/
-Vector cross3(Vector v1, Vector v2) {
-	return cross3(v1.x,v2.x,v1.y,v2.y,v1.z,v2.z);
-}
-
-/*
-====================
 magnitude
 	returns the magnitude of a vector (pop pop!)
 ====================
