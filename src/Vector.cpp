@@ -10,6 +10,7 @@ Vector::Vector() {
 	this->x = 0;
 	this->y = 0;
 	this->z = 0;
+	this->isNormalized = false;
 }
 
 /*
@@ -22,6 +23,7 @@ Vector::Vector(double x, double y, double z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
+	this->isNormalized = false;
 }
 
 /*
@@ -35,6 +37,7 @@ Vector Vector::VectorZero() {
 	zero.x = 0;
 	zero.y = 0;
 	zero.z = 0;
+	zero.isNormalized = true;
 	return zero;
 }
 
@@ -47,6 +50,21 @@ Vector::print
 */
 void Vector::print() {
 	printf("{%.2f,%.2f,%.2f}",x,y,z);
+}
+
+/*
+====================
+Vector::normalize
+	normalizes the vector, if necessary
+====================
+*/
+void Vector::normalize() {
+	//if(!isNormalized) {
+	double n = sqrt(x*x+y*y+z*z);
+	x /= n;
+	y /= n;
+	z /= n;
+	//}
 }
 
 //Vector with vector addition

@@ -45,11 +45,11 @@ Plane::Plane(ifstream &f)
 			else if(word == "color")	material.color = Color(num1,num2,num3);
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				norm(this->up);
+				this->up.normalize();
 			}
 			else if(word == "normal") {
 				this->normal = Vector(num1,num2,num3);
-				norm(this->normal);
+				this->normal.normalize();
 			}
 		}
 
@@ -225,7 +225,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	Ray side;
 	side.dir = upLeft - botLeft;
 	side.start = botLeft;
-	norm(side.dir);
+	side.dir.normalize();
 
 	Ray planeLeft;
 	planeLeft.dir = left;

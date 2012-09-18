@@ -153,17 +153,6 @@ void norm(double &x, double &y, double &z) //Returns the normalized vector by re
 
 /*
 ====================
-norm
-	normalizes a vector by reference
-====================
-*/
-void norm(Vector &v) //Returns the normalized vector by reference
-{
-	norm(v.x,v.y,v.z);
-}
-
-/*
-====================
 magnitude
 	returns the magnitude of a vector (pop pop!)
 ====================

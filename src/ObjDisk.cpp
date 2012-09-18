@@ -48,11 +48,11 @@ Disk::Disk(ifstream &f)
 			}
 			else if(word == "normal") {
 				this->normal = Vector(num1,num2,num3);
-				norm(this->normal);
+				this->normal.normalize();
 			}
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				norm(this->up);
+				this->up.normalize();
 			}
 		}
 

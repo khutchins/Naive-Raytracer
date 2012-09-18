@@ -49,11 +49,11 @@ Cuboid::Cuboid(ifstream &f) {
 			else if(word == "color")	material.color = Color(num1,num2,num3);
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				norm(this->up);
+				this->up.normalize();
 			}
 			else if(word == "front") {
 				this->front = Vector(num1,num2,num3);
-				norm(this->front);
+				this->front.normalize();
 			}
 		}
 
@@ -97,7 +97,7 @@ Cuboid::Cuboid(ifstream &f) {
 	}
 	
 	Vector left = cross3(up,front);
-	norm(left);
+	left.normalize();
 
 	children[0] = new Plane(material, length, width, front, up, textureName, origin+up*height*0.5f); //Top plane
 	children[1] = new Plane(material, length, width, front, -1*up, textureName, origin-up*height*0.5f); //Bottom plane

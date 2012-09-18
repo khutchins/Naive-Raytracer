@@ -55,11 +55,11 @@ Camera::Camera(ifstream &f)
 			}
 			else if(word == "direction") {
 				this->direction = Vector(num1,num2,num3);
-				norm(this->direction);
+				this->direction.normalize();
 			}
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				norm(this->up);
+				this->up.normalize();
 			}
 		}
 

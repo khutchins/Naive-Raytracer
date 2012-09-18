@@ -91,7 +91,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 			Color refract = Color::ColorBlack();
 
 			Vector normal = closestO->calculateNormalForPoint(oInt,r->start);
-			norm(normal);
+			normal.normalize();
 
 			llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
 
@@ -163,7 +163,7 @@ Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID
 			//Direction from the light source to the plane.  Used for calculating lambert
 			Vector lToObject = lDir;
 
-			norm(lToObject);
+			lToObject.normalize();
 
 			receivedColor.r /= 255.f;
 			receivedColor.g /= 255.f;

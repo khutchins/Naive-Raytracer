@@ -50,7 +50,7 @@ Cylinder::Cylinder(ifstream &f)
 			else if(word == "color") material.color = Color(num1,num2,num3);
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				norm(this->up);
+				this->up.normalize();
 			}
 		}
 

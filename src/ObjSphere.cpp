@@ -71,8 +71,8 @@ Sphere::intersect
 SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 	Vector dist = this->origin - r->start;
 
-	norm(dist);
-	norm(r->dir);
+	dist.normalize();
+	r->dir.normalize();
 
 	double a = dot3(r->dir,r->dir);
 	double b = 2 * dot3(r->start - this->origin,r->dir);
