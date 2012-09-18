@@ -132,8 +132,8 @@ SceneObject* Tube::intersect(Ray* r, Point &intersect) {
 
 	Vector AB = this->up;
 	Vector AO = r->start - this->origin;
-	Vector AOxAB = cross3(AO,AB);
-	Vector VxAB = cross3(r->dir,AB);
+	Vector AOxAB = AO.cross(AB);
+	Vector VxAB = r->dir.cross(AB);
 	double ab2 = dot3(AB,AB);
 
 	double a = dot3(VxAB,VxAB);

@@ -117,42 +117,6 @@ Vector cross3(Vector v1, Vector v2) {
 
 /*
 ====================
-vectorPerpendicularTo
-	computes one of the vectors perpendicular to the provided vector.  If the 
-	vector provided is the zero vector, the zero vector is returned
-====================
-*/
-Vector vectorPerpendicularTo(Vector original) {
-	if(original.x == 0 && original.y == 0 && original.z == 0) {
-		return Vector::VectorZero();
-	}
-	if(original.x <= original.y && original.x <= original.z) {
-		return cross3(original.x,1,original.y,0,original.z,0);
-	}
-	else if(original.y <= original.x && original.y <= original.z) {
-		return cross3(original.x,0,original.y,1,original.z,0);
-	}
-	else return cross3(original.x,0,original.y,0,original.z,1);
-}
-
-/*
-====================
-norm
-	normalizes (x,y,z) by reference
-====================
-*/
-void norm(double &x, double &y, double &z) //Returns the normalized vector by reference
-{
-	if(x != 0 || y != 0 || z != 0) {
-		double n = sqrt(x*x+y*y+z*z);
-		x /= n;
-		y /= n;
-		z /= n;
-	}
-}
-
-/*
-====================
 magnitude
 	returns the magnitude of a vector (pop pop!)
 ====================
@@ -201,8 +165,8 @@ pointsOnSameSide
 bool pointsOnSameSideOfLine(Point point1, Point point2, Point vertex1, Point vertex2) {
 	Vector side = vertex2 - vertex1;
 
-	Vector crossProduct1 = cross3(side, point1 - vertex1);
-	Vector crossProduct2 = cross3(side, point2 - vertex1);
+	Vector crossProduct1 = side.cross(point1 - vertex1);
+	Vector crossProduct2 = side.cross(point2 - vertex1);
 
 	//if the cross products point in the same direction, on same side (positive dot product)
 	//if they point in opposite directions, on opposite sides (negative dot product)

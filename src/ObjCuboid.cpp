@@ -96,7 +96,7 @@ Cuboid::Cuboid(ifstream &f) {
 		printf(" are not orthogonal.\n");
 	}
 	
-	Vector left = cross3(up,front);
+	Vector left = up.cross(front);
 	left.normalize();
 
 	children[0] = new Plane(material, length, width, front, up, textureName, origin+up*height*0.5f); //Top plane

@@ -162,7 +162,7 @@ Color Camera::renderPixel(int x, int y, int numSamples, Raytracer *raytracer) {
 	double xCoord = -1*width2 + width*x/imageWidth;
 	double yCoord = -1*height2 + height*y/imageHeight;
 
-	Vector vLeft = cross3(this->direction,this->up); 
+	Vector vLeft = direction.cross(up);
 
 	//Point on image plane
 	Point pPointOnImagePlane = this->origin + this->zmin * this->direction + xCoord * vLeft + yCoord * this->up;

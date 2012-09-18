@@ -10,7 +10,6 @@ Vector::Vector() {
 	this->x = 0;
 	this->y = 0;
 	this->z = 0;
-	this->isNormalized = false;
 }
 
 /*
@@ -23,7 +22,6 @@ Vector::Vector(double x, double y, double z) {
 	this->x = x;
 	this->y = y;
 	this->z = z;
-	this->isNormalized = false;
 }
 
 /*
@@ -37,7 +35,6 @@ Vector Vector::VectorZero() {
 	zero.x = 0;
 	zero.y = 0;
 	zero.z = 0;
-	zero.isNormalized = true;
 	return zero;
 }
 
@@ -59,12 +56,54 @@ Vector::normalize
 ====================
 */
 void Vector::normalize() {
-	//if(!isNormalized) {
 	double n = sqrt(x*x+y*y+z*z);
 	x /= n;
 	y /= n;
 	z /= n;
-	//}
+}
+
+/*
+====================
+perpendicularVector
+	computes one of the vectors perpendicular to the provided vector.  If the 
+	vector provided is the zero vector, the zero vector is returned
+====================
+*/
+Vector Vector::perpendicularVector() {
+	if(x == 0 && y == 0 && z == 0) {
+		return VectorZero();
+	}
+	if(x <= y && x <= z) {
+		return this->cross(1,0,0);
+	}
+	else if(y <= x && y <= z) {
+		return this->cross(0,1,0);
+	}
+	else return this->cross(0,0,1);
+}
+
+/*
+====================
+cross
+	computes the cross product of self with provided vector values
+====================
+*/
+Vector Vector::cross(const double x2, const double y2, const double z2) {
+	Vector v;
+	v.x = y*z2 - z*y2;
+	v.y = z*x2 - x*z2;
+	v.z = x*y2 - y*x2;
+	return v;
+}
+
+/*
+====================
+cross
+	computes the cross product of self with provided vector
+====================
+*/
+Vector Vector::cross(const Vector other) {
+	return this->cross(other.x,other.y,other.z);
 }
 
 //Vector with vector addition

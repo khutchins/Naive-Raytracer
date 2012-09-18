@@ -146,7 +146,7 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 
 			//See if the point of intersection is actually on the finite plane
 			//First, find coordinates of vertices that make up the quad
-			Vector left = cross3(this->normal,this->up);
+			Vector left = normal.cross(up);
 			Point upMid = (this->up * this->height * 0.5) + this->origin;
 			Point upLeft = upMid + (left * this->width * 0.5);
 			Point upRight = upMid - (left * this->width * 0.5);
@@ -188,7 +188,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
 	//Figure out the boundaries of the plane
-	Vector left = cross3(this->normal,this->up);
+	Vector left = normal.cross(up);
 
 	Point upMid = (this->up * this->height * 0.5) + this->origin;
 	Point upLeft = upMid + (left * this->width * 0.5);
@@ -209,7 +209,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 
 	// ((p2 - p1)xd1) . (d1xd2) / ||d1xd2||^2
 	//percentage along top of plane
-	double tTopPoint = dot3(cross3((planeUp.start - top.start),planeUp.dir),cross3(top.dir,planeUp.dir))/magnitude2(cross3(top.dir,planeUp.dir));
+	double tTopPoint = dot3((planeUp.start - top.start).cross(planeUp.dir), top.dir.cross(planeUp.dir))/magnitude2(top.dir.cross(planeUp.dir));
 
 	Ray side;
 	side.dir = upLeft - botLeft;
@@ -222,7 +222,9 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 
 	//percentage along side of plane
 	double tLeftPoint = 1 - (1.f/this->height) * dot3(cross3((planeLeft.start - side.start),planeLeft.dir),cross3(side.dir,planeLeft.dir))/magnitude2(cross3(side.dir,planeLeft.dir));
-	
+	//double tLeftPoint = 1 - (1.f/height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
+	//double tLeftPoint = 1 - (1.f/height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
+
 	int pixelX = abs((int)(tTopPoint * width));
 	int pixelY = abs((int)(tLeftPoint * height));
 	pixelX %= width;

@@ -69,7 +69,7 @@ Triangle::Triangle(ifstream &f)
 		else break;
 	}
 
-	this->normal = cross3(vertex3 - vertex1, vertex2 - vertex1);
+	this->normal = (vertex3 - vertex1).cross(vertex2 - vertex1);
 	this->origin = vertex1;
 	this->normal.normalize();
 }
@@ -93,7 +93,7 @@ Triangle::Triangle(Material m, Point vertex1, Point vertex2, Point vertex3) {
 	this->vertex1 = vertex1;
 	this->vertex2 = vertex2;
 	this->vertex3 = vertex3;
-	this->normal = cross3(vertex3 - vertex1, vertex2 - vertex1);
+	this->normal = (vertex3 - vertex1).cross(vertex2 - vertex1);
 	this->origin = vertex1;
 	this->normal.normalize();
 }

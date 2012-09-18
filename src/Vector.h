@@ -10,13 +10,15 @@ using namespace std;
 
 struct Vector {
 	double x,y,z;
-	bool isNormalized;
 
 	Vector();
 	Vector(double x, double y, double z);
 	static Vector VectorZero();
 
 	void normalize();
+	Vector perpendicularVector();
+	Vector cross(const double x, const double y, const double z);
+	Vector cross(const Vector other);
 
 	void print();
 

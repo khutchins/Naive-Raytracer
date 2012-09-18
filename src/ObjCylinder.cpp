@@ -71,8 +71,8 @@ Cylinder::Cylinder(ifstream &f)
 		else break;
 	}
 	children[0] = new Tube(material,radius,height,up,origin);
-	children[1] = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin+up*(height*0.5));
-	children[2] = new Disk(material,radius,/*up = */vectorPerpendicularTo(up),/*normal = */up,/*origin = */origin-up*(height*0.5));
+	children[1] = new Disk(material,radius,/*up = */up.perpendicularVector(),/*normal = */up,/*origin = */origin+up*(height*0.5));
+	children[2] = new Disk(material,radius,/*up = */up.perpendicularVector(),/*normal = */up,/*origin = */origin-up*(height*0.5));
 }
 
 Cylinder::~Cylinder() {
