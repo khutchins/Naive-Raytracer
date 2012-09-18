@@ -209,7 +209,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 
 	// ((p2 - p1)xd1) . (d1xd2) / ||d1xd2||^2
 	//percentage along top of plane
-	double tTopPoint = (planeUp.start - top.start).cross(planeUp.dir).dot(top.dir.cross(planeUp.dir)) / top.dir.cross(planeUp.dir).magnitude();
+	double tTopPoint = (planeUp.start - top.start).cross(planeUp.dir).dot(top.dir.cross(planeUp.dir)) / top.dir.cross(planeUp.dir).magnitude2();
 	//double tTopPoint = dot3((planeUp.start - top.start).cross(planeUp.dir), top.dir.cross(planeUp.dir))/magnitude2(top.dir.cross(planeUp.dir));
 
 	Ray side;
@@ -222,8 +222,9 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	planeLeft.start = intercept;
 
 	//percentage along side of plane
-	double tLeftPoint = 1 - (1.f/this->height) * (planeLeft.start - side.start).cross(planeLeft.dir).dot(side.dir.cross(planeLeft.dir)) / magnitude2(side.dir.cross(planeLeft.dir));
+	//double tLeftPoint = 1 - (1.f/this->height) * (planeLeft.start - side.start).cross(planeLeft.dir).dot(side.dir.cross(planeLeft.dir)) / magnitude2(side.dir.cross(planeLeft.dir));
 	//double tLeftPoint = 1 - (1.f/this->height) * dot3((planeLeft.start - side.start).cross(planeLeft.dir),side.dir.cross(planeLeft.dir))/magnitude2(side.dir.cross(planeLeft.dir));
+	double tLeftPoint = 1 - (1.f/this->height) * (planeLeft.start - side.start).cross(planeLeft.dir).dot(side.dir.cross(planeLeft.dir)) / side.dir.cross(planeLeft.dir).magnitude2();
 
 	int pixelX = abs((int)(tTopPoint * width));
 	int pixelY = abs((int)(tLeftPoint * height));

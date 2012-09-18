@@ -135,7 +135,17 @@ magnitude
 */
 double Vector::magnitude() { //Returns the magnitude of the vector
 	//return sqrt(this->dot(this));
-	return sqrt(this->dot(this->x,this->y,this->z));
+	return sqrt(this->magnitude2());
+}
+
+/*
+====================
+magnitude2
+	returns the square of the magnitude (dot product of it with itself)
+====================
+*/
+double Vector::magnitude2() { //Returns the magnitude of a vector squared
+	return this->dot(this->x,this->y,this->z);
 }
 
 //Vector with vector addition

@@ -22,6 +22,7 @@ struct Vector {
 	double dot(const double x, const double y, const double z);
 	double dot(const Vector other);
 	double magnitude();
+	double magnitude2(); //magnitude squared
 
 	void print();
 

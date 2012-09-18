@@ -60,16 +60,6 @@ double quadratic(double a, double b, double c) //Returns the smallest value (gre
 
 /*
 ====================
-magnitude2
-	returns the square of the magnitude (dot product of it with itself)
-====================
-*/
-double magnitude2(Vector v) { //Returns the magnitude of a vector squared
-	return v.dot(v);
-}
-
-/*
-====================
 cosAngle
 	returns the cosine of the angle between two vectors
 ====================
