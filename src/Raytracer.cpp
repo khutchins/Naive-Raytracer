@@ -79,7 +79,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 	}
 
 	double oDist;
-	if(closestO)	oDist = dist3Compare(oInt,r->start);
+	if(closestO)	oDist = oInt.comparitiveDistanceFrom(r->start);
 	else			oDist = numeric_limits<double>::max();
 
 	//If > 0 entities found
@@ -236,7 +236,7 @@ SceneObject *Raytracer::findClosestObject(Ray *r, Point &intersect) {
 
 		Point objectIntersect;
 		if(tempO = tempO->intersect(r,objectIntersect)) {
-			if(!closestObject || dist3Compare(objectIntersect, r->start) < dist3Compare(intersect, r->start)) {
+			if(!closestObject || objectIntersect.comparitiveDistanceFrom(r->start) < intersect.comparitiveDistanceFrom(r->start)) {
 				closestObject = tempO;
 				intersect = objectIntersect;
 			}

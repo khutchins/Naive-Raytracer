@@ -4,9 +4,6 @@
 #include "Vector.h"
 #include "Point.h"
 
-double dist3(double x1,double x2,double y1,double y2,double z1,double z2); //3D distance
-double dist3(Point p1, Point p2);
-double dist3Compare(Point p1, Point p2); //Distance between two objects squared (faster than dist3)
 double discrim(double a, double b, double c); //Discriminant
 double quadratic(double a, double b, double c); //Returns the smallest value that satisfies the quadratic equation
 double cosAngle(Vector v1, Vector v2); //Returns cosine of the angle between two vectors

@@ -17,7 +17,7 @@ Vector ContainerObject::calculateNormalForPoint(Point p, Point raySource) {
 
 	for(size_t i = 0; i < children.size(); i++) {
 		if(children[i]->intersect(r,objectIntersect)) {
-			if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
+			if(!objectHit || r->start.comparitiveDistanceFrom(objectIntersect) < (r->start).comparitiveDistanceFrom(intersect)) {
 				intersect = objectIntersect;
 				objectHit = true;
 				closestObject = children[i];
@@ -44,7 +44,7 @@ SceneObject* ContainerObject::intersect(Ray* r, Point &intersect) {
 
 	for(size_t i = 0; i < children.size(); i++) {
 		if(children[i]->intersect(r,objectIntersect)) {
-			if(!objectHit || dist3Compare(r->start,objectIntersect) < dist3Compare(r->start,intersect)) {
+			if(!objectHit || r->start.comparitiveDistanceFrom(objectIntersect) < r->start.comparitiveDistanceFrom(intersect)) {
 				intersect = objectIntersect;
 				closestObject = children[i];
 				objectHit = true;

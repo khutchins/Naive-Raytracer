@@ -23,6 +23,8 @@ struct Vector {
 	double dot(const Vector other);
 	double magnitude();
 	double magnitude2(); //magnitude squared
+	double distanceFrom();
+	double comparitiveDistanceFrom(); //distance for comparison (not actual distance)
 
 	void print();
 

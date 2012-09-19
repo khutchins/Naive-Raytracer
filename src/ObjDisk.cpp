@@ -121,7 +121,7 @@ SceneObject* Disk::intersect(Ray* r, Point &intersect) {
 			Point tempInt = r->dir * t + r->start;
 
 			//See if disk contains the point
-			if(dist3Compare(tempInt,this->origin) < radius*radius) {
+			if(tempInt.comparitiveDistanceFrom(this->origin) < radius*radius) {
 				intersect = tempInt;
 				return this;
 			}
@@ -139,8 +139,8 @@ Disk::calculateNormalForPoint
 ====================
 */
 Vector Disk::calculateNormalForPoint(Point p, Point raySource) {
-	double distNormalSide = dist3Compare(p + this->normal, raySource);
-	double distOtherSide = dist3Compare(p - this->normal, raySource);
+	double distNormalSide = (p + this->normal).comparitiveDistanceFrom(raySource);
+	double distOtherSide = (p - this->normal).comparitiveDistanceFrom(raySource);
 	if(distOtherSide < distNormalSide) return this->normal * -1;
 	return this->normal;
 }

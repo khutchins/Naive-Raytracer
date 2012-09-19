@@ -1,0 +1,23 @@
+camera
+origin 0 0 0
+direction 0 0 1
+up 0 1 0
+z 1 10
+width 3
+perspective 1
+end
+
+light
+origin 1 1 -1
+color 1 1 1
+end
+
+tube
+origin 0 0 5
+radius 3
+height 3
+up 0 0 1
+color 1 0 0
+reflect 0
+transparency 0
+end

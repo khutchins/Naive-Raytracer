@@ -39,6 +39,27 @@ Point::Point(double x, double y, double z) {
 	this->z = z;
 }
 
+/*
+====================
+distanceFrom
+	computes the 3D distance between two points
+====================
+*/
+double Point::distanceFrom(Point other) {
+	return sqrt((other.x-this->x)*(other.x-this->x) + (other.y-this->y)*(other.y-this->y) + (other.z-this->z)*(other.z-this->z));
+}
+
+/*
+====================
+comparitiveDistanceFrom
+	the square of the 3D distance (faster than normal dist3, used for 
+	comparisons)
+====================
+*/
+double Point::comparitiveDistanceFrom(Point other) {
+	return (other.x-this->x)*(other.x-this->x) + (other.y-this->y)*(other.y-this->y) + (other.z-this->z)*(other.z-this->z);
+}
+
 //Subtracts a point from a point and returns a vector
 Vector Point::operator-(Point right)
 {
