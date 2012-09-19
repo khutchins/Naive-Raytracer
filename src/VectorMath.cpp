@@ -4,38 +4,6 @@
 
 /*
 ====================
-dist3
-	computes the 3D distance between individual variables
-====================
-*/
-double dist3(double x1,double x2,double y1,double y2,double z1,double z2)
-{
-	return sqrt((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) + (z2-z1)*(z2-z1));
-}
-
-/*
-====================
-dist3
-	computes the 3D distance between two points
-====================
-*/
-double dist3(Point x1, Point x2) {
-	return sqrt((x2.x-x1.x)*(x2.x-x1.x) + (x2.y-x1.y)*(x2.y-x1.y) + (x2.z-x1.z)*(x2.z-x1.z));
-}
-
-/*
-====================
-dist3Compare
-	the square of the 3D distance (faster than normal dist3, used for 
-	comparisons)
-====================
-*/
-double dist3Compare(Point x1, Point x2) {
-	return (x2.x-x1.x)*(x2.x-x1.x) + (x2.y-x1.y)*(x2.y-x1.y) + (x2.z-x1.z)*(x2.z-x1.z);
-}
-
-/*
-====================
 discrim
 	calculates the discriminant of a, b, and c
 ====================
