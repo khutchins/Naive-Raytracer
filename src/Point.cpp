@@ -45,7 +45,7 @@ distanceFrom
 	computes the 3D distance between two points
 ====================
 */
-double Point::distanceFrom(Point other) {
+double Point::distanceFrom(const Point other) {
 	return sqrt((other.x-this->x)*(other.x-this->x) + (other.y-this->y)*(other.y-this->y) + (other.z-this->z)*(other.z-this->z));
 }
 
@@ -56,7 +56,7 @@ comparitiveDistanceFrom
 	comparisons)
 ====================
 */
-double Point::comparitiveDistanceFrom(Point other) {
+double Point::comparitiveDistanceFrom(const Point other) {
 	return (other.x-this->x)*(other.x-this->x) + (other.y-this->y)*(other.y-this->y) + (other.z-this->z)*(other.z-this->z);
 }
 

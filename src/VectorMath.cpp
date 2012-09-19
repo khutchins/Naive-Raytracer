@@ -28,26 +28,6 @@ double quadratic(double a, double b, double c) //Returns the smallest value (gre
 
 /*
 ====================
-cosAngle
-	returns the cosine of the angle between two vectors
-====================
-*/
-double cosAngle(Vector v1, Vector v2) { //Returns cos(angle) between two vectors
-	return v1.dot(v2)/v1.magnitude()/v2.magnitude();
-}
-
-/*
-====================
-angle
-	returns the angle between two vectors
-====================
-*/
-double angle(Vector v1, Vector v2) { //Returns the angle between two vectors
-	return acos(cosAngle(v1,v2));
-}
-
-/*
-====================
 pointsOnSameSide
 	Checks if two points are on the same side of a line segment.  Returns true if 
 	same side, false if opposite sides

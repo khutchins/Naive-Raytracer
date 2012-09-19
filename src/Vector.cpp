@@ -148,6 +148,27 @@ double Vector::magnitude2() { //Returns the magnitude of a vector squared
 	return this->dot(this->x,this->y,this->z);
 }
 
+/*
+====================
+cosAngleBetween
+	returns the cosine of the angle between two vectors
+====================
+*/
+double Vector::cosAngleBetween(Vector other) { //Returns cos(angle) between two vectors
+	return this->dot(other)/this->magnitude()/other.magnitude();
+}
+
+/*
+====================
+angleBetween
+	returns the angle between two vectors
+====================
+*/
+double Vector::angleBetween(const Vector other) { //Returns the angle between two vectors
+	return acos(this->cosAngleBetween(other));
+}
+
+
 //Vector with vector addition
 Vector Vector::operator+(Vector right)
 {

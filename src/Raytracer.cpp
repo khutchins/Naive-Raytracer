@@ -169,7 +169,7 @@ Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID
 			receivedColor.g /= 255.f;
 			receivedColor.b /= 255.f;
 
-			double lightSourceIntensity = cosAngle(lToObject,normal);
+			double lightSourceIntensity = lToObject.cosAngleBetween(normal);
 			if(lightSourceIntensity < 0) lightSourceIntensity = 0;
 			llocal.r += receivedColor.r * lightSourceIntensity;
 			llocal.g += receivedColor.g * lightSourceIntensity;
