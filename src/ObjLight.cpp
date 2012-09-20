@@ -6,8 +6,7 @@ Light::Light
 	Takes in the input stream and creates a Light object from the parsed input
 ====================
 */
-Light::Light(ifstream &f)
-{
+Light::Light(ifstream &f) {
 	this->isVisible = true;
 	this->isLight = true;
 	this->objectType = ENTITY_LIGHT;
@@ -48,6 +47,23 @@ Light::Light(ifstream &f)
 		else break;
 
 	}
+}
+
+/*
+====================
+Light::Light
+	Takes in variables and creates a Light object
+====================
+*/
+Light::Light(Point origin, Material material) {
+	this->isVisible = true;
+	this->isLight = true;
+	this->objectType = ENTITY_LIGHT;
+	this->hasTexture = false;
+	this->material = material;
+	this->material.reflection = 0;
+	this->material.transparency = 0;
+	this->origin = origin;
 }
 
 /*

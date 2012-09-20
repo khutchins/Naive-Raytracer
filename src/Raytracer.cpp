@@ -317,3 +317,23 @@ int Raytracer::processInput(string filename) {
 	}
 	return 1;
 }
+
+/*
+====================
+Raytracer::addSceneObject
+	adds a scene object to the object queue
+====================
+*/
+void Raytracer::addSceneObject(SceneObject *o) {
+	objectQueue.push(o);
+}
+
+/*
+====================
+Raytracer::removeAllSceneObjects
+	removes all scene objects from the object queue
+====================
+*/
+void Raytracer::removeAllSceneObjects() {
+	while(objectQueue.size() > 0) objectQueue.pop();
+}

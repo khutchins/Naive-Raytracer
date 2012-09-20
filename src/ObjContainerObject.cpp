@@ -87,8 +87,7 @@ Color ContainerObject::getColor() {
 
 
 ContainerObject::~ContainerObject() {
-	while(SceneObject *result = children[0]) {
-		free(result);
-		children.erase(children.begin());
+	for(size_t i = 0; i < children.size(); i++) {
+		delete children[i];
 	}
 }

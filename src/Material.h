@@ -3,10 +3,13 @@
 
 #include "Color.h"
 
-typedef struct Material {
+struct Material {
+	Material();
+	Material(Color color, double reflection, double transparency);
+
     Color color;
     double reflection;   // Valid range 0-1
     double transparency; // Valid range 0-1
-} Material;
+};
 
 #endif

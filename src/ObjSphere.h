@@ -18,10 +18,10 @@ using namespace std;
 
 class Sphere : public SceneObject {
 public:
-    Material material;
     double radius;
 
 	Sphere(ifstream &f);
+	Sphere(Point origin, Material material, double radius);
 	Vector calculateNormalForPoint(Point p, Point raySource);
 	SceneObject* intersect(Ray* r, Point &intersect);
 	double getReflection();

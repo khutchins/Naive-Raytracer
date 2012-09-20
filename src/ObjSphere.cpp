@@ -63,6 +63,22 @@ Sphere::Sphere(ifstream &f)
 
 /*
 ====================
+Sphere::Sphere
+	Takes in arguments and creates a Sphere object
+====================
+*/
+Sphere::Sphere(Point origin, Material material, double radius) {
+	this->isLight = false;
+	this->isVisible = true;
+	this->objectType = ENTITY_SPHERE;
+	this->hasTexture = false;
+	this->origin = origin;
+	this->material = material;
+	this->radius = radius;
+}
+
+/*
+====================
 Sphere::intersect
 	Computes intersection between the Sphere and the ray, and returns itself if 
 	it is hit or NULL if it is not along with the point of intersection

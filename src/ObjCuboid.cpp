@@ -11,7 +11,6 @@ Cuboid::Cuboid(ifstream &f) {
 	this->isVisible = true;
 	this->objectType = ENTITY_CUBOID;
 	this->hasTexture = false;
-	Material material;
 	string textureName;
 
 	children.resize(6);
@@ -107,8 +106,36 @@ Cuboid::Cuboid(ifstream &f) {
 	children[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //right plane
 }
 
-Cuboid::~Cuboid() {
-	for(size_t i = 0; i < children.size(); i++) {
-		delete children[i];
+/*
+====================
+Cuboid::Cuboid
+	Takes in variables and creates a cuboid
+====================
+*/
+Cuboid::Cuboid(Point origin, Vector up, Vector front, double width, double height, double length, Material material, string textureName) {
+	this->isLight = false;
+	this->isVisible = true;
+	this->objectType = ENTITY_CUBOID;
+	this->hasTexture = false;
+
+	children.resize(6);
+
+	//Warning: Vectors are not orthogonal
+	if(abs(up.dot(front)) > 0.00001) {
+		printf("Warning: Cuboid up vector ");
+		up.print();
+		printf(" and front vector ");
+		front.print();
+		printf(" are not orthogonal.\n");
 	}
+	
+	Vector left = up.cross(front);
+	left.normalize();
+
+	children[0] = new Plane(material, length, width, front, up, textureName, origin+up*height*0.5f); //Top plane
+	children[1] = new Plane(material, length, width, front, -1*up, textureName, origin-up*height*0.5f); //Bottom plane
+	children[2] = new Plane(material, length, height, up, front, textureName, origin+front*width*0.5f); //Front plane
+	children[3] = new Plane(material, length, height, up, -1*front, textureName, origin-front*width*0.5f); //Back plane
+	children[4] = new Plane(material, width, height, up, left, textureName, origin+left*length*0.5f); //left plane
+	children[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //right plane
 }

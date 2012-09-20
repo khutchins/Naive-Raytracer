@@ -18,13 +18,12 @@ class Cuboid : public ContainerObject {
 public:
 	Vector	up;
 	Vector	front;
-	Point	origin;
 	double	height;
 	double	width;
 	double	length;
 
 	Cuboid(ifstream &f);
-	~Cuboid();
+	Cuboid(Point origin, Vector up, Vector front, double width, double height, double length, Material material, string textureName = string());
 };
 
 #endif

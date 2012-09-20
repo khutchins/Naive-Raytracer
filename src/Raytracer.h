@@ -42,6 +42,9 @@ public:
 	int start(string fn);
 	Color raytrace(Ray* r, bool &lightWasSeen);
 
+	void addSceneObject(SceneObject *o);
+	void removeAllSceneObjects();
+
 private:
 	///Variables
 	//Global camera and object queues
