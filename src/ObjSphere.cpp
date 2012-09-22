@@ -90,19 +90,19 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 	dist.normalize();
 	r->dir.normalize();
 
-	double a = r->dir.dot(r->dir);
-	double b = 2 * (r->start - this->origin).dot(r->dir);
-	double c = (r->start - this->origin).dot(r->start - this->origin) - this->radius * this->radius;
+	const double a = 1; //if not normalized, a = r->dot.dot(r->dot); (or |r->dir|^2)
+	const double b = 2 * (r->start - this->origin).dot(r->dir);
+	const double c = (r->start - this->origin).dot(r->start - this->origin) - this->radius * this->radius;
 
-	double disc = discrim(a,b,c);
+	const double discriminant = discrim(a,b,c);
 
 	//No intersection, do nothing
-	if(disc < 0) return false;
-	else if(disc >= 0) { //Find closest intersection
-		double discSqrt = sqrt(disc);
+	if(discriminant < 0) return false;
+	else if(discriminant >= 0) { //Find closest intersection
+		const double discSqrt = sqrt(discriminant);
 		double quad;
 		if (b < 0)	quad = (-b - discSqrt)/2.f;
-		else quad = (-b + discSqrt)/2.f;
+		else		quad = (-b + discSqrt)/2.f;
 
 		double t0 = quad/a;
 		double t1 = c/quad;
@@ -110,8 +110,8 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 
 		double t;
 		if(t0 < 0 && t1 < 0) return false;
-		if(t0 < 0) t = t1;
-		else t = t0;
+		if(t0 < 0)	t = t1;
+		else		t = t0;
 
 		intersect = r->start + t * r->dir;
 		return this;

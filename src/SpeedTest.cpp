@@ -129,7 +129,7 @@ objectIntersectionSpeedTest
 ====================
 */
 void objectIntersectionSpeedTest() {
-	unsigned int numberOfRaysToCast = 10000000;
+	unsigned int numberOfRaysToCast = 1000000;
 
 	cuboidIntersectionSpeedTest(numberOfRaysToCast);
 	diskIntersectionSpeedTest(numberOfRaysToCast);
