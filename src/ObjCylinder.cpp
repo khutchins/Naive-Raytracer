@@ -74,9 +74,3 @@ Cylinder::Cylinder(ifstream &f)
 	children[1] = new Disk(material,radius,/*up = */up.perpendicularVector(),/*normal = */up,/*origin = */origin+up*(height*0.5));
 	children[2] = new Disk(material,radius,/*up = */up.perpendicularVector(),/*normal = */up,/*origin = */origin-up*(height*0.5));
 }
-
-Cylinder::~Cylinder() {
-	for(size_t i = 0; i < children.size(); i++) {
-		delete children[i];
-	}
-}

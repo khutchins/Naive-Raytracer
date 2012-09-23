@@ -6,12 +6,7 @@ Disk::Disk
 	Takes in the input stream and creates a Disk object from the parsed input
 ====================
 */
-Disk::Disk(ifstream &f)
-{
-	this->isLight = false;
-	this->isVisible = true;
-	this->objectType = ENTITY_DISK;
-	this->hasTexture = false;
+Disk::Disk(ifstream &f) {
 	while(!f.eof()) {
 		string line;
 		getline(f,line);
@@ -48,11 +43,9 @@ Disk::Disk(ifstream &f)
 			}
 			else if(word == "normal") {
 				this->normal = Vector(num1,num2,num3);
-				this->normal.normalize();
 			}
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				this->up.normalize();
 			}
 		}
 
@@ -71,15 +64,7 @@ Disk::Disk(ifstream &f)
 		}
 		else break;
 	}
-
-	//Warning: Vectors are not orthogonal
-	if(abs(up.dot(normal)) > 0.00001) {
-		printf("Warning: Disk up vector ");
-		up.print();
-		printf(" and normal vector ");
-		normal.print();
-		printf(" are not orthogonal.\n");
-	}
+	sharedInit(material,radius,up,normal,origin);
 }
 
 /*
@@ -90,6 +75,25 @@ Disk::Disk
 ====================
 */
 Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {
+	sharedInit(m,radius,up,normal,origin);
+}
+
+/*
+====================
+Disk::sharedInit
+	Shared initialization method for all Disk objects
+====================
+*/
+void Disk::sharedInit(Material m, double radius, Vector up, Vector normal, Point origin) {
+	//Warning if Vectors are not orthogonal
+	if(abs(up.dot(normal)) > 0.00001) {
+		printf("Warning: Disk up vector ");
+		up.print();
+		printf(" and normal vector ");
+		normal.print();
+		printf(" are not orthogonal.\n");
+	}
+
 	//Constant parameters for all disks
 	this->isLight = false;
 	this->isVisible = true;
@@ -100,7 +104,9 @@ Disk::Disk(Material m, double radius, Vector up, Vector normal, Point origin) {
 	this->radius = radius;
 	this->material = m;
 	this->up = up;
+	this->up.normalize();
 	this->normal = normal;
+	this->normal.normalize();
 	this->origin = origin;
 }
 

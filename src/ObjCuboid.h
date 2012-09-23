@@ -24,6 +24,9 @@ public:
 
 	Cuboid(ifstream &f);
 	Cuboid(Point origin, Vector up, Vector front, double width, double height, double length, Material material, string textureName = string());
+
+private:
+	void sharedInit(Point origin, Vector up, Vector front, double width, double height, double length, Material material, string textureName = string());
 };
 
 #endif

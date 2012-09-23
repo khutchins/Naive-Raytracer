@@ -8,10 +8,6 @@ Tube::Tube
 */
 Tube::Tube(ifstream &f)
 {
-	this->isLight = false;
-	this->isVisible = true;
-	this->objectType = ENTITY_TUBE;
-	this->hasTexture = false;
 	while(!f.eof()) {
 		string line;
 		getline(f,line);
@@ -44,7 +40,6 @@ Tube::Tube(ifstream &f)
 			else if(word == "color") this->material.color = Color(num1,num2,num3);
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				this->up.normalize();
 			}
 		}
 
@@ -64,6 +59,8 @@ Tube::Tube(ifstream &f)
 		}
 		else break;
 	}
+
+	sharedInit(material,radius,height,up,origin);
 }
 
 /*
@@ -74,11 +71,28 @@ Tube::Tube
 ====================
 */
 Tube::Tube(Material m, double radius, double height, Vector up, Point origin) {
+	sharedInit(m,radius,height,up,origin);
+}
+
+/*
+====================
+Tube::sharedInit
+	Shared initialization method for all Tube objects
+====================
+*/
+void Tube::sharedInit(Material m, double radius, double height, Vector up, Point origin) {
+	this->isLight = false;
+	this->isVisible = true;
+	this->objectType = ENTITY_TUBE;
+	this->hasTexture = false;
+
 	this->material = m;
 	this->radius = radius;
 	this->height = height;
 	this->up = up;
 	this->origin = origin;
+
+	this->up.normalize();
 }
 
 /*

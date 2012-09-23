@@ -6,12 +6,7 @@ Triangle::Triangle
 	Takes in the input stream and creates a Triangle object from the parsed input
 ====================
 */
-Triangle::Triangle(ifstream &f)
-{
-	this->isLight = false;
-	this->isVisible = true;
-	this->objectType = ENTITY_TRIANGLE;
-	this->hasTexture = false;
+Triangle::Triangle(ifstream &f) {
 	while(!f.eof()) {
 		string line;
 		getline(f,line);
@@ -69,9 +64,7 @@ Triangle::Triangle(ifstream &f)
 		else break;
 	}
 
-	this->normal = (vertex3 - vertex1).cross(vertex2 - vertex1);
-	this->origin = vertex1;
-	this->normal.normalize();
+	sharedInit(material,vertex1,vertex2,vertex3);
 }
 
 /*
@@ -82,6 +75,16 @@ Triangle::Triangle
 ====================
 */
 Triangle::Triangle(Material m, Point vertex1, Point vertex2, Point vertex3) {
+	sharedInit(m,vertex1,vertex2,vertex3);
+}
+
+/*
+====================
+Triangle::sharedInit
+	Shared initialization method for all Triangle objects
+====================
+*/
+void Triangle::sharedInit(Material m, Point vertex1, Point vertex2, Point vertex3) {
 	//Constant parameters for all triangles
 	this->isLight = false;
 	this->isVisible = true;
@@ -97,6 +100,7 @@ Triangle::Triangle(Material m, Point vertex1, Point vertex2, Point vertex3) {
 	this->origin = vertex1;
 	this->normal.normalize();
 }
+
 
 /*
 ====================

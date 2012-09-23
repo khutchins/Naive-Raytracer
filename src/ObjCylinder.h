@@ -21,7 +21,6 @@ public:
 	Vector up;
 
 	Cylinder(ifstream &f);
-	~Cylinder();
 };
 
 #endif

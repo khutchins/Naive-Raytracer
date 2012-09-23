@@ -8,10 +8,7 @@ Plane::Plane
 */
 Plane::Plane(ifstream &f)
 {
-	this->isLight = false;
-	this->isVisible = true;
-	this->hasTexture = false;
-	this->objectType = ENTITY_PLANE;
+	string textureName;
 
 	while(!f.eof()) {
 		string line;
@@ -45,11 +42,9 @@ Plane::Plane(ifstream &f)
 			else if(word == "color")	material.color = Color(num1,num2,num3);
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
-				this->up.normalize();
 			}
 			else if(word == "normal") {
 				this->normal = Vector(num1,num2,num3);
-				this->normal.normalize();
 			}
 		}
 
@@ -91,21 +86,11 @@ Plane::Plane(ifstream &f)
 
 			textureName = lineContents.front();
 			lineContents.pop();
-
-			if(this->texture.ReadFromFile(textureName.c_str()))
-				this->hasTexture = true;
 		}
 		else break;
 	}
 
-	//Warning: Vectors are not orthogonal
-	if(abs(up.dot(normal)) > 0.00001) {
-		printf("Warning: Plane up vector ");
-		up.print();
-		printf(" and normal vector ");
-		normal.print();
-		printf(" are not orthogonal.\n");
-	}
+	sharedInit(material,width,height,up,normal,textureName,origin);
 }
 
 /*
@@ -116,6 +101,30 @@ Plane::Plane
 ====================
 */
 Plane::Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin) {
+	sharedInit(m,width,height,up,normal,textureName,origin);
+}
+
+/*
+====================
+Plane::sharedInit
+	Shared initialization method for all Plane objects
+====================
+*/
+void Plane::sharedInit(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin) {
+	//Warns if Vectors are not orthogonal
+	if(abs(up.dot(normal)) > 0.00001) {
+		printf("Warning: Plane up vector ");
+		up.print();
+		printf(" and normal vector ");
+		normal.print();
+		printf(" are not orthogonal.\n");
+	}
+
+	this->isLight = false;
+	this->isVisible = true;
+	this->hasTexture = false;
+	this->objectType = ENTITY_PLANE;
+
 	this->origin = origin;
 	this->width = width;
 	this->height = height;
@@ -126,6 +135,9 @@ Plane::Plane(Material m, double width, double height, Vector up, Vector normal, 
 	if(textureName.size() > 0) if(this->texture.ReadFromFile(textureName.c_str())) this->hasTexture = true;
 	this->isLight = false;
 	this->isVisible = true;
+
+	this->up.normalize();
+	this->normal.normalize();
 }
 
 /*

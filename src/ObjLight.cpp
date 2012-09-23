@@ -7,15 +7,8 @@ Light::Light
 ====================
 */
 Light::Light(ifstream &f) {
-	this->isVisible = true;
-	this->isLight = true;
-	this->objectType = ENTITY_LIGHT;
-	this->hasTexture = false;
-	this->material.color.r = 0;
-	this->material.color.g = 0;
-	this->material.color.b = 0;
-	this->material.reflection = 0;
-	this->material.transparency = 0;
+	this->material = Material();
+
 	while(!f.eof()) {
 		string line;
 		getline(f,line);
@@ -45,8 +38,9 @@ Light::Light(ifstream &f) {
 		if(word == "origin")		this->origin = Point(num1,num2,num3);
 		else if(word == "color")	this->material.color = Color(num1,num2,num3);
 		else break;
-
 	}
+
+	sharedInit(origin,material);
 }
 
 /*
@@ -56,6 +50,16 @@ Light::Light
 ====================
 */
 Light::Light(Point origin, Material material) {
+	sharedInit(origin,material);
+}
+
+/*
+====================
+Light::sharedInit
+	Shared initialization method for all Light objects
+====================
+*/
+void Light::sharedInit(Point origin, Material material) {
 	this->isVisible = true;
 	this->isLight = true;
 	this->objectType = ENTITY_LIGHT;

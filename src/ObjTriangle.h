@@ -29,6 +29,8 @@ public:
 
 private:
 	Vector normal;
+
+	void sharedInit(Material m, Point vertex1, Point vertex2, Point );
 };
 
 #endif

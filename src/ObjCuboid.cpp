@@ -7,13 +7,7 @@ Cuboid::Cuboid
 ====================
 */
 Cuboid::Cuboid(ifstream &f) {
-	this->isLight = false;
-	this->isVisible = true;
-	this->objectType = ENTITY_CUBOID;
-	this->hasTexture = false;
 	string textureName;
-
-	children.resize(6);
 
 	while(!f.eof())
 	{
@@ -86,24 +80,7 @@ Cuboid::Cuboid(ifstream &f) {
 		else break;
 	}
 
-	//Warning: Vectors are not orthogonal
-	if(abs(up.dot(front)) > 0.00001) {
-		printf("Warning: Cuboid up vector ");
-		up.print();
-		printf(" and front vector ");
-		front.print();
-		printf(" are not orthogonal.\n");
-	}
-	
-	Vector left = up.cross(front);
-	left.normalize();
-
-	children[0] = new Plane(material, length, width, front, up, textureName, origin+up*height*0.5f); //Top plane
-	children[1] = new Plane(material, length, width, front, -1*up, textureName, origin-up*height*0.5f); //Bottom plane
-	children[2] = new Plane(material, length, height, up, front, textureName, origin+front*width*0.5f); //Front plane
-	children[3] = new Plane(material, length, height, up, -1*front, textureName, origin-front*width*0.5f); //Back plane
-	children[4] = new Plane(material, width, height, up, left, textureName, origin+left*length*0.5f); //left plane
-	children[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //right plane
+	sharedInit(origin,up,front,width,height,length,material,textureName);
 }
 
 /*
@@ -113,6 +90,16 @@ Cuboid::Cuboid
 ====================
 */
 Cuboid::Cuboid(Point origin, Vector up, Vector front, double width, double height, double length, Material material, string textureName) {
+	sharedInit(origin,up,front,width,height,length,material,textureName);
+}
+
+/*
+====================
+Cuboid::sharedInit
+	Shared initialization method for all Cuboid objects
+====================
+*/
+void Cuboid::sharedInit(Point origin, Vector up, Vector front, double width, double height, double length, Material material, string textureName) {
 	this->isLight = false;
 	this->isVisible = true;
 	this->objectType = ENTITY_CUBOID;

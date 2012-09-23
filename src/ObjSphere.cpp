@@ -8,10 +8,6 @@ Sphere::Sphere
 */
 Sphere::Sphere(ifstream &f)
 {
-	this->isLight = false;
-	this->isVisible = true;
-	this->objectType = ENTITY_SPHERE;
-	this->hasTexture = false;
 	while(!f.eof()) {
 		string line;
 		getline(f,line);
@@ -59,6 +55,8 @@ Sphere::Sphere(ifstream &f)
 		}
 		else break;
 	}
+
+	sharedInit(origin,material,radius);
 }
 
 /*
@@ -68,10 +66,21 @@ Sphere::Sphere
 ====================
 */
 Sphere::Sphere(Point origin, Material material, double radius) {
+	sharedInit(origin,material,radius);
+}
+
+/*
+====================
+Sphere::sharedInit
+	Shared initialization method for all Sphere objects
+====================
+*/
+void Sphere::sharedInit(Point origin, Material material, double radius) {
 	this->isLight = false;
 	this->isVisible = true;
 	this->objectType = ENTITY_SPHERE;
 	this->hasTexture = false;
+
 	this->origin = origin;
 	this->material = material;
 	this->radius = radius;

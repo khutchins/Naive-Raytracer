@@ -20,6 +20,9 @@ public:
 
 	SceneObject* intersect(Ray* r, Point &intersect);
 	Color getColor();
+
+private:
+	void sharedInit(Point origin, Material material);
 };
 
 #endif

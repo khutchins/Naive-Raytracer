@@ -27,6 +27,9 @@ public:
 	double getReflection();
 	double getRefraction();
 	Color getColor();
+
+private:
+	void sharedInit(Point origin, Material material, double radius);
 };
 
 #endif
