@@ -138,6 +138,13 @@ void Plane::sharedInit(Material m, double width, double height, Vector up, Vecto
 
 	this->up.normalize();
 	this->normal.normalize();
+
+	Vector left = normal.cross(up);
+	Point upMid = (this->up * this->height * 0.5) + this->origin;
+	vertex1 = upMid + (left * this->width * 0.5);
+	vertex2 = upMid - (left * this->width * 0.5);
+	vertex3 = vertex1 - (this->up * this->height);
+	vertex4 = vertex2 - (this->up * this->height);
 }
 
 /*
@@ -156,24 +163,15 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 			//Calculate point of intersection on plane
 			Point tempInt = r->dir * t + r->start;
 
-			//See if the point of intersection is actually on the finite plane
-			//First, find coordinates of vertices that make up the quad
-			Vector left = normal.cross(up);
-			Point upMid = (this->up * this->height * 0.5) + this->origin;
-			Point upLeft = upMid + (left * this->width * 0.5);
-			Point upRight = upMid - (left * this->width * 0.5);
-			Point botLeft = upLeft - (this->up * this->height);
-			Point botRight = upRight - (this->up * this->height);
-
 			//Calculate vectors that define the rectangle and vector to point
-			Vector leftV = upRight - upLeft;
-			Vector up = botLeft - upLeft;
-			Vector cornerToPoint = tempInt - upLeft;
+			Vector topLine = vertex2 - vertex1;
+			Vector leftLine = vertex3 - vertex2;
+			Vector topLeftToPoint = tempInt - vertex1;
 
-			double dotUpCTP = up.dot(cornerToPoint);
+			double dotUpCTP = up.dot(topLeftToPoint);
 			double dotUpUp = up.dot(up);
-			double dotLeftCTP = leftV.dot(cornerToPoint);
-			double dotLeftLeft = leftV.dot(leftV);
+			double dotLeftCTP = topLine.dot(topLeftToPoint);
+			double dotLeftLeft = topLine.dot(topLine);
 
 			if(0 <= dotUpCTP && dotUpCTP <= dotUpUp && 0 <= dotLeftCTP && dotLeftCTP <= dotLeftLeft) {
 				intersect = tempInt;
