@@ -47,7 +47,7 @@ None
 
 ## Usage
 
-This currently outputs a .bmp file for each camera in a scene: <scene_name>-<camera_number>.bmp or <scene_name>-<name>.bmp if the camera name parameter is defined.
+This currently outputs a .bmp file for each camera in a scene: \<scene_name\>-\<camera_number\>.bmp or \<scene_name\>-\<name\>.bmp if the camera name parameter is defined.
 
 Usage: ./<program> <path-to-scene-file>
 
