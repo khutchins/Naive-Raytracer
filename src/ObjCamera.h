@@ -19,13 +19,17 @@ class Raytracer;
 
 enum AntiAliasingType {
 	AA_TYPE_NONE,
+
 	AA_TYPE_NAIVE_AVERAGE, //weighted average of pixels post processing
+
 	AA_TYPE_FSAA_4, //full scene anti-aliasing with 4 samples (super-sampling)
 	AA_TYPE_FSAA_16, //full scene anti-aliasing with 16 samples  (super-sampling)
 	AA_TYPE_SSAA_4 = AA_TYPE_FSAA_4, //alias for FSAA4
 	AA_TYPE_SSAA_16 = AA_TYPE_FSAA_16, //alias for FSAA16
+
 	AA_TYPE_EDAA_4, //super-sampling with 4 samples on pixels that are detected at edges using the ED convolution
 	AA_TYPE_EDAA_16, //super-sampling with 16 samples on pixels that are detected at edges using the ED convolution
+
 	AA_TYPE_FXAA //gaussian blur convolution on pixels that are detected to be an edge using the ED convolution
 };
 
