@@ -192,10 +192,10 @@ calculateTextureFromMaterial
 ====================
 */
 Color Plane::calculateTextureFromMaterial(Point intercept) {
-	BMP* temp;
-	temp = &this->texture;
-	int height = temp->TellHeight();
-	int width = temp->TellWidth();
+	BMP* texture;
+	texture = &this->texture;
+	int height = texture->TellHeight();
+	int width  = texture->TellWidth();
 	double planeHeight = this->height;
 	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
@@ -207,20 +207,21 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	double topLineLength		= topLine.dot(topLine);
 
 	double heightPercentage = leftProjectionLength / leftLineLength;
-	double widthPercentage  = topProjectionLength / topLineLength;
+	double widthPercentage  = topProjectionLength  / topLineLength;
 
 	int pixelX = abs((int)(widthPercentage * width));
 	int pixelY = abs((int)(heightPercentage * height));
 	pixelX %= width;
 	pixelY %= height;
 	Color matColor;
+
 	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_TEXTURE_MAPPING) {
 		matColor = Color(heightPercentage,1,widthPercentage);
 	}
 	else {
-		matColor.r = temp->GetPixel(pixelX,pixelY).Red/255.f;
-		matColor.g = temp->GetPixel(pixelX,pixelY).Green/255.f;
-		matColor.b = temp->GetPixel(pixelX,pixelY).Blue/255.f;
+		matColor.r = texture->GetPixel(pixelX,pixelY).Red/255.f;
+		matColor.g = texture->GetPixel(pixelX,pixelY).Green/255.f;
+		matColor.b = texture->GetPixel(pixelX,pixelY).Blue/255.f;
 	}
 
 	return matColor;
