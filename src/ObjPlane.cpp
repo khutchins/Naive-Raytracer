@@ -6,8 +6,7 @@ Plane::Plane
 	Takes in the input stream and creates a Plane object from the parsed input
 ====================
 */
-Plane::Plane(ifstream &f)
-{
+Plane::Plane(ifstream &f) {
 	string textureName;
 
 	while(!f.eof()) {
@@ -139,7 +138,7 @@ void Plane::sharedInit(Material m, double width, double height, Vector up, Vecto
 	this->up.normalize();
 	this->normal.normalize();
 
-	Vector left = normal.cross(up);
+	Vector left = this->normal.cross(this->up);
 	Point upMid = (this->up * this->height * 0.5) + this->origin;
 	vertex1 = upMid + (left * this->width * 0.5);
 	vertex2 = upMid - (left * this->width * 0.5);
@@ -164,12 +163,17 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 			Point tempInt = r->dir * t + r->start;
 
 			//Calculate vectors that define the rectangle and vector to point
-			Vector topLine = vertex2 - vertex1;
-			Vector leftLine = vertex3 - vertex2;
+			// +----------> topLine
+			// |\
+			// | \ topLeftToPoint
+			// v
+			// leftLine
+			Vector topLine =  vertex2 - vertex1;
+			Vector leftLine = vertex3 - vertex1;
 			Vector topLeftToPoint = tempInt - vertex1;
 
-			double dotUpCTP = up.dot(topLeftToPoint);
-			double dotUpUp = up.dot(up);
+			double dotUpCTP = leftLine.dot(topLeftToPoint);
+			double dotUpUp = leftLine.dot(leftLine);
 			double dotLeftCTP = topLine.dot(topLeftToPoint);
 			double dotLeftLeft = topLine.dot(topLine);
 
