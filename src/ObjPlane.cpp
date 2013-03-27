@@ -172,12 +172,13 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 			Vector leftLine = vertex3 - vertex1;
 			Vector topLeftToPoint = tempInt - vertex1;
 
-			double dotUpCTP = leftLine.dot(topLeftToPoint);
-			double dotUpUp = leftLine.dot(leftLine);
-			double dotLeftCTP = topLine.dot(topLeftToPoint);
-			double dotLeftLeft = topLine.dot(topLine);
+			double leftProjectionLength	= leftLine.dot(topLeftToPoint);
+			double leftLineLength		= leftLine.dot(leftLine);
+			double topProjectionLength	= topLine.dot(topLeftToPoint);
+			double topLineLength		= topLine.dot(topLine);
 
-			if(0 <= dotUpCTP && dotUpCTP <= dotUpUp && 0 <= dotLeftCTP && dotLeftCTP <= dotLeftLeft) {
+			if(0 <= leftProjectionLength && leftProjectionLength <= leftLineLength && 
+			   0 <= topProjectionLength  && topProjectionLength  <= topLineLength) {
 				intersect = tempInt;
 				return this;
 			}
