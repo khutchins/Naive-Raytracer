@@ -79,8 +79,6 @@ Plane::Plane(ifstream &f) {
 		//words with one string argument
 		else if(word == "texture") {
 			//TODO: attempt load texture from local directory first
-			string textureName;
-
 			if(lineContents.size() < 1) break;
 
 			textureName = lineContents.front();
@@ -119,9 +117,6 @@ void Plane::sharedInit(Material m, double width, double height, Vector up, Vecto
 		printf(" are not orthogonal.\n");
 	}
 
-	this->isLight = false;
-	this->isVisible = true;
-	this->hasTexture = false;
 	this->objectType = ENTITY_PLANE;
 
 	this->origin = origin;
@@ -131,7 +126,9 @@ void Plane::sharedInit(Material m, double width, double height, Vector up, Vecto
 	this->up = up;
 	this->normal = normal;
 	this->hasTexture = false;
-	if(textureName.size() > 0) if(this->texture.ReadFromFile(textureName.c_str())) this->hasTexture = true;
+	if(textureName.size() > 0 && this->texture.ReadFromFile(textureName.c_str())) {
+		this->hasTexture = true;
+	}
 	this->isLight = false;
 	this->isVisible = true;
 
