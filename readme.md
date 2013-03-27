@@ -24,7 +24,7 @@ Disks
 Cuboids  
 Triangles  
 
-### Anti-aliasing Pptions
+### Anti-Aliasing Options
 
 none - no anti-aliasing  
 naive-average - a naive weighted average of a pixel with its neighbors  
