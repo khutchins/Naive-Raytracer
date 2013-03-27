@@ -37,6 +37,8 @@ private:
 	Point vertex2;
 	Point vertex3;
 	Point vertex4;
+	Vector topLine;
+	Vector leftLine;
 
 	void sharedInit(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin);
 };

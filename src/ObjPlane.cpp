@@ -141,6 +141,8 @@ void Plane::sharedInit(Material m, double width, double height, Vector up, Vecto
 	vertex2 = upMid - (left * this->width * 0.5);
 	vertex3 = vertex1 - (this->up * this->height);
 	vertex4 = vertex2 - (this->up * this->height);
+	topLine =  vertex2 - vertex1;
+	leftLine = vertex3 - vertex1;
 }
 
 /*
@@ -165,8 +167,6 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 			// | \ topLeftToPoint
 			// v
 			// leftLine
-			Vector topLine =  vertex2 - vertex1;
-			Vector leftLine = vertex3 - vertex1;
 			Vector topLeftToPoint = tempInt - vertex1;
 
 			double leftProjectionLength	= leftLine.dot(topLeftToPoint);
@@ -199,8 +199,6 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	double planeHeight = this->height;
 	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
-	Vector topLine =  vertex2 - vertex1;
-	Vector leftLine = vertex3 - vertex1;
 	Vector topLeftToPoint = intercept - vertex1;
 
 	double leftProjectionLength	= leftLine.dot(topLeftToPoint);
