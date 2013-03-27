@@ -57,4 +57,4 @@ Example scene files are in /scenes.
 
 ## License
 
-This is licensed under the MIT license.
+This is licensed under the BSD license.
