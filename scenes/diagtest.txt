@@ -72,6 +72,19 @@ diag edaa-threshhold
 name edaa-threshhold
 end
 
+camera
+origin 0 0 0
+direction 0 0 1
+up 0 1 0
+z 0 15
+width 20
+imagesize 320 320
+perspective 0
+aa edaa4
+diag fullbright
+name fullbright
+end
+
 light
 origin 0 0 -1
 color 1 1 1

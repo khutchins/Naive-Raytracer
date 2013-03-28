@@ -90,24 +90,32 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 			Color llocal = Color::ColorBlack();
 			Color reflect = Color::ColorBlack();
 			Color refract = Color::ColorBlack();
+			double percentDiffuse = 1;
 
 			Vector normal = closestO->calculateNormalForPoint(oInt,r->start);
 			normal.normalize();
 
-			llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
+			if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT) {
+				llocal = Color::Color(1,1,1);
+				percentDiffuse = 1;
+				if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
+			}
+			else {
+				llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
 
-			//calculate the reflected and refracted rays (if necessary)
-			iterations++;
-			if(closestO->getReflection() != 0 && iterations < MAXIMUM_ITERATIONS) reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
-			if(closestO->getRefraction() != 0 && iterations < MAXIMUM_ITERATIONS) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
-			iterations--;
+				//calculate the reflected and refracted rays (if necessary)
+				iterations++;
+				if(closestO->getReflection() != 0 && iterations < MAXIMUM_ITERATIONS) reflect = calculateReflectedRay(*r,oInt,normal,closestO->objectType);
+				if(closestO->getRefraction() != 0 && iterations < MAXIMUM_ITERATIONS) refract = calculateRefractedRay(*r,oInt,normal,closestO->objectType);
+				iterations--;
 
-			//If the object has texture mapping, calculate the texture for the point
-			if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
+				//If the object has texture mapping, calculate the texture for the point
+				if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
 
-			//Calculate the percent diffusion of the object
-			double percentDiffuse = 1.f - closestO->getReflection() - closestO->getRefraction();
-			if(percentDiffuse < 0) percentDiffuse = 0;
+				//Calculate the percent diffusion of the object
+				percentDiffuse = 1.f - closestO->getReflection() - closestO->getRefraction();
+				if(percentDiffuse < 0) percentDiffuse = 0;
+			}
 
 			if(closestO->hasTexture) {
 				if(currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING) {

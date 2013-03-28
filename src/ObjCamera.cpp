@@ -119,6 +119,7 @@ Camera::Camera(ifstream &f)
 				else if(sNum == "tex-map")			this->diagnosticStatus = DIAGNOSTIC_TEXTURE_MAPPING;
 				else if(sNum == "edge-detect")		this->diagnosticStatus = DIAGNOSTIC_EDGE_DETECTION;
 				else if(sNum == "edaa-threshhold")	this->diagnosticStatus = DIAGNOSTIC_EDAA_THRESHHOLD;
+				else if(sNum == "fullbright")		this->diagnosticStatus = DIAGNOSTIC_FULLBRIGHT;
 			}
 		}
 		else break;
