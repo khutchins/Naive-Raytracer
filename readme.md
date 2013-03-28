@@ -49,7 +49,7 @@ None
 
 This currently outputs a .bmp file for each camera in a scene: \<scene_name\>-\<camera_number\>.bmp or \<scene_name\>-\<name\>.bmp if the camera name parameter is defined.
 
-Usage: ./<program> <path-to-scene-file>
+Usage: ./\<program\> \<path-to-scene-file\>
 
 This code is being run in Windows. Doesn't currently work on Linux/Mac. Sorry. Feel free to make changes to allow for compilation.
 
@@ -57,4 +57,4 @@ Example scene files are in /scenes.
 
 ## License
 
-This is licensed under the BSD license.
+This project is licensed under the BSD license.
