@@ -1,0 +1,41 @@
+camera
+origin 0 0 0
+direction 0 0 1
+up 0 1 0
+z 0 10
+width 10
+perspective 0
+end
+
+plane
+origin 0 0 10
+normal 0 0 -1
+up  0 1 0
+size 7 7
+color 1 0 0
+reflect 1
+transparency 0
+end
+
+sphere
+origin 0 0 10
+radius 3
+color 0 0 1
+reflect 1
+transparency 0
+end
+
+plane
+origin 0 0 -2
+normal 0 0 -1
+up  0 1 0
+size 50 50
+color 0 1 0
+reflect 0
+transparency 0
+end
+
+light
+origin 0 0 -1
+color 1 1 1
+end
