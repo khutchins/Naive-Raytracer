@@ -170,9 +170,9 @@ SceneObject* Plane::intersect(Ray* r, Point &intersect) {
 			Vector topLeftToPoint = tempInt - vertex1;
 
 			double leftProjectionLength	= leftLine.dot(topLeftToPoint);
-			double leftLineLength		= leftLine.dot(leftLine);
+			double leftLineLength		= this->height * this->height;
 			double topProjectionLength	= topLine.dot(topLeftToPoint);
-			double topLineLength		= topLine.dot(topLine);
+			double topLineLength		= this->width * this->width;
 
 			if(0 <= leftProjectionLength && leftProjectionLength <= leftLineLength && 
 			   0 <= topProjectionLength  && topProjectionLength  <= topLineLength) {
@@ -202,9 +202,9 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	Vector topLeftToPoint = intercept - vertex1;
 
 	double leftProjectionLength	= leftLine.dot(topLeftToPoint);
-	double leftLineLength		= leftLine.dot(leftLine);
+	double leftLineLength		= this->height * this->height;
 	double topProjectionLength	= topLine.dot(topLeftToPoint);
-	double topLineLength		= topLine.dot(topLine);
+	double topLineLength		= this->width * this->width;
 
 	double heightPercentage = leftProjectionLength / leftLineLength;
 	double widthPercentage  = topProjectionLength  / topLineLength;
