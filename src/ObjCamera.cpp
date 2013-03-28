@@ -18,6 +18,7 @@ Camera::Camera(ifstream &f)
 	this->imageWidth = 320;
 	this->name = "";
 	this->diagnosticStatus = DIAGNOSTIC_NORMAL;
+	this->raysTraced = 0;
 
 	//Material doesn't matter for the camera
 
@@ -268,5 +269,5 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 
 	double seconds = (endTime - startTime) / (double)CLOCKS_PER_SEC;
 
-	cout << "Finished rendering file " << sceneName << " in " << seconds << " seconds.\n";
+	cout << "Finished rendering file " << sceneName << " in " << seconds << " seconds.\n" << raysTraced << " rays traced.\n";
 }

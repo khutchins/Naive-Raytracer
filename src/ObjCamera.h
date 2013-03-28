@@ -47,6 +47,7 @@ public:
 	bool grayscale;
 	string name;
 	DiagnosticStatus diagnosticStatus;
+	long long raysTraced;
 
 	//Class variables for optimization
 	double height,width2,height2;

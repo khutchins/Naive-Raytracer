@@ -67,6 +67,7 @@ Raytracer::raytrace
 ====================
 */
 Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
+	currentCamera->raysTraced++;
 	Color c = Color::ColorBlack();
 
 	//find nearest intersection
