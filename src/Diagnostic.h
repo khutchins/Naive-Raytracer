@@ -10,6 +10,4 @@ enum DiagnosticStatus {
 	DIAGNOSTIC_EDAA_THRESHHOLD
 };
 
-const DiagnosticStatus DIAGNOSTIC_STATUS = DIAGNOSTIC_NORMAL;
-
 #endif

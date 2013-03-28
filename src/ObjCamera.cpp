@@ -17,6 +17,7 @@ Camera::Camera(ifstream &f)
 	this->imageHeight = 240;
 	this->imageWidth = 320;
 	this->name = "";
+	this->diagnosticStatus = DIAGNOSTIC_NORMAL;
 
 	//Material doesn't matter for the camera
 
@@ -64,8 +65,7 @@ Camera::Camera(ifstream &f)
 		}
 
 		//words with two arguments
-		else if(word == "z" || word == "imagesize")
-		{
+		else if(word == "z" || word == "imagesize") {
 			double num1 = 0;
 			double num2 = 0;
 
@@ -88,8 +88,7 @@ Camera::Camera(ifstream &f)
 
 		//words with one argument
 		else if(word == "width" || word == "perspective" || word == "grayscale" 
-				|| word == "aa"	|| word == "name")
-		{
+				|| word == "aa"	|| word == "name" || word == "diag") {
 			string sNum;
 			double num = 0;
 
@@ -113,11 +112,20 @@ Camera::Camera(ifstream &f)
 				else if(sNum == "edaa16")						this->aa = AA_TYPE_EDAA_16;
 				else if(sNum == "fxaa")							this->aa = AA_TYPE_FXAA;
 			}
+			else if(word == "diag") {
+					 if(sNum == "none")				this->diagnosticStatus = DIAGNOSTIC_NORMAL;
+				else if(sNum == "is-lit")			this->diagnosticStatus = DIAGNOSTIC_IS_LIT;
+				else if(sNum == "is-hit")			this->diagnosticStatus = DIAGNOSTIC_IS_HIT;
+				else if(sNum == "tex-map")			this->diagnosticStatus = DIAGNOSTIC_TEXTURE_MAPPING;
+				else if(sNum == "edge-detect")		this->diagnosticStatus = DIAGNOSTIC_EDGE_DETECTION;
+				else if(sNum == "edaa-threshhold")	this->diagnosticStatus = DIAGNOSTIC_EDAA_THRESHHOLD;
+			}
 		}
 		else break;
 	}
-	if(this->perspective && this->zmin == 0)
+	if(this->perspective && this->zmin == 0) {
 		printf("Warning: Perspective camera with a zmin of zero.\n");
+	}
 
 	//Warning: Vectors are not orthogonal
 	if(abs(up.dot(direction)) > 0.00001) {
@@ -204,7 +212,7 @@ Color Camera::renderPixel(int x, int y, int numSamples, Raytracer *raytracer) {
 		delete colors;
 	}
 	else col = raytracer->raytrace(ray,lightWasSeen);
-	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_IS_LIT) col.adjustColorForDiagnosticIsLit();
+	if(this->diagnosticStatus == DIAGNOSTIC_IS_LIT) col.adjustColorForDiagnosticIsLit();
 
 	delete ray;
 	return col;
@@ -249,10 +257,10 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	else sceneName += name;
 	sceneName += ".bmp";
 
-	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDGE_DETECTION)		generateConvolutionBitmap(image,getEdgeDetectionConvolution()).WriteToFile(sceneName.c_str());
+	if(this->diagnosticStatus == DIAGNOSTIC_EDGE_DETECTION)	generateConvolutionBitmap(image,getEdgeDetectionConvolution()).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_NAIVE_AVERAGE)					generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_EDAA_4 || aa == AA_TYPE_EDAA_16)	generateEDAABMP(this,image,raytracer).WriteToFile(sceneName.c_str());
-	else if(aa == AA_TYPE_FXAA)								generateFXAABMP(image).WriteToFile(sceneName.c_str());
+	else if(aa == AA_TYPE_FXAA)								generateFXAABMP(this,image).WriteToFile(sceneName.c_str());
 	else													image.WriteToFile(sceneName.c_str());
 
 	clock_t endTime = clock();

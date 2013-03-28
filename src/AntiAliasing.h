@@ -14,6 +14,6 @@ class Raytracer;
 
 BMP generateNaiveAABMP(BMP originalImage);
 BMP generateEDAABMP(Camera *c, BMP &originalImage, Raytracer *raytracer);
-BMP generateFXAABMP(BMP &originalImage);
+BMP generateFXAABMP(Camera *c, BMP &originalImage);
 
 #endif

@@ -51,11 +51,11 @@ BMP generateEDAABMP(Camera *c, BMP& originalImage, Raytracer* raytracer) {
 			if(pixelExceedsThreshhold(edc,EDAA_THRESHHOLD)) {
 				Color col = c->renderPixel(x,y,numSamples,raytracer);
 
-				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD)		originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorWhite().RGBAPixel());
+				if(c->diagnosticStatus == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorWhite().RGBAPixel());
 				else if(c->grayscale)									originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorGrayscale(col.grayscaleValue()).RGBAPixel());
 				else													originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
 			}
-			else if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorBlack().RGBAPixel());
+			else if(c->diagnosticStatus == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorBlack().RGBAPixel());
 		}
 	}
 	return originalImage;
@@ -71,7 +71,7 @@ generateFXAABMP
 	samples.  It should be less computationally expensive.
 ====================
 */
-BMP generateFXAABMP(BMP& originalImage) {
+BMP generateFXAABMP(Camera *c, BMP& originalImage) {
 	int imageWidth = originalImage.TellWidth();
 	int imageHeight = originalImage.TellHeight();
 
@@ -84,10 +84,10 @@ BMP generateFXAABMP(BMP& originalImage) {
 			if(pixelExceedsThreshhold(edc,EDAA_THRESHHOLD)) {
 				Color col = convolutePoint(imageWidth-x-1,imageHeight-y-1,&originalImage,gaussianBlurConvolution);
 
-				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorWhite().RGBAPixel());
-				else												originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
+				if(c->diagnosticStatus == DIAGNOSTIC_EDAA_THRESHHOLD)	originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorWhite().RGBAPixel());
+				else													originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
 			}
-			else if(DIAGNOSTIC_STATUS == DIAGNOSTIC_EDAA_THRESHHOLD) originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorBlack().RGBAPixel());
+			else if(c->diagnosticStatus == DIAGNOSTIC_EDAA_THRESHHOLD) originalImage.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorBlack().RGBAPixel());
 		}
 	}
 	return originalImage;

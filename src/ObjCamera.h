@@ -9,6 +9,7 @@
 #include "Color.h"
 #include "EasyBMP/EasyBMP.h"
 #include "AntiAliasing.h"
+#include "Diagnostic.h"
 #include <fstream>
 #include <string>
 #include <queue>
@@ -24,7 +25,7 @@ enum AntiAliasingType {
 
 	AA_TYPE_FSAA_4, //full scene anti-aliasing with 4 samples (super-sampling)
 	AA_TYPE_FSAA_16, //full scene anti-aliasing with 16 samples  (super-sampling)
-	AA_TYPE_SSAA_4 = AA_TYPE_FSAA_4, //alias for FSAA4
+	AA_TYPE_SSAA_4  = AA_TYPE_FSAA_4, //alias for FSAA4
 	AA_TYPE_SSAA_16 = AA_TYPE_FSAA_16, //alias for FSAA16
 
 	AA_TYPE_EDAA_4, //super-sampling with 4 samples on pixels that are detected at edges using the ED convolution
@@ -45,6 +46,7 @@ public:
     bool perspective;
 	bool grayscale;
 	string name;
+	DiagnosticStatus diagnosticStatus;
 
 	//Class variables for optimization
 	double height,width2,height2;

@@ -27,7 +27,7 @@ public:
 	Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin);
 	SceneObject* intersect(Ray* r, Point &intersect);
 	Vector calculateNormalForPoint(Point p, Point raySource);
-	Color calculateTextureFromMaterial(Point intercept);
+	Color calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled);
 	double getReflection();
 	double getRefraction();
 	Color getColor();

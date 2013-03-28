@@ -48,6 +48,7 @@ int Raytracer::start(string fn) {
 		Camera* c = cameraQueue.front();
 		
 		zmaxG = c->zmax;
+		currentCamera = c;
 		c->renderScene(fn,cameraNum,this);
 
 		cameraQueue.pop();
@@ -73,7 +74,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 	Point oInt;
 
 	closestO = findClosestObject(r, oInt);
-	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_IS_HIT) {
+	if(currentCamera->diagnosticStatus == DIAGNOSTIC_IS_HIT) {
 		if(closestO) return Color::ColorWhite();
 		else return Color::ColorBlack();
 	}
@@ -102,14 +103,14 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 			iterations--;
 
 			//If the object has texture mapping, calculate the texture for the point
-			if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt);
+			if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
 
 			//Calculate the percent diffusion of the object
 			double percentDiffuse = 1.f - closestO->getReflection() - closestO->getRefraction();
 			if(percentDiffuse < 0) percentDiffuse = 0;
 
 			if(closestO->hasTexture) {
-				if(DIAGNOSTIC_STATUS == DIAGNOSTIC_TEXTURE_MAPPING) {
+				if(currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING) {
 					c = materialTexture * 255;
 					return c;
 				}

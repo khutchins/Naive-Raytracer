@@ -17,7 +17,6 @@ public:
 	virtual double getReflection();
 	virtual double getRefraction();
 	virtual Color getColor();
-	//virtual Color calculateTextureFromMaterial(Point intercept);
 
 	//New methods
 	~ContainerObject();

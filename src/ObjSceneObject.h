@@ -34,7 +34,7 @@ public:
 	virtual double getReflection() { return 0; }
 	virtual double getRefraction() { return 0; }
 	virtual Color getColor() { return Color::ColorBlack(); }
-	virtual Color calculateTextureFromMaterial(Point intercept) { return Color::ColorBlack(); }
+	virtual Color calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled) { return Color::ColorBlack(); }
 };
 
 #endif

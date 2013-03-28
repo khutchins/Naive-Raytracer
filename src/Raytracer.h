@@ -50,6 +50,7 @@ private:
 	//Global camera and object queues
 	queue<Camera*> cameraQueue;
 	queue<SceneObject*> objectQueue;
+	Camera* currentCamera;
 
 	//maximum z value (currently ignored)
 	double zmaxG;

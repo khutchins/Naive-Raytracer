@@ -191,7 +191,7 @@ calculateTextureFromMaterial
 	should be returned
 ====================
 */
-Color Plane::calculateTextureFromMaterial(Point intercept) {
+Color Plane::calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled) {
 	BMP* texture;
 	texture = &this->texture;
 	int height = texture->TellHeight();
@@ -215,7 +215,7 @@ Color Plane::calculateTextureFromMaterial(Point intercept) {
 	pixelY %= height;
 	Color matColor;
 
-	if(DIAGNOSTIC_STATUS == DIAGNOSTIC_TEXTURE_MAPPING) {
+	if(diagnosticEnabled) {
 		matColor = Color(heightPercentage,1,widthPercentage);
 	}
 	else {
