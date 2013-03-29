@@ -110,7 +110,6 @@ Triangle::intersect
 ====================
 */
 SceneObject* Triangle::intersect(Ray* r, Point &intersect) {
-	//TODO
 	double dot = normal.dot(r->dir);
 
 	if(dot != 0) { //If the normal and ray aren't perpendicular (which would mean ray and triangle are parallel)
