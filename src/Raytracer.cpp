@@ -96,13 +96,16 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 			Vector normal = closestO->calculateNormalForPoint(oInt,r->start);
 			normal.normalize();
 
-			if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT) {
+			if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT_AND_DIFFUSE) {
 				llocal = Color::Color(1,1,1);
 				percentDiffuse = 1;
 				if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
 			}
 			else {
-				llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
+				if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT) {
+					llocal = Color::Color(1,1,1);
+				}
+				else llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
 
 				//calculate the reflected and refracted rays (if necessary)
 				iterations++;

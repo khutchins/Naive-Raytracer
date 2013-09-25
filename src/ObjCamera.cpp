@@ -114,13 +114,14 @@ Camera::Camera(ifstream &f)
 				else if(sNum == "fxaa")							this->aa = AA_TYPE_FXAA;
 			}
 			else if(word == "diag") {
-					 if(sNum == "none")				this->diagnosticStatus = DIAGNOSTIC_NORMAL;
-				else if(sNum == "is-lit")			this->diagnosticStatus = DIAGNOSTIC_IS_LIT;
-				else if(sNum == "is-hit")			this->diagnosticStatus = DIAGNOSTIC_IS_HIT;
-				else if(sNum == "tex-map")			this->diagnosticStatus = DIAGNOSTIC_TEXTURE_MAPPING;
-				else if(sNum == "edge-detect")		this->diagnosticStatus = DIAGNOSTIC_EDGE_DETECTION;
-				else if(sNum == "edaa-threshhold")	this->diagnosticStatus = DIAGNOSTIC_EDAA_THRESHHOLD;
-				else if(sNum == "fullbright")		this->diagnosticStatus = DIAGNOSTIC_FULLBRIGHT;
+					 if(sNum == "none")					this->diagnosticStatus = DIAGNOSTIC_NORMAL;
+				else if(sNum == "is-lit")				this->diagnosticStatus = DIAGNOSTIC_IS_LIT;
+				else if(sNum == "is-hit")				this->diagnosticStatus = DIAGNOSTIC_IS_HIT;
+				else if(sNum == "tex-map")				this->diagnosticStatus = DIAGNOSTIC_TEXTURE_MAPPING;
+				else if(sNum == "edge-detect")			this->diagnosticStatus = DIAGNOSTIC_EDGE_DETECTION;
+				else if(sNum == "edaa-threshhold")		this->diagnosticStatus = DIAGNOSTIC_EDAA_THRESHHOLD;
+				else if(sNum == "fullbright")			this->diagnosticStatus = DIAGNOSTIC_FULLBRIGHT;
+				else if(sNum == "fullbright-diffuse")	this->diagnosticStatus = DIAGNOSTIC_FULLBRIGHT_AND_DIFFUSE;
 			}
 		}
 		else break;
