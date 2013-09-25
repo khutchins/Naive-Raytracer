@@ -16,6 +16,7 @@
 #include "ObjDisk.h"
 #include "ObjLight.h"
 #include "ObjPlane.h"
+#include "ObjInfPlane.h"
 #include "ObjSceneObject.h"
 #include "ObjSphere.h"
 #include "ObjTriangle.h"

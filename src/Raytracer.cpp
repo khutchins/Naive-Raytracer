@@ -292,6 +292,10 @@ int Raytracer::processInput(string filename) {
 			Plane* p = new Plane(sceneFile);
 			objectQueue.push(p);
 		}
+		else if(word == "infplane") {
+			InfPlane *ip = new InfPlane(sceneFile);
+			objectQueue.push(ip);
+		}
 		else if(word == "sphere") {
 			Sphere* s = new Sphere(sceneFile);
 			objectQueue.push(s);
