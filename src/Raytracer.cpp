@@ -114,7 +114,9 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 				iterations--;
 
 				//If the object has texture mapping, calculate the texture for the point
-				if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
+				if(closestO->hasTexture) { 
+					materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
+				}
 
 				//Calculate the percent diffusion of the object
 				percentDiffuse = 1.f - closestO->getReflection() - closestO->getRefraction();

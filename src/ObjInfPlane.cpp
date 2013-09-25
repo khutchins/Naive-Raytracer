@@ -101,7 +101,7 @@ void InfPlane::sharedInit(Material m, Vector up, Vector normal, string textureNa
 		printf(" are not orthogonal.\n");
 	}
 
-	this->objectType = ENTITY_PLANE;
+	this->objectType = ENTITY_INFPLANE;
 
 	this->origin = origin;
 	this->material = m;
@@ -162,7 +162,9 @@ Color InfPlane::calculateTextureFromMaterial(Point intercept, bool diagnosticEna
 	texture = &this->texture;
 	int height = texture->TellHeight();
 	int width  = texture->TellWidth();
-	double planeHeight = height;
+	double simulatedTextureWidth = width/100;
+	double simulatedTextureHeight = height/100;
+	double planeHeight = simulatedTextureHeight;
 	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
 	Point vertex1 = this->origin;
@@ -170,9 +172,9 @@ Color InfPlane::calculateTextureFromMaterial(Point intercept, bool diagnosticEna
 	Vector topLeftToPoint = intercept - vertex1;
 
 	double leftProjectionLength	= leftLine.dot(topLeftToPoint);
-	double leftLineLength		= height * height;
+	double leftLineLength		= simulatedTextureHeight * simulatedTextureHeight;
 	double topProjectionLength	= topLine.dot(topLeftToPoint);
-	double topLineLength		= width * width;
+	double topLineLength		= simulatedTextureWidth * simulatedTextureWidth;
 
 	double heightPercentage = leftProjectionLength / leftLineLength;
 	double widthPercentage  = topProjectionLength  / topLineLength;
