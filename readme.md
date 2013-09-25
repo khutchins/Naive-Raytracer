@@ -9,41 +9,42 @@ This is a pretty textbook implementation of a raytracer currently.  If you're lo
 ## Purpose
 
 The main purposes of this project are to:  
-A) Refresh and increase my knowledge of raytracing through the implementation of a raytracer.  
-B) To become familiar with using git.
+* Refresh and increase my knowledge of raytracing through the implementation of a raytracer.  
+* To become familiar with using git.
 
 ## Existing Functionality
 
 ### Scene Elements
 
-Planes  
-Spheres  
-Cameras  
-Point Lights  
-Disks  
-Cuboids  
-Triangles  
+* Planes  
+* Infinite Planes  
+* Spheres  
+* Cameras  
+* Point Lights  
+* Disks  
+* Cuboids  
+* Triangles  
 
 ### Anti-Aliasing Options
 
-none - no anti-aliasing  
-naive-average - a naive weighted average of a pixel with its neighbors  
-fsaa4 - 4xFSAA (scene is sampled at 4x the normal resolution and averaged down to normal)  
-fsaa16 - 16xFSAA (scene is sampled at 16x the normal resolution and averaged down to normal)  
-edaa4 - 4xEDAA (scene is sampled at 4x the normal resolution where edges are detected)  
-edaa16 - 16xEDAA (scene is sampled at 16x the normal resolution where edges are detected)  
-fxaa - FXAA (scene is blurred using a gaussian blur where edges are detected)  
+* none - no anti-aliasing  
+* naive-average - a naive weighted average of a pixel with its neighbors  
+* fsaa4 - 4xFSAA (scene is sampled at 4x the normal resolution and averaged down to normal)  
+* fsaa16 - 16xFSAA (scene is sampled at 16x the normal resolution and averaged down to normal)  
+* edaa4 - 4xEDAA (scene is sampled at 4x the normal resolution where edges are detected)  
+* edaa16 - 16xEDAA (scene is sampled at 16x the normal resolution where edges are detected)  
+* fxaa - FXAA (scene is blurred using a gaussian blur where edges are detected)  
 
 ## Planned Functionality
 
 ### Scene Elements
 
-Tubes  
-Cylinders  
+* Tubes  
+* Cylinders  
 
 ### Anti-Aliasing Options
 
-None
+* None
 
 ## Usage
 
