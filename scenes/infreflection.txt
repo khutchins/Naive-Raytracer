@@ -8,7 +8,7 @@ perspective 0
 end
 
 infplane
-origin 0 0 10
+origin 0 0 12
 normal 0 0 -1
 up  0 1 0
 color 1 0 0
@@ -17,8 +17,24 @@ transparency 0
 end
 
 sphere
-origin 0 0 10
-radius 3
+origin 0 0 11
+radius 1
+color 0 0 1
+reflect 1
+transparency 0
+end
+
+sphere
+origin -3 0 10
+radius 1
+color 0 0 1
+reflect 1
+transparency 0
+end
+
+sphere
+origin 3 0 10
+radius 1
 color 0 0 1
 reflect 1
 transparency 0

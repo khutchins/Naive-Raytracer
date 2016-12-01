@@ -164,8 +164,6 @@ Color InfPlane::calculateTextureFromMaterial(Point intercept, bool diagnosticEna
 	int width  = texture->TellWidth();
 	double simulatedTextureWidth = width/100;
 	double simulatedTextureHeight = height/100;
-	double planeHeight = simulatedTextureHeight;
-	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
 	Point vertex1 = this->origin;
 

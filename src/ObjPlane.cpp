@@ -196,8 +196,6 @@ Color Plane::calculateTextureFromMaterial(Point intercept, bool diagnosticEnable
 	texture = &this->texture;
 	int height = texture->TellHeight();
 	int width  = texture->TellWidth();
-	double planeHeight = this->height;
-	double pixelSize = height / planeHeight; //Width and height of pixel on plane
 
 	Vector topLeftToPoint = intercept - vertex1;
 
