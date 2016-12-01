@@ -23,7 +23,7 @@ public:
     Material material;
     BMP texture;
 
-	Plane(std::ifstream &f);
+	explicit Plane(std::ifstream &f);
 	Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin);
 	SceneObject* intersect(Ray* r, Point &intersect) override;
 	Vector calculateNormalForPoint(Point p, Point raySource) override;

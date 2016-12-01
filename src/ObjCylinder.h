@@ -20,7 +20,7 @@ class Cylinder : public ContainerObject {
 public:
 	Vector up;
 
-	Cylinder(ifstream &f);
+	explicit Cylinder(ifstream &f);
 };
 
 #endif

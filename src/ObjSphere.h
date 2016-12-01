@@ -20,7 +20,7 @@ class Sphere : public SceneObject {
 public:
     double radius;
 
-	Sphere(ifstream &f);
+	explicit Sphere(ifstream &f);
 	Sphere(Point origin, Material material, double radius);
 	Vector calculateNormalForPoint(Point p, Point raySource) override;
 	SceneObject* intersect(Ray* r, Point &intersect) override;

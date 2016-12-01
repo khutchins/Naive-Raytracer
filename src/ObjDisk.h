@@ -23,7 +23,7 @@ public:
 	Vector up;
 	Vector normal;
 
-	Disk(ifstream &f);
+	explicit Disk(ifstream &f);
 	Disk(Material m, double radius, Vector up, Vector normal, Point origin);
 	Vector calculateNormalForPoint(Point p, Point raySource) override;
 	SceneObject* intersect(Ray* r, Point &intersect) override;

@@ -19,7 +19,7 @@ public:
 	Material material;
 	Vector up;
 
-	Tube(ifstream &f);
+	explicit Tube(ifstream &f);
 	Tube(Material m, double radius, double height, Vector up, Point origin);
 	Vector calculateNormalForPoint(Point p, Point raySource) override;
 	SceneObject* intersect(Ray* r, Point &intersect) override;

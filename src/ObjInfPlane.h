@@ -21,7 +21,7 @@ public:
     Material material;
     BMP texture;
 
-	InfPlane(std::ifstream &f);
+	explicit InfPlane(std::ifstream &f);
 	InfPlane(Material m, Vector up, Vector normal, string textureName, Point origin);
 	SceneObject* intersect(Ray* r, Point &intersect) override;
 	Vector calculateNormalForPoint(Point p, Point raySource) override;

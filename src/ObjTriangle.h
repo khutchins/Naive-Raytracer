@@ -19,7 +19,7 @@ public:
 	Point vertex3;
     Material material;
 
-	Triangle(std::ifstream &f);
+	explicit Triangle(std::ifstream &f);
 	Triangle(Material m, Point vertex1, Point vertex2, Point vertex3);
 	SceneObject* intersect(Ray* r, Point &intersect) override;
 	Vector calculateNormalForPoint(Point p, Point raySource) override;

@@ -22,7 +22,7 @@ public:
 	double	width;
 	double	length;
 
-	Cuboid(ifstream &f);
+	explicit Cuboid(ifstream &f);
 	Cuboid(Point origin, Vector up, Vector front, double width, double height, double length, Material material, string textureName = string());
 
 private:

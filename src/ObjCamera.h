@@ -54,7 +54,7 @@ public:
 	double gapWidth2,gapHeight2, aspect;
 	int sqrtNumSamples;
 
-	Camera(ifstream &f);
+	explicit Camera(ifstream &f);
 	Color renderPixel(int x, int y, int numSamples, Raytracer *raytracer);
 	void renderScene(string filename, int cameraNum, Raytracer *raytracer);
 };

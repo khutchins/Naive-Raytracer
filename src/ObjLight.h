@@ -15,7 +15,7 @@ using namespace std;
 
 class Light : public SceneObject{
 public:
-	Light(ifstream &f);
+	explicit Light(ifstream &f);
 	Light(Point origin, Material material);
 
 	SceneObject* intersect(Ray* r, Point &intersect) override;
