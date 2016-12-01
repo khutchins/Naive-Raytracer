@@ -7,7 +7,7 @@
 #include "ObjCamera.h"
 #include "Raytracer.h"
 
-const int EDAA_THRESHHOLD = 10;
+const int EDAA_THRESHOLD = 10;
 
 class Camera;
 class Raytracer;

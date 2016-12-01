@@ -106,7 +106,7 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 	const double discriminant = discrim(a,b,c);
 
 	//No intersection, do nothing
-	if(discriminant < 0) return false;
+	if(discriminant < 0) return NULL;
 	else if(discriminant >= 0) { //Find closest intersection
 		const double discSqrt = sqrt(discriminant);
 		double quad;
@@ -118,7 +118,7 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 		if(t0 > t1) swap(t0,t1);
 
 		double t;
-		if(t0 < 0 && t1 < 0) return false;
+		if(t0 < 0 && t1 < 0) return NULL;
 		if(t0 < 0)	t = t1;
 		else		t = t0;
 

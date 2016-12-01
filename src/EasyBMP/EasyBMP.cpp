@@ -178,7 +178,7 @@ bool BMP::SetColor( int ColorNumber , RGBApixel NewColor )
 }
 
 // RGBApixel BMP::GetColor( int ColorNumber ) const
-RGBApixel BMP::GetColor( int ColorNumber )
+RGBApixel BMP::GetColor( int ColorNumber ) const
 { 
  RGBApixel Output;
  Output.Red   = 255;
@@ -239,7 +239,7 @@ BMP::BMP()
 }
 
 // BMP::BMP( const BMP& Input )
-BMP::BMP( BMP& Input )
+BMP::BMP(const BMP& Input )
 {
  // first, make the image empty.
 
@@ -307,7 +307,7 @@ BMP::~BMP()
  { delete [] MetaData2; }
 } 
 
-RGBApixel* BMP::operator()(int i, int j)
+RGBApixel* BMP::operator()(int i, int j) const
 {
  using namespace std;
  bool Warn = false;
@@ -329,19 +329,19 @@ RGBApixel* BMP::operator()(int i, int j)
 }
 
 // int BMP::TellBitDepth( void ) const
-int BMP::TellBitDepth( void )
+int BMP::TellBitDepth( void ) const
 { return BitDepth; }
 
 // int BMP::TellHeight( void ) const
-int BMP::TellHeight( void )
+int BMP::TellHeight( void ) const
 { return Height; }
 
 // int BMP::TellWidth( void ) const
-int BMP::TellWidth( void )
+int BMP::TellWidth( void ) const
 { return Width; }
 
 // int BMP::TellNumberOfColors( void ) const
-int BMP::TellNumberOfColors( void )
+int BMP::TellNumberOfColors( void ) const
 {
  int output = IntPow( 2, BitDepth );
  if( BitDepth == 32 )
@@ -1274,19 +1274,15 @@ void BMP::SetDPI( int HorizontalDPI, int VerticalDPI )
 }
 
 // int BMP::TellVerticalDPI( void ) const
-int BMP::TellVerticalDPI( void )
+int BMP::TellVerticalDPI( void ) const
 {
- if( !YPelsPerMeter )
- { YPelsPerMeter = DefaultYPelsPerMeter; }
- return (int) ( YPelsPerMeter / (double) 39.37007874015748 ); 
+ return (int) ( DefaultYPelsPerMeter / (double) 39.37007874015748 );
 }
 
 // int BMP::TellHorizontalDPI( void ) const
-int BMP::TellHorizontalDPI( void )
+int BMP::TellHorizontalDPI( void ) const
 {
- if( !XPelsPerMeter )
- { XPelsPerMeter = DefaultXPelsPerMeter; }
- return (int) ( XPelsPerMeter / (double) 39.37007874015748 );
+ return (int) ( DefaultXPelsPerMeter / (double) 39.37007874015748 );
 }
 
 /* These functions are defined in EasyBMP_VariousBMPutilities.h */

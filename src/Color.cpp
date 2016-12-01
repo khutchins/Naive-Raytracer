@@ -26,6 +26,20 @@ Color::Color(double r, double g, double b) {
 
 /*
 ====================
+Color::ColorWith
+	Returns a color with the provided rgb values
+====================
+*/
+Color Color::ColorWith(double r, double g, double b) {
+	Color color;
+	color.r = r;
+	color.g = g;
+	color.b = b;
+	return color;
+}
+
+/*
+====================
 Color::ColorBlack
 	Returns a black color object
 ====================

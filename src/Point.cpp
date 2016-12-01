@@ -1,3 +1,4 @@
+#include <cmath>
 #include "Point.h"
 
 /*
@@ -51,12 +52,12 @@ double Point::distanceFrom(const Point other) {
 
 /*
 ====================
-comparitiveDistanceFrom
+comparativeDistanceFrom
 	the square of the 3D distance (faster than normal dist3, used for 
 	comparisons)
 ====================
 */
-double Point::comparitiveDistanceFrom(const Point other) {
+double Point::comparativeDistanceFrom(const Point other) {
 	return (other.x-this->x)*(other.x-this->x) + (other.y-this->y)*(other.y-this->y) + (other.z-this->z)*(other.z-this->z);
 }
 

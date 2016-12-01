@@ -81,7 +81,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 	}
 
 	double oDist;
-	if(closestO)	oDist = oInt.comparitiveDistanceFrom(r->start);
+	if(closestO)	oDist = oInt.comparativeDistanceFrom(r->start);
 	else			oDist = numeric_limits<double>::max();
 
 	//If > 0 entities found
@@ -97,13 +97,13 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 			normal.normalize();
 
 			if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT_AND_DIFFUSE) {
-				llocal = Color::Color(1,1,1);
+				llocal = Color::ColorWith(1,1,1);
 				percentDiffuse = 1;
 				if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
 			}
 			else {
 				if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT) {
-					llocal = Color::Color(1,1,1);
+					llocal = Color::ColorWith(1,1,1);
 				}
 				else llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
 
@@ -224,7 +224,7 @@ Color Raytracer::calculateReflectedRay(Ray r, Point intercept, Vector normal, En
 Raytracer::calculateRefractedRay
 	Based on the incoming ray r, the intercept, the normal, and the entity ID, 
 	calculate the color of the refracted ray (not adjusted for the refractivity 
-	of the object
+	of the object)
 ====================
 */
 Color Raytracer::calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id) {
@@ -239,7 +239,7 @@ Color Raytracer::calculateRefractedRay(Ray r, Point intercept, Vector normal, En
 /*
 ====================
 Raytracer::findClosestObject
-	Iterates through the object queue and locates the closeest object
+	Iterates through the object queue and locates the closest object
 ====================
 */
 SceneObject *Raytracer::findClosestObject(Ray *r, Point &intersect) {
@@ -251,7 +251,7 @@ SceneObject *Raytracer::findClosestObject(Ray *r, Point &intersect) {
 
 		Point objectIntersect;
 		if(tempO = tempO->intersect(r,objectIntersect)) {
-			if(!closestObject || objectIntersect.comparitiveDistanceFrom(r->start) < intersect.comparitiveDistanceFrom(r->start)) {
+			if(!closestObject || objectIntersect.comparativeDistanceFrom(r->start) < intersect.comparativeDistanceFrom(r->start)) {
 				closestObject = tempO;
 				intersect = objectIntersect;
 			}

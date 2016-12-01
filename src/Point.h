@@ -18,7 +18,7 @@ struct Point {
 	Point operator-(Vector right);
 
 	double distanceFrom(const Point other);
-	double comparitiveDistanceFrom(const Point other);
+	double comparativeDistanceFrom(const Point other);
 
 	Point operator * (double k);
 	friend Point operator * (double k, Point v);

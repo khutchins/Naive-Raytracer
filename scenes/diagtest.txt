@@ -68,8 +68,8 @@ width 20
 imagesize 320 320
 perspective 0
 aa edaa4
-diag edaa-threshhold
-name edaa-threshhold
+diag edaa-threshold
+name edaa-threshold
 end
 
 camera

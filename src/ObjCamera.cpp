@@ -119,7 +119,7 @@ Camera::Camera(ifstream &f)
 				else if(sNum == "is-hit")				this->diagnosticStatus = DIAGNOSTIC_IS_HIT;
 				else if(sNum == "tex-map")				this->diagnosticStatus = DIAGNOSTIC_TEXTURE_MAPPING;
 				else if(sNum == "edge-detect")			this->diagnosticStatus = DIAGNOSTIC_EDGE_DETECTION;
-				else if(sNum == "edaa-threshhold")		this->diagnosticStatus = DIAGNOSTIC_EDAA_THRESHHOLD;
+				else if(sNum == "edaa-threshold")		this->diagnosticStatus = DIAGNOSTIC_EDAA_THRESHOLD;
 				else if(sNum == "fullbright")			this->diagnosticStatus = DIAGNOSTIC_FULLBRIGHT;
 				else if(sNum == "fullbright-diffuse")	this->diagnosticStatus = DIAGNOSTIC_FULLBRIGHT_AND_DIFFUSE;
 			}
@@ -260,7 +260,7 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	else sceneName += name;
 	sceneName += ".bmp";
 
-	if(this->diagnosticStatus == DIAGNOSTIC_EDGE_DETECTION)	generateConvolutionBitmap(image,getEdgeDetectionConvolution()).WriteToFile(sceneName.c_str());
+	if(this->diagnosticStatus == DIAGNOSTIC_EDGE_DETECTION)	Convolution::generateConvolutionBitmap(image,Convolution::getEdgeDetectionConvolution()).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_NAIVE_AVERAGE)					generateNaiveAABMP(image).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_EDAA_4 || aa == AA_TYPE_EDAA_16)	generateEDAABMP(this,image,raytracer).WriteToFile(sceneName.c_str());
 	else if(aa == AA_TYPE_FXAA)								generateFXAABMP(this,image).WriteToFile(sceneName.c_str());

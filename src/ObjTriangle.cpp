@@ -139,8 +139,8 @@ Triangle::calculateNormalForPoint
 ====================
 */
 Vector Triangle::calculateNormalForPoint(Point p, Point raySource) {
-	double distNormalSide = (p + this->normal).comparitiveDistanceFrom(raySource);
-	double distOtherSide =	(p - this->normal).comparitiveDistanceFrom(raySource);
+	double distNormalSide = (p + this->normal).comparativeDistanceFrom(raySource);
+	double distOtherSide =	(p - this->normal).comparativeDistanceFrom(raySource);
 	if(distOtherSide < distNormalSide) return this->normal * -1;
 	return this->normal;
 }
