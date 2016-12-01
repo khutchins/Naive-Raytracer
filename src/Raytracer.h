@@ -75,6 +75,7 @@ private:
 	SceneObject* findClosestObject(Ray *r, Point &oInt);
 
 	void incrementCameraRayCount();
+	DiagnosticStatus getCameraDiagnosticStatus() const;
 };
 
 #endif

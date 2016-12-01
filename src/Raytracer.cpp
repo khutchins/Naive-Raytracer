@@ -373,6 +373,7 @@ void Raytracer::incrementCameraRayCount() {
 /*
  * Get diagnostic status if camera exists, normal otherwise
  */
+DiagnosticStatus Raytracer::getCameraDiagnosticStatus() const {
 	if(currentCamera != nullptr) {
 		return currentCamera->diagnosticStatus;
 	}
