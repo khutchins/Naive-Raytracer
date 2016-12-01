@@ -57,6 +57,8 @@ public:
 	explicit Camera(ifstream &f);
 	Color renderPixel(int x, int y, int numSamples, Raytracer *raytracer);
 	void renderScene(string filename, int cameraNum, Raytracer *raytracer);
+
+	void renderChunk(BMP image, int samples, int startX, int endX, int startY, int endY, Raytracer *raytracer);
 };
 
 #endif

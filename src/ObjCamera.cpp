@@ -224,6 +224,30 @@ Color Camera::renderPixel(int x, int y, int numSamples, Raytracer *raytracer) {
 /*
 ====================
 Camera::renderScene
+	Takes in a reference to the raytracer, the output image, and the indices
+ 	at which to begin and end rendering. This method allows for multi-tasking
+ 	of rendering.
+====================
+*/
+void Camera::renderChunk(BMP image, int samples, int startX, int endX, int startY, int endY, Raytracer *raytracer) {
+	int numSamples;
+	if(aa == AA_TYPE_FSAA_4) numSamples = 4;
+	else if(aa == AA_TYPE_FSAA_16) numSamples = 16;
+	else numSamples = 1;
+
+	for(int y = startY; y < endY; y++) {
+		for(int x = startX; x < endX; x++) {
+			Color col = renderPixel(x,y,numSamples,raytracer);
+
+			if(this->grayscale) image.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorGrayscale(col.grayscaleValue()).RGBAPixel());
+			else				image.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
+		}
+	}
+}
+
+/*
+====================
+Camera::renderScene
 	Takes in the scene file location as well as the camera number (used if the 
 	camera doesn't have a name).  Renders the scene completely (including any 
 	anti-aliasing/convolutions and saves the file.  This is the meat of this 
@@ -240,6 +264,8 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	if(aa == AA_TYPE_FSAA_4) numSamples = 4;
 	else if(aa == AA_TYPE_FSAA_16) numSamples = 16;
 	else numSamples = 1;
+
+	renderChunk(image, numSamples, 0, this->imageWidth, 0, this->imageHeight, raytracer);
 
 	for(int y = 0; y < this->imageHeight; y++) {
 		for(int x = 0; x < this->imageWidth; x++) {
