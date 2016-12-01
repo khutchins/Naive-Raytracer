@@ -21,11 +21,11 @@ public:
 
 	Tube(ifstream &f);
 	Tube(Material m, double radius, double height, Vector up, Point origin);
-	Vector calculateNormalForPoint(Point p, Point raySource);
-	SceneObject* intersect(Ray* r, Point &intersect);
-	double getReflection();
-	double getRefraction();
-	Color getColor();
+	Vector calculateNormalForPoint(Point p, Point raySource) override;
+	SceneObject* intersect(Ray* r, Point &intersect) override;
+	double getReflection() override;
+	double getRefraction() override;
+	Color getColor() override;
 
 private:
 	void sharedInit(Material m, double radius, double height, Vector up, Point origin);

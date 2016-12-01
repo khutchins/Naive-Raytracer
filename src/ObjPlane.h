@@ -25,12 +25,12 @@ public:
 
 	Plane(std::ifstream &f);
 	Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin);
-	SceneObject* intersect(Ray* r, Point &intersect);
-	Vector calculateNormalForPoint(Point p, Point raySource);
-	Color calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled);
-	double getReflection();
-	double getRefraction();
-	Color getColor();
+	SceneObject* intersect(Ray* r, Point &intersect) override;
+	Vector calculateNormalForPoint(Point p, Point raySource) override;
+	Color calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled) override;
+	double getReflection() override;
+	double getRefraction() override;
+	Color getColor() override;
 
 private:
 	Point vertex1;

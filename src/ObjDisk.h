@@ -25,11 +25,11 @@ public:
 
 	Disk(ifstream &f);
 	Disk(Material m, double radius, Vector up, Vector normal, Point origin);
-	Vector calculateNormalForPoint(Point p, Point raySource);
-	SceneObject* intersect(Ray* r, Point &intersect);
-	double getReflection();
-	double getRefraction();
-	Color getColor();
+	Vector calculateNormalForPoint(Point p, Point raySource) override;
+	SceneObject* intersect(Ray* r, Point &intersect) override;
+	double getReflection() override;
+	double getRefraction() override;
+	Color getColor() override;
 
 private:
 	void sharedInit(Material m, double radius, Vector up, Vector normal, Point origin);

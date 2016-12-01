@@ -4,9 +4,9 @@
 #include <fstream>
 #include <iostream>
 #include <limits>
-#include <stdio.h>
+#include <cstdio>
 #include <string>
-#include <string.h>
+#include <cstring>
 #include <queue>
 #include "AntiAliasing.h"
 

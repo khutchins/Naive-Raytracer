@@ -18,8 +18,8 @@ public:
 	Light(ifstream &f);
 	Light(Point origin, Material material);
 
-	SceneObject* intersect(Ray* r, Point &intersect);
-	Color getColor();
+	SceneObject* intersect(Ray* r, Point &intersect) override;
+	Color getColor() override;
 
 private:
 	void sharedInit(Point origin, Material material);

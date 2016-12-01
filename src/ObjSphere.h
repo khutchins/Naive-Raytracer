@@ -22,11 +22,11 @@ public:
 
 	Sphere(ifstream &f);
 	Sphere(Point origin, Material material, double radius);
-	Vector calculateNormalForPoint(Point p, Point raySource);
-	SceneObject* intersect(Ray* r, Point &intersect);
-	double getReflection();
-	double getRefraction();
-	Color getColor();
+	Vector calculateNormalForPoint(Point p, Point raySource) override;
+	SceneObject* intersect(Ray* r, Point &intersect) override;
+	double getReflection() override;
+	double getRefraction() override;
+	Color getColor() override;
 
 private:
 	void sharedInit(Point origin, Material material, double radius);

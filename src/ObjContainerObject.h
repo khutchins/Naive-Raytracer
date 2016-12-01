@@ -12,11 +12,11 @@ public:
 	vector<SceneObject *> children;
 
 	//Inherited from SceneObject
-	virtual SceneObject* intersect(Ray* r, Point &intersect);
-	virtual Vector calculateNormalForPoint(Point p, Point raySource);
-	virtual double getReflection();
-	virtual double getRefraction();
-	virtual Color getColor();
+	SceneObject* intersect(Ray* r, Point &intersect) override;
+	Vector calculateNormalForPoint(Point p, Point raySource) override;
+	double getReflection() override;
+	double getRefraction() override;
+	Color getColor() override;
 
 	//New methods
 	~ContainerObject();
