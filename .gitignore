@@ -1,5 +1,6 @@
 *.[oa]
 *~
 *.bmp
+!texture.bmp
 .idea/
 cmake-build-debug/
