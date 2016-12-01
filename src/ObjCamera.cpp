@@ -1,5 +1,8 @@
 #include "ObjCamera.h"
+#include <thread>
 #include <time.h>
+
+#define MULTI_THREADING 0
 
 /*
 ====================
@@ -14,8 +17,8 @@ Camera::Camera(ifstream &f)
 	this->isVisible = false;
 	this->hasTexture = false;
 	this->aa = AA_TYPE_NONE;
-	this->imageHeight = 480;
-	this->imageWidth = 640;
+	this->imageHeight = 240;
+	this->imageWidth = 320;
 	this->name = "";
 	this->diagnosticStatus = DIAGNOSTIC_NORMAL;
 	this->raysTraced = 0;
@@ -229,19 +232,14 @@ Camera::renderScene
  	of rendering.
 ====================
 */
-void Camera::renderChunk(BMP image, int samples, int startX, int endX, int startY, int endY, Raytracer *raytracer) {
-	int numSamples;
-	if(aa == AA_TYPE_FSAA_4) numSamples = 4;
-	else if(aa == AA_TYPE_FSAA_16) numSamples = 16;
-	else numSamples = 1;
+void Camera::renderChunk(BMP *image, int samples, int start, int end, Raytracer *raytracer) {
+	for(int i = start; i < end; i++) {
+		int x = i % imageWidth;
+		int y = i / imageWidth;
+		Color col = renderPixel(x, y, samples, raytracer);
 
-	for(int y = startY; y < endY; y++) {
-		for(int x = startX; x < endX; x++) {
-			Color col = renderPixel(x,y,numSamples,raytracer);
-
-			if(this->grayscale) image.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorGrayscale(col.grayscaleValue()).RGBAPixel());
-			else				image.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
-		}
+		if(this->grayscale) image->SetPixel(imageWidth-x-1, imageHeight-y-1, Color::ColorGrayscale(col.grayscaleValue()).RGBAPixel());
+		else				image->SetPixel(imageWidth-x-1, imageHeight-y-1, col.RGBAPixel());
 	}
 }
 
@@ -265,16 +263,36 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	else if(aa == AA_TYPE_FSAA_16) numSamples = 16;
 	else numSamples = 1;
 
-	renderChunk(image, numSamples, 0, this->imageWidth, 0, this->imageHeight, raytracer);
+	int numThreads = 4;
+	int totalPixels = imageWidth * imageHeight;
 
-	for(int y = 0; y < this->imageHeight; y++) {
-		for(int x = 0; x < this->imageWidth; x++) {
-			Color col = renderPixel(x,y,numSamples,raytracer);
+#if MULTI_THREADING
+	int pixelsPerThread = totalPixels / numThreads;
+	int currentPixel = 0;
 
-			if(this->grayscale) image.SetPixel(imageWidth-x-1,imageHeight-y-1,Color::ColorGrayscale(col.grayscaleValue()).RGBAPixel());
-			else				image.SetPixel(imageWidth-x-1,imageHeight-y-1,col.RGBAPixel());
+	if (numThreads == 1) { // If only one thread, no point in spinning up a new one
+		renderChunk(&image, numSamples, 0, totalPixels, raytracer);
+	}
+	else {
+		std::vector<std::thread> threads;
+
+		for (int i = 0; i < numThreads; i++) {
+			int start = currentPixel;
+			currentPixel += pixelsPerThread;
+			if (i == numThreads - 1) currentPixel = totalPixels;
+
+			threads.emplace_back(new std::thread (renderChunk, &this, &image, numSamples, start, currentPixel, raytracer));
+			renderChunk(&image, numSamples, start, currentPixel, raytracer);
+		}
+
+		for (auto &thread : threads) {
+			thread.join();
+			delete thread;
 		}
 	}
+#else
+	renderChunk(&image, numSamples, 0, totalPixels, raytracer);
+#endif
 
 	string sceneName = filename.substr(0,filename.length()-4);
 	sceneName += "-";
