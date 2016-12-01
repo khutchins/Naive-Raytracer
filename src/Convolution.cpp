@@ -70,8 +70,8 @@ namespace Convolution {
 	====================
 	*/
 	Convolution getEdgeDetectionConvolution() {
-		int width = 3;
-		int height = 3;
+		unsigned int width = 3;
+		unsigned int height = 3;
 		Convolution aa2DVector;
 		aa2DVector.resize(width);
 		for (int i = 0; i < width; i++) aa2DVector[i].resize(height);
@@ -100,8 +100,8 @@ namespace Convolution {
 	====================
 	*/
 	Convolution getGaussianBlurConvolution() {
-		int width = 3;
-		int height = 3;
+		unsigned int width = 3;
+		unsigned int height = 3;
 		Convolution aa2DVector;
 		aa2DVector.resize(width);
 		for (int i = 0; i < width; i++) aa2DVector[i].resize(height);

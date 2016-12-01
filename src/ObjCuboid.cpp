@@ -31,11 +31,11 @@ Cuboid::Cuboid(ifstream &f) {
 
 			if(lineContents.size() < 3) break;
 
-			num1 = (double)atof(lineContents.front().c_str());
+			num1 = atof(lineContents.front().c_str());
 			lineContents.pop();
-			num2 = (double)atof(lineContents.front().c_str());
+			num2 = atof(lineContents.front().c_str());
 			lineContents.pop();
-			num3 = (double)atof(lineContents.front().c_str());
+			num3 = atof(lineContents.front().c_str());
 			lineContents.pop();
 
 			if(word == "origin")		this->origin = Point(num1,num2,num3);
@@ -57,7 +57,7 @@ Cuboid::Cuboid(ifstream &f) {
 
 			if(lineContents.size() < 1) break;
 
-			num1 = (double)atof(lineContents.front().c_str());
+			num1 = atof(lineContents.front().c_str());
 			lineContents.pop();
 
 			if(word == "reflect")		material.reflection = num1;

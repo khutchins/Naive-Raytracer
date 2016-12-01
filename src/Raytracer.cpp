@@ -86,7 +86,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 	else			oDist = numeric_limits<double>::max();
 
 	//If > 0 entities found
-	if(oDist != numeric_limits<double>::max()) {
+	if(closestO != nullptr && oDist != numeric_limits<double>::max()) {
 		if(!closestO->isLight) { //if not a light
 			Color materialTexture;
 			Color llocal = Color::ColorBlack();

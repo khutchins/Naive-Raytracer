@@ -48,11 +48,11 @@ Camera::Camera(ifstream &f)
 
 			if(lineContents.size() < 3) break;
 
-			num1 = (double)atof(lineContents.front().c_str());
+			num1 = atof(lineContents.front().c_str());
 			lineContents.pop();
-			num2 = (double)atof(lineContents.front().c_str());
+			num2 = atof(lineContents.front().c_str());
 			lineContents.pop();
-			num3 = (double)atof(lineContents.front().c_str());
+			num3 = atof(lineContents.front().c_str());
 			lineContents.pop();
 
 			if(word == "origin") {
@@ -75,9 +75,9 @@ Camera::Camera(ifstream &f)
 
 			if(lineContents.size() < 2) break;
 
-			num1 = (double)atof(lineContents.front().c_str());
+			num1 = atof(lineContents.front().c_str());
 			lineContents.pop();
-			num2 = (double)atof(lineContents.front().c_str());
+			num2 = atof(lineContents.front().c_str());
 			lineContents.pop();
 
 			if(word == "z") {
@@ -101,7 +101,7 @@ Camera::Camera(ifstream &f)
 			sNum = lineContents.front();
 			lineContents.pop();
 			bool bool1 = sNum[0] != '0';
-			num = (double)atof(sNum.c_str());
+			num = atof(sNum.c_str());
 
 			if(word == "width")				this->width = num;
 			else if(word == "perspective")	this->perspective = bool1;

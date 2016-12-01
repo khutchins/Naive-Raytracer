@@ -28,11 +28,11 @@ Triangle::Triangle(ifstream &f) {
 
 			if(lineContents.size() < 3) break;
 
-			num1 = (double)atof(lineContents.front().c_str());
+			num1 = atof(lineContents.front().c_str());
 			lineContents.pop();
-			num2 = (double)atof(lineContents.front().c_str());
+			num2 = atof(lineContents.front().c_str());
 			lineContents.pop();
-			num3 = (double)atof(lineContents.front().c_str());
+			num3 = atof(lineContents.front().c_str());
 			lineContents.pop();
 
 			if(word == "vertex1") { //read in the origin coordinates
@@ -55,7 +55,7 @@ Triangle::Triangle(ifstream &f) {
 
 			if(lineContents.size() < 1) break;
 
-			num1 = (double)atof(lineContents.front().c_str());
+			num1 = atof(lineContents.front().c_str());
 			lineContents.pop();
 
 			if(word == "transparency")	this->material.transparency = num1;

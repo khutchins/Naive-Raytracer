@@ -10,7 +10,7 @@ ContainerObject::calculateNormalForPoint
 Vector ContainerObject::calculateNormalForPoint(Point p, Point raySource) {
 	bool objectHit = false;
 	Point objectIntersect, intersect;
-	SceneObject* closestObject;
+	SceneObject* closestObject = nullptr;
 	Ray *r = new Ray();
 	r->start = raySource;
 	r->dir = p-raySource;
