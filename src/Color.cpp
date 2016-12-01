@@ -116,7 +116,7 @@ Color Color::averageValues(Color* colors, int numValues) {
 /*
 ====================
 Color::colorFromRGBAPixel
-	Converts RGBApixels (used for EasyBMP) to a Color object
+	Converts RGBAPixels (used for EasyBMP) to a Color object
 ====================
 */
 Color Color::colorFromRGBAPixel(RGBApixel *pix) {
@@ -130,7 +130,7 @@ Color Color::colorFromRGBAPixel(RGBApixel *pix) {
 /*
 ====================
 Color::RGBAPixel()
-	This converts the color object into an RGBApixel (used for EasyBMP)
+	This converts the color object into an RGBAPixel (used for EasyBMP)
 ====================
 */
 RGBApixel Color::RGBAPixel() {

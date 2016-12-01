@@ -73,6 +73,8 @@ private:
 
 	//Object location
 	SceneObject* findClosestObject(Ray *r, Point &oInt);
+
+	void incrementCameraRayCount();
 };
 
 #endif

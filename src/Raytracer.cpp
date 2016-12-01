@@ -16,6 +16,7 @@ Raytracer::Raytracer() {
 	zmaxG = 1000;
 	cameraNum = 0;
 	iterations = 0;
+	currentCamera = nullptr;
 }
 
 /*
@@ -67,7 +68,7 @@ Raytracer::raytrace
 ====================
 */
 Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
-	currentCamera->raysTraced++;
+	incrementCameraRayCount();
 	Color c = Color::ColorBlack();
 
 	//find nearest intersection
@@ -75,7 +76,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 	Point oInt;
 
 	closestO = findClosestObject(r, oInt);
-	if(currentCamera->diagnosticStatus == DIAGNOSTIC_IS_HIT) {
+	if(getCameraDiagnosticStatus() == DIAGNOSTIC_IS_HIT) {
 		if(closestO) return Color::ColorWhite();
 		else return Color::ColorBlack();
 	}
@@ -96,13 +97,13 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 			Vector normal = closestO->calculateNormalForPoint(oInt,r->start);
 			normal.normalize();
 
-			if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT_AND_DIFFUSE) {
+			if(getCameraDiagnosticStatus() == DIAGNOSTIC_FULLBRIGHT_AND_DIFFUSE) {
 				llocal = Color::ColorWith(1,1,1);
 				percentDiffuse = 1;
-				if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
+				if(closestO->hasTexture) materialTexture = closestO->calculateTextureFromMaterial(oInt, getCameraDiagnosticStatus() == DIAGNOSTIC_TEXTURE_MAPPING);
 			}
 			else {
-				if(currentCamera->diagnosticStatus == DIAGNOSTIC_FULLBRIGHT) {
+				if(getCameraDiagnosticStatus() == DIAGNOSTIC_FULLBRIGHT) {
 					llocal = Color::ColorWith(1,1,1);
 				}
 				else llocal = calculateLocalLighting(oInt,normal,closestO->objectType);
@@ -115,7 +116,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 
 				//If the object has texture mapping, calculate the texture for the point
 				if(closestO->hasTexture) { 
-					materialTexture = closestO->calculateTextureFromMaterial(oInt, currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING);
+					materialTexture = closestO->calculateTextureFromMaterial(oInt, getCameraDiagnosticStatus() == DIAGNOSTIC_TEXTURE_MAPPING);
 				}
 
 				//Calculate the percent diffusion of the object
@@ -124,7 +125,7 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 			}
 
 			if(closestO->hasTexture) {
-				if(currentCamera->diagnosticStatus == DIAGNOSTIC_TEXTURE_MAPPING) {
+				if(getCameraDiagnosticStatus() == DIAGNOSTIC_TEXTURE_MAPPING) {
 					c = materialTexture * 255;
 					return c;
 				}
@@ -250,7 +251,7 @@ SceneObject *Raytracer::findClosestObject(Ray *r, Point &intersect) {
 		objectQueue.push(tempO);
 
 		Point objectIntersect;
-		if(tempO = tempO->intersect(r,objectIntersect)) {
+		if((tempO = tempO->intersect(r, objectIntersect))) {
 			if(!closestObject || objectIntersect.comparativeDistanceFrom(r->start) < intersect.comparativeDistanceFrom(r->start)) {
 				closestObject = tempO;
 				intersect = objectIntersect;
@@ -268,15 +269,18 @@ Raytracer::processInput
 ====================
 */
 int Raytracer::processInput(string filename) {
-	ifstream sceneFile;
-	string line; //We will be temporarily storing input here
+	ifstream sceneFile(filename);
 
-	sceneFile.open(filename.c_str()); //Open file
-	
+	if(!sceneFile.good()) {
+		cout << "Not good.\n";
+	}
 	if(!sceneFile.is_open()) {
 		cout << "Scene file failed to open.\n";
 		return 0;
 	}
+
+	string line; //We will be temporarily storing input here
+
 	while(!sceneFile.eof()) { //Loop through all input
 		getline(sceneFile,line);
 
@@ -355,4 +359,22 @@ Raytracer::removeAllSceneObjects
 */
 void Raytracer::removeAllSceneObjects() {
 	while(objectQueue.size() > 0) objectQueue.pop();
+}
+
+/*
+ * Increment number of rays traced on camera, if applicable
+ */
+void Raytracer::incrementCameraRayCount() {
+	if(currentCamera != nullptr) {
+		currentCamera->raysTraced++;
+	}
+}
+
+/*
+ * Get diagnostic status if camera exists, normal otherwise
+ */
+	if(currentCamera != nullptr) {
+		return currentCamera->diagnosticStatus;
+	}
+	return DIAGNOSTIC_NORMAL;
 }

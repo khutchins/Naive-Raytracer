@@ -14,8 +14,8 @@ Camera::Camera(ifstream &f)
 	this->isVisible = false;
 	this->hasTexture = false;
 	this->aa = AA_TYPE_NONE;
-	this->imageHeight = 240;
-	this->imageWidth = 320;
+	this->imageHeight = 480;
+	this->imageWidth = 640;
 	this->name = "";
 	this->diagnosticStatus = DIAGNOSTIC_NORMAL;
 	this->raysTraced = 0;
@@ -97,7 +97,7 @@ Camera::Camera(ifstream &f)
 
 			sNum = lineContents.front();
 			lineContents.pop();
-			bool bool1 = (sNum[0] != '0') ? true : false;
+			bool bool1 = sNum[0] != '0';
 			num = (double)atof(sNum.c_str());
 
 			if(word == "width")				this->width = num;

@@ -4,6 +4,8 @@
 
 using namespace std;
 
+#define MANUAL_FILENAME 1
+
 int raytrace(string fileName) {
 	Raytracer *raytracer = new Raytracer();
 	int retValue = raytracer->start(fileName);
@@ -15,25 +17,26 @@ void speedTest() {
 	objectIntersectionSpeedTest();
 }
 
-int main(int argc, char * argv[])
-{
-	bool manualFilename = false; //If true, use a predefined scene file
-	bool runSpeedTests = true;
-	string fn; //name of file
-	if(manualFilename) fn = "K:\\git\\Naive-Raytracer\\scenes";
-
-	if(argc != 2 && !manualFilename) cout << "Incorrect argument amount. Program terminating.\n";
-	else if(argc == 2 && !manualFilename) fn = argv[1];
+int main(int argc, char * argv[]) {
+	bool runSpeedTests = false;
+	string fn = ""; //name of file
 
 	int retValue;
 	if(runSpeedTests) { 
 		speedTest();
 		retValue = 0;
-	}
-	else retValue = raytrace(fn);
+	} else {
+		if(argc >= 2) fn = argv[1];
+#if MANUAL_FILENAME
+		fn = "K:/git/Naive-Raytracer/scenes/aatest.txt";
+#endif
 
-	std::cout << "Press ENTER to continue...";
-	std::cin.ignore( std::numeric_limits<std::streamsize>::max(), '\n' );
+		if (fn.empty()) {
+			cout << "Incorrect argument amount. Program terminating.\n";
+		}
+
+		retValue = raytrace(fn);
+	}
 
 	return retValue;
 }
