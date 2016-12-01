@@ -98,6 +98,19 @@ void planeIntersectionSpeedTest(const unsigned int numberOfRaysToCast) {
 
 /*
 ====================
+infPlaneIntersectionSpeedTest
+	Checks intersection speed of an infinite plane
+====================
+*/
+void infPlaneIntersectionSpeedTest(const unsigned int numberOfRaysToCast) {
+	InfPlane *o = new InfPlane(Material(),Vector(0,1,0),Vector(0,0,-1),"",Point(0,0,5));
+	double seconds = generalIntersectionSpeedTest(numberOfRaysToCast,o);
+	outputObjectSpeedTestResult(numberOfRaysToCast,seconds,"infPlane");
+	delete o;
+}
+
+/*
+====================
 sphereIntersectionSpeedTest
 	Checks intersection speed of sphere
 ====================
@@ -135,6 +148,7 @@ void objectIntersectionSpeedTest() {
 	diskIntersectionSpeedTest(numberOfRaysToCast);
 	lightIntersectionSpeedTest(numberOfRaysToCast);
 	planeIntersectionSpeedTest(numberOfRaysToCast);
+	infPlaneIntersectionSpeedTest(numberOfRaysToCast);
 	sphereIntersectionSpeedTest(numberOfRaysToCast);
 	triangleIntersectionSpeedTest(numberOfRaysToCast);
 }

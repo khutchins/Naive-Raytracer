@@ -18,7 +18,7 @@ void speedTest() {
 int main(int argc, char * argv[])
 {
 	bool manualFilename = false; //If true, use a predefined scene file
-	bool runSpeedTests = false;
+	bool runSpeedTests = true;
 	string fn; //name of file
 	if(manualFilename) fn = "K:\\git\\Naive-Raytracer\\scenes";
 

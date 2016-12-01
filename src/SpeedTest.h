@@ -7,6 +7,7 @@
 #include "ObjCylinder.h"
 #include "ObjDisk.h"
 #include "ObjLight.h"
+#include "ObjInfPlane.h"
 #include "ObjPlane.h"
 #include "ObjSceneObject.h"
 #include "ObjSphere.h"

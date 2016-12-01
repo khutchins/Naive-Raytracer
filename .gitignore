@@ -1,3 +1,5 @@
 *.[oa]
 *~
 *.bmp
+.idea/
+cmake-build-debug/
