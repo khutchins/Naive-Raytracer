@@ -52,7 +52,7 @@ This currently outputs a .bmp file for each camera in a scene: \<scene_name\>-\<
 
 Usage: ./\<program\> \<path-to-scene-file\>
 
-This code is being run in Windows. Doesn't currently work on Linux/Mac. Sorry. Feel free to make changes to allow for compilation.
+This code is being run in Windows. It may run in Mac/Linux, but no testing has been done to that effect.
 
 Example scene files are in /scenes.
 
