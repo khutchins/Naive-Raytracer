@@ -22,6 +22,7 @@ Camera::Camera(ifstream &f)
 	this->name = "";
 	this->diagnosticStatus = DIAGNOSTIC_NORMAL;
 	this->raysTraced = 0;
+	this->globalIllumination = Color::ColorBlack();
 
 	//Material doesn't matter for the camera
 
@@ -40,7 +41,7 @@ Camera::Camera(ifstream &f)
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		//words with three arguments
-		if(word == "origin" || word == "direction" || word == "up")
+		if(word == "origin" || word == "direction" || word == "up" || word == "global")
 		{
 			double num1 = 0;
 			double num2 = 0;
@@ -65,6 +66,9 @@ Camera::Camera(ifstream &f)
 			else if(word == "up") {
 				this->up = Vector(num1,num2,num3);
 				this->up.normalize();
+			}
+			else if(word == "global") {
+				this->globalIllumination = Color(num1,num2,num3);
 			}
 		}
 
@@ -266,6 +270,9 @@ void Camera::renderScene(string filename, int cameraNum, Raytracer *raytracer) {
 	int numThreads = 4;
 	int totalPixels = imageWidth * imageHeight;
 
+	// This actually will probably crash and burn if it's actually executed! There are a few facets of the code that
+	// rely on some object-wide state. For instance, the iterations var in Raytracer rely on some shared state. Once
+	// a proper PRNG is hooked up, that will also need to be accessed in a thread-safe way.
 #if MULTI_THREADING
 	int pixelsPerThread = totalPixels / numThreads;
 	int currentPixel = 0;

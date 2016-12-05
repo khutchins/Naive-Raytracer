@@ -8,6 +8,7 @@
 #include "Material.h"
 #include "Diagnostic.h"
 #include <fstream>
+#include <random>
 #include <string>
 #include <queue>
 #include "EasyBMP/EasyBMP.h"

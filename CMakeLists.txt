@@ -58,6 +58,6 @@ set(SOURCE_FILES
     src/Vector.cpp
     src/Vector.h
     src/VectorMath.cpp
-    src/VectorMath.h)
+    src/VectorMath.h src/StaticRandom.cpp src/StaticRandom.h)
 
 add_executable(Naive_Raytracer ${SOURCE_FILES})

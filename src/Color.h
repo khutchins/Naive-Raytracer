@@ -9,6 +9,7 @@ public:
 
 	Color();
 	Color(double r, double g, double b);
+	Color(const Color &col);
 	static Color ColorWith(double r, double g, double b);
 	static Color ColorBlack();
 	static Color ColorWhite();

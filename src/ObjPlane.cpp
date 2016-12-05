@@ -3,6 +3,11 @@
 #define PLANE_LIGHTING_X_SAMPLES 3
 #define PLANE_LIGHTING_Y_SAMPLES 3
 
+#include "StaticRandom.h"
+#include <random>
+
+StaticRandom random = StaticRandom();
+
 /*
 ====================
 Plane::Plane
@@ -295,10 +300,12 @@ std::vector<std::unique_ptr<Ray>> Plane::raysForLighting(Point origin) {
 	Vector squareWidth = topLine / PLANE_LIGHTING_X_SAMPLES;
 	Vector squareHeight = leftLine / PLANE_LIGHTING_Y_SAMPLES;
 
+	std::uniform_real_distribution<> distribution(0, 1);
+
 	for (int i_x = 0; i_x < PLANE_LIGHTING_X_SAMPLES; i_x++) {
 		for (int i_y = 0; i_y < PLANE_LIGHTING_Y_SAMPLES; i_y++) {
-			double randX = (rand() / RAND_MAX);
-			double randY = (rand() / RAND_MAX);
+			double randX = distribution(random.rand);
+			double randY = distribution(random.rand);
 			Point lOrigin = vertex1 + squareWidth * i_x + squareWidth * randX
 						 + squareHeight * i_y + squareHeight * randY;
 			rays.push_back(std::unique_ptr<Ray>(new Ray(origin, lOrigin - origin)));

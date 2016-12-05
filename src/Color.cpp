@@ -24,6 +24,12 @@ Color::Color(double r, double g, double b) {
 	this->b = b;
 }
 
+Color::Color(const Color &col) {
+	this->r = col.r;
+	this->g = col.g;
+	this->b = col.b;
+}
+
 /*
 ====================
 Color::ColorWith

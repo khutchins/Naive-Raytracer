@@ -4,6 +4,7 @@ direction 0 0 1
 up 0 1 0
 z 0 10
 width 10
+global .1 .1 .1
 perspective 0
 end
 
@@ -35,9 +36,4 @@ color 1 1 1
 reflect 0
 transparency 0
 light 1
-end
-
-light
-origin 0 0 -5
-color .1 .1 .1
 end

@@ -159,7 +159,7 @@ Raytracer::calculateLocalLighting
 ====================
 */
 Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID id) {
-	Color llocal = Color::ColorBlack();
+	Color llocal = Color(currentCamera->globalIllumination);
 	for(unsigned int i = 0; i < objectQueue.size(); i++) {
 		SceneObject* l = objectQueue.front();
 		objectQueue.pop();

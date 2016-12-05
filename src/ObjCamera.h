@@ -48,6 +48,7 @@ public:
 	string name;
 	DiagnosticStatus diagnosticStatus;
 	long long raysTraced;
+	Color globalIllumination;
 
 	//Class variables for optimization
 	double height,width2,height2;
