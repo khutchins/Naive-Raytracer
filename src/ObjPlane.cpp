@@ -1,5 +1,8 @@
 #include "ObjPlane.h"
 
+#define PLANE_LIGHTING_X_SAMPLES 3
+#define PLANE_LIGHTING_Y_SAMPLES 3
+
 /*
 ====================
 Plane::Plane
@@ -8,6 +11,8 @@ Plane::Plane
 */
 Plane::Plane(ifstream &f) {
 	string textureName;
+
+	isLight = false;
 
 	while(!f.eof()) {
 		string line;
@@ -76,6 +81,18 @@ Plane::Plane(ifstream &f) {
 			else if (word == "transparency")this->material.transparency = num1;
 		}
 
+		//words with one bool argument
+		else if(word == "light") {
+			bool num1 = 0;
+
+			if(lineContents.size() < 1) break;
+
+			num1 = (bool)atof(lineContents.front().c_str());
+			lineContents.pop();
+
+			this->isLight = num1;
+		}
+
 		//words with one string argument
 		else if(word == "texture") {
 			//TODO: attempt load texture from local directory first
@@ -87,7 +104,7 @@ Plane::Plane(ifstream &f) {
 		else break;
 	}
 
-	sharedInit(material,width,height,up,normal,textureName,origin);
+	sharedInit(material,width,height,up,normal,textureName,origin,isLight);
 }
 
 /*
@@ -97,8 +114,8 @@ Plane::Plane
 	so that it can be created by a complex object
 ====================
 */
-Plane::Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin) {
-	sharedInit(m,width,height,up,normal,textureName,origin);
+Plane::Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin, bool isLight) {
+	sharedInit(m,width,height,up,normal,textureName,origin,isLight);
 }
 
 /*
@@ -107,7 +124,7 @@ Plane::sharedInit
 	Shared initialization method for all Plane objects
 ====================
 */
-void Plane::sharedInit(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin) {
+void Plane::sharedInit(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin, bool isLight) {
 	//Warns if Vectors are not orthogonal
 	if(abs(up.dot(normal)) > 0.00001) {
 		printf("Warning: Plane up vector ");
@@ -129,7 +146,7 @@ void Plane::sharedInit(Material m, double width, double height, Vector up, Vecto
 	if(textureName.size() > 0 && this->texture.ReadFromFile(textureName.c_str())) {
 		this->hasTexture = true;
 	}
-	this->isLight = false;
+	this->isLight = isLight;
 	this->isVisible = true;
 
 	this->up.normalize();
@@ -268,4 +285,26 @@ Plane::getColor
 */
 Color Plane::getColor() {
 	return this->material.color;
+}
+
+
+
+std::vector<std::unique_ptr<Ray>> Plane::raysForLighting(Point origin) {
+	std::vector<std::unique_ptr<Ray>> rays;
+
+	Vector squareWidth = topLine / PLANE_LIGHTING_X_SAMPLES;
+	Vector squareHeight = leftLine / PLANE_LIGHTING_Y_SAMPLES;
+
+	for (int i_x = 0; i_x < PLANE_LIGHTING_X_SAMPLES; i_x++) {
+		for (int i_y = 0; i_y < PLANE_LIGHTING_Y_SAMPLES; i_y++) {
+			double randX = (rand() / RAND_MAX);
+			double randY = (rand() / RAND_MAX);
+			Point lOrigin = vertex1 + squareWidth * i_x + squareWidth * randX
+						 + squareHeight * i_y + squareHeight * randY;
+			rays.push_back(std::unique_ptr<Ray>(new Ray(origin, lOrigin - origin)));
+		}
+	}
+
+
+	return rays;
 }

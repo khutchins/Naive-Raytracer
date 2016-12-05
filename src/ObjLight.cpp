@@ -1,4 +1,5 @@
 #include "ObjLight.h"
+#include <memory>
 
 /*
 ====================
@@ -116,4 +117,10 @@ Light::getColor
 */
 Color Light::getColor() {
 	return this->material.color;
+}
+
+std::vector<std::unique_ptr<Ray>> Light::raysForLighting(Point origin) {
+	std::vector<std::unique_ptr<Ray>> rays = {};
+	rays.push_back(std::unique_ptr<Ray>(new Ray(origin, this->origin - origin)));
+	return rays;
 }

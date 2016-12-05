@@ -36,6 +36,7 @@ struct Vector {
 	Point operator-(Point right);
 	Vector operator * (double k);
 	friend Vector operator * (double k, Vector v);
+	Vector operator/(double k);
 
 };
 

@@ -20,6 +20,7 @@ public:
 
 	SceneObject* intersect(Ray* r, Point &intersect) override;
 	Color getColor() override;
+	std::vector<std::unique_ptr<Ray>> raysForLighting(Point origin);
 
 private:
 	void sharedInit(Point origin, Material material);

@@ -41,7 +41,7 @@ public:
 	Raytracer();
 	~Raytracer();
 	int start(string fn);
-	Color raytrace(Ray* r, bool &lightWasSeen);
+	Color raytrace(Ray* r, bool &lightWasSeen, bool lightRay);
 
 	void addSceneObject(SceneObject *o);
 	void removeAllSceneObjects();
@@ -69,7 +69,6 @@ private:
 	Color calculateLocalLighting(Point intercept, Vector normal, EntityID id);
 	Color calculateReflectedRay(Ray r, Point intercept, Vector normal, EntityID id);
 	Color calculateRefractedRay(Ray r, Point intercept, Vector normal, EntityID id);
-	Color calculateTextureOnPlaneFromMaterial(Plane* plane, Point intercept);
 
 	//Object location
 	SceneObject* findClosestObject(Ray *r, Point &oInt);

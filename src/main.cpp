@@ -28,7 +28,7 @@ int main(int argc, char * argv[]) {
 	} else {
 		if(argc >= 2) fn = argv[1];
 #if MANUAL_FILENAME
-		fn = "K:/git/Naive-Raytracer/scenes/sphereplanelight.txt";
+		fn = "K:/git/Naive-Raytracer/scenes/planelight.txt";
 #endif
 
 		if (fn.empty()) {

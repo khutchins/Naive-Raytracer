@@ -20,7 +20,7 @@ double generalIntersectionSpeedTest(const unsigned int numberOfRaysToCast, Scene
 	//Test intersections
 	for(size_t i = 0; i < numberOfRaysToCast; i++) {
 		Ray *r = new Ray(Point(0,0,0),Vector(rand()%100,rand()%100,rand()%100));
-		raytracer->raytrace(r,lightWasSeen);
+		raytracer->raytrace(r,lightWasSeen,false);
 		delete r;
 	}
 
@@ -90,7 +90,7 @@ planeIntersectionSpeedTest
 ====================
 */
 void planeIntersectionSpeedTest(const unsigned int numberOfRaysToCast) {
-	Plane *o = new Plane(Material(),3,2,Vector(0,1,0),Vector(0,0,-1),"",Point(0,0,5));
+	Plane *o = new Plane(Material(),3,2,Vector(0,1,0),Vector(0,0,-1),"",Point(0,0,5),false);
 	double seconds = generalIntersectionSpeedTest(numberOfRaysToCast,o);
 	outputObjectSpeedTestResult(numberOfRaysToCast,seconds,"plane");
 	delete o;

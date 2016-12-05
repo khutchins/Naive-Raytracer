@@ -24,13 +24,14 @@ public:
     BMP texture;
 
 	explicit Plane(std::ifstream &f);
-	Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin);
+	Plane(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin, bool isLight);
 	SceneObject* intersect(Ray* r, Point &intersect) override;
 	Vector calculateNormalForPoint(Point p, Point raySource) override;
 	Color calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled) override;
 	double getReflection() override;
 	double getRefraction() override;
 	Color getColor() override;
+	std::vector<std::unique_ptr<Ray>> raysForLighting(Point origin);
 
 private:
 	Point vertex1;
@@ -40,7 +41,7 @@ private:
 	Vector topLine;
 	Vector leftLine;
 
-	void sharedInit(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin);
+	void sharedInit(Material m, double width, double height, Vector up, Vector normal, string textureName, Point origin, bool isLight);
 };
 
 #endif

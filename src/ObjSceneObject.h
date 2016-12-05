@@ -7,6 +7,8 @@
 #include "Color.h"
 #include "Material.h"
 #include <cstdlib>
+#include <memory>
+#include <vector>
 
 enum EntityID {
 	ENTITY_SPHERE,
@@ -36,6 +38,7 @@ public:
 	virtual double getRefraction() { return 0; }
 	virtual Color getColor() { return Color::ColorBlack(); }
 	virtual Color calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled) { return Color::ColorBlack(); }
+	virtual std::vector<std::unique_ptr<Ray>> raysForLighting(Point origin) { std::vector<std::unique_ptr<Ray>> rays; return rays; };
 };
 
 #endif

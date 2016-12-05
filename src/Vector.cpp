@@ -224,3 +224,11 @@ Vector Vector::operator *(double k) {
 Vector operator * (double k, Vector v) {
 	return v*k;
 }
+
+Vector Vector::operator /(double k) {
+	Vector result;
+	result.x = this->x / k;
+	result.y = this->y / k;
+	result.z = this->z / k;
+	return result;
+}

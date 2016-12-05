@@ -119,10 +119,10 @@ void Cuboid::sharedInit(Point origin, Vector up, Vector front, double width, dou
 	Vector left = up.cross(front);
 	left.normalize();
 
-	children[0] = new Plane(material, length, width, front, up, textureName, origin+up*height*0.5f); //Top plane
-	children[1] = new Plane(material, length, width, front, -1*up, textureName, origin-up*height*0.5f); //Bottom plane
-	children[2] = new Plane(material, length, height, up, front, textureName, origin+front*width*0.5f); //Front plane
-	children[3] = new Plane(material, length, height, up, -1*front, textureName, origin-front*width*0.5f); //Back plane
-	children[4] = new Plane(material, width, height, up, left, textureName, origin+left*length*0.5f); //left plane
-	children[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f); //right plane
+	children[0] = new Plane(material, length, width, front, up, textureName, origin+up*height*0.5f, false); //Top plane
+	children[1] = new Plane(material, length, width, front, -1*up, textureName, origin-up*height*0.5f, false); //Bottom plane
+	children[2] = new Plane(material, length, height, up, front, textureName, origin+front*width*0.5f, false); //Front plane
+	children[3] = new Plane(material, length, height, up, -1*front, textureName, origin-front*width*0.5f, false); //Back plane
+	children[4] = new Plane(material, width, height, up, left, textureName, origin+left*length*0.5f, false); //left plane
+	children[5] = new Plane(material, width, height, up, -1*left, textureName, origin-left*length*0.5f, false); //right plane
 }

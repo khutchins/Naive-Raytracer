@@ -1,5 +1,6 @@
 #include "Raytracer.h"
 #include "VectorMath.h"
+#include <random>
 
 using namespace std;
 
@@ -67,7 +68,7 @@ Raytracer::raytrace
 	closest object is a light
 ====================
 */
-Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
+Color Raytracer::raytrace(Ray* r, bool &lightWasSeen, bool lightRay) {
 	incrementCameraRayCount();
 	Color c = Color::ColorBlack();
 
@@ -87,12 +88,16 @@ Color Raytracer::raytrace(Ray* r, bool &lightWasSeen) {
 
 	//If > 0 entities found
 	if(closestO != nullptr && oDist != numeric_limits<double>::max()) {
-		if(!closestO->isLight) { //if not a light
+		if(!closestO->isLight && lightRay) { //if not a light and we're looking for a light
+			lightWasSeen = false;
+			return Color::ColorBlack();
+		}
+		else if(!closestO->isLight) { //if not a light
 			Color materialTexture;
-			Color llocal = Color::ColorBlack();
+			Color llocal;
 			Color reflect = Color::ColorBlack();
 			Color refract = Color::ColorBlack();
-			double percentDiffuse = 1;
+			double percentDiffuse;
 
 			Vector normal = closestO->calculateNormalForPoint(oInt,r->start);
 			normal.normalize();
@@ -161,40 +166,38 @@ Color Raytracer::calculateLocalLighting(Point intercept, Vector normal, EntityID
 		objectQueue.push(l);
 		if(!l->isLight) continue;
 
-		Ray* lightRay = new Ray();
 		bool lightWasSeen = true;
 
 		//Start of the ray (moved a bit so we won't intercept the object)
 		Point lStart = intercept + 0.000001 * (l->origin - intercept);
 
-		//Direction from the object *to* the light source
-		Vector lDir = l->origin - lStart;
+		std::vector<std::unique_ptr<Ray>> rays = l->raysForLighting(lStart);
+		int samples = rays.size();
 
-		lightRay->dir = lDir;
-		lightRay->start = lStart;
+		for (int i = 0; i < samples; i++) {
+			Color receivedColor = raytrace(rays[i].get(),lightWasSeen,true);
 
-		Color receivedColor = raytrace(lightRay,lightWasSeen);
+			if(lightWasSeen) { //We see the light from the point
+				//Direction from the light source to the plane.  Used for calculating lambert
+				Vector lToObject = rays[i]->dir;
 
-		if(lightWasSeen) { //We see the light from the point
-			//Direction from the light source to the plane.  Used for calculating lambert
-			Vector lToObject = lDir;
+				lToObject.normalize();
 
-			lToObject.normalize();
+				receivedColor.r /= 255.f * samples;
+				receivedColor.g /= 255.f * samples;
+				receivedColor.b /= 255.f * samples;
 
-			receivedColor.r /= 255.f;
-			receivedColor.g /= 255.f;
-			receivedColor.b /= 255.f;
-
-			double lightSourceIntensity = lToObject.cosAngleBetween(normal);
-			if(lightSourceIntensity < 0) lightSourceIntensity = 0;
-			llocal.r += receivedColor.r * lightSourceIntensity;
-			llocal.g += receivedColor.g * lightSourceIntensity;
-			llocal.b += receivedColor.b * lightSourceIntensity;
-			if(llocal.r > 1) llocal.r = 1;
-			if(llocal.g > 1) llocal.g = 1;
-			if(llocal.b > 1) llocal.b = 1;
+				double lightSourceIntensity = lToObject.cosAngleBetween(normal);
+				if(lightSourceIntensity < 0) lightSourceIntensity = 0;
+				llocal.r += receivedColor.r * lightSourceIntensity;
+				llocal.g += receivedColor.g * lightSourceIntensity;
+				llocal.b += receivedColor.b * lightSourceIntensity;
+				if(llocal.r > 1) llocal.r = 1;
+				if(llocal.g > 1) llocal.g = 1;
+				if(llocal.b > 1) llocal.b = 1;
+			}
 		}
-		delete lightRay;
+
 	}
 	return llocal;
 }
@@ -217,7 +220,7 @@ Color Raytracer::calculateReflectedRay(Ray r, Point intercept, Vector normal, En
 	reflectRay.start = intercept + 0.000001 * reflectVec;
 
 	bool lightWasSeen = false;
-	return raytrace(&reflectRay,lightWasSeen);
+	return raytrace(&reflectRay,lightWasSeen,false);
 }
 
 /*
@@ -234,7 +237,7 @@ Color Raytracer::calculateRefractedRay(Ray r, Point intercept, Vector normal, En
 	refractRay.start = intercept + 0.000001 * r.dir;
 
 	bool lightWasSeen = false;
-	return raytrace(&refractRay,lightWasSeen);
+	return raytrace(&refractRay,lightWasSeen,false);
 }
 
 /*
