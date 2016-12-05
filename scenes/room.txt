@@ -1,0 +1,82 @@
+camera
+origin 3 1 4
+direction -3 -1 -4
+up 0 4 -1
+z 2 10
+width 5
+perspective 1
+end
+
+cuboid
+origin 0 0 0
+width 10
+height 5
+length 8
+up 0 1 0
+front 0 0 1
+color .6 .6 .6
+reflect 0
+transparency 0
+end
+
+cuboid
+origin 0 -2 2
+width 2
+height 1
+length 2
+up 0 1 0
+front 0 0 1
+color .1 .1 .1
+reflect 0
+transparency 0
+end
+
+sphere
+origin 0 -0.5 2
+radius 1
+color 1 1 1
+reflect 1
+transparency 0
+end
+
+cuboid
+origin 0 -2 -2
+width 2
+height 1
+length 2
+up 0 1 0
+front 0 0 1
+color .1 .1 .1
+reflect 1
+transparency 0
+end
+
+sphere
+origin 0 -0.5 -2
+radius 1
+color 1 1 1
+reflect 0
+transparency 1
+end
+
+plane
+origin -3 2.49 0
+normal 0 1 0
+up 0 0 1
+size .5 .5
+color .9 .9 .9
+reflect 0
+transparency 0
+light 1
+end
+
+plane
+origin 3 2.49 0
+normal 0 1 0
+up 0 0 1
+size .5 .5
+color .9 .9 .9
+reflect 0
+transparency 0
+light 1
+end
