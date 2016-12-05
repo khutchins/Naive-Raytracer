@@ -23,6 +23,7 @@ Camera::Camera(ifstream &f)
 	this->diagnosticStatus = DIAGNOSTIC_NORMAL;
 	this->raysTraced = 0;
 	this->globalIllumination = Color::ColorBlack();
+	Point *look = nullptr;
 
 	//Material doesn't matter for the camera
 
@@ -41,7 +42,7 @@ Camera::Camera(ifstream &f)
 		if(word[0] == '#' || line[0] == '\n' || line[0] == '\r') continue;
 
 		//words with three arguments
-		if(word == "origin" || word == "direction" || word == "up" || word == "global")
+		if(word == "origin" || word == "direction" || word == "up" || word == "global" || word == "look")
 		{
 			double num1 = 0;
 			double num2 = 0;
@@ -69,6 +70,9 @@ Camera::Camera(ifstream &f)
 			}
 			else if(word == "global") {
 				this->globalIllumination = Color(num1,num2,num3);
+			}
+			else if(word == "look") {
+				look = new Point(num1,num2,num3);
 			}
 		}
 
@@ -135,6 +139,17 @@ Camera::Camera(ifstream &f)
 	}
 	if(this->perspective && this->zmin == 0) {
 		printf("Warning: Perspective camera with a zmin of zero.\n");
+	}
+
+	if (look != nullptr) {
+		direction = *look - origin;
+		direction.normalize();
+		delete look;
+
+		if (direction.x == 0) up = Vector(1, 0, 0);
+		else if (direction.y == 0) up = Vector(0, 1, 0);
+		else if (direction.z == 0) up = Vector(0, 0, 1);
+		else up = Vector(-direction.y, direction.x, 0);
 	}
 
 	//Warning: Vectors are not orthogonal
