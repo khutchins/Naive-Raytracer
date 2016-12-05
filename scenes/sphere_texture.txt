@@ -1,0 +1,28 @@
+camera
+origin 0 0 3
+direction 0 0 -1
+up 0 1 0
+z 2 10
+width 5
+perspective 1
+global 1 1 1
+end
+
+sphere
+origin 0 0 0
+radius 2
+color 1 1 1
+reflect 0
+transparency 0
+texture K:/git/Naive-Raytracer/scenes/texture_sphere3.bmp
+end
+
+plane
+origin 0 0 0
+normal 0 0 1
+up 0 1 0
+size 10 10
+color 0.3 0.3 0.3
+reflect 0
+transparency 0
+end

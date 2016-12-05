@@ -116,7 +116,7 @@ sphereIntersectionSpeedTest
 ====================
 */
 void sphereIntersectionSpeedTest(const unsigned int numberOfRaysToCast) {
-	Sphere *o = new Sphere(Point(0,0,5),Material(),3);
+	Sphere *o = new Sphere(Point(0,0,5),Material(),3,"");
 	double seconds = generalIntersectionSpeedTest(numberOfRaysToCast,o);
 	outputObjectSpeedTestResult(numberOfRaysToCast,seconds,"sphere");
 	delete o;

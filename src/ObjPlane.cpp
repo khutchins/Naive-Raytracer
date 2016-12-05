@@ -4,7 +4,6 @@
 #define PLANE_LIGHTING_Y_SAMPLES 3
 
 #include "StaticRandom.h"
-#include <random>
 
 StaticRandom random = StaticRandom();
 

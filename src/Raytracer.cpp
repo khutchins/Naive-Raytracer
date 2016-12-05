@@ -283,9 +283,11 @@ int Raytracer::processInput(string filename) {
 	}
 
 	string line; //We will be temporarily storing input here
+	int lineNumber = 0;
 
 	while(!sceneFile.eof()) { //Loop through all input
 		getline(sceneFile,line);
+		lineNumber++;
 
 		queue<string> lineContents;
 		explode(line," ",&lineContents);
@@ -337,7 +339,7 @@ int Raytracer::processInput(string filename) {
 			objectQueue.push(t);
 		}
 		else {
-			cout << "Incorrect syntax on or before line \n\"" << line << "\"." << endl;
+			cout << "Incorrect syntax on or before line " << lineNumber << ": \n\"" << line << "\"." << endl;
 			return 0;
 		}
 	}

@@ -21,7 +21,6 @@ public:
     Vector up;
     double width;
     double height;
-    Material material;
     BMP texture;
 
 	explicit Plane(std::ifstream &f);

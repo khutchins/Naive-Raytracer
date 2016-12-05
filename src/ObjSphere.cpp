@@ -6,8 +6,8 @@ Sphere::Sphere
 	Takes in the input stream and creates a Sphere object from the parsed input
 ====================
 */
-Sphere::Sphere(ifstream &f)
-{
+Sphere::Sphere(ifstream &f) {
+	string textureName;
 	while(!f.eof()) {
 		string line;
 		getline(f,line);
@@ -53,10 +53,18 @@ Sphere::Sphere(ifstream &f)
 			else if(word == "reflect")		this->material.reflection = num1;
 			else if(word == "transparency")	this->material.transparency = num1;
 		}
+		//words with one string argument
+		else if(word == "texture") {
+			//TODO: attempt load texture from local directory first
+			if(lineContents.size() < 1) break;
+
+			textureName = lineContents.front();
+			lineContents.pop();
+		}
 		else break;
 	}
 
-	sharedInit(origin,material,radius);
+	sharedInit(origin,material,radius,textureName);
 }
 
 /*
@@ -65,8 +73,8 @@ Sphere::Sphere
 	Takes in arguments and creates a Sphere object
 ====================
 */
-Sphere::Sphere(Point origin, Material material, double radius) {
-	sharedInit(origin,material,radius);
+Sphere::Sphere(Point origin, Material material, double radius, string textureName) {
+	sharedInit(origin,material,radius,textureName);
 }
 
 /*
@@ -75,11 +83,14 @@ Sphere::sharedInit
 	Shared initialization method for all Sphere objects
 ====================
 */
-void Sphere::sharedInit(Point origin, Material material, double radius) {
+void Sphere::sharedInit(Point origin, Material material, double radius, string textureName) {
 	this->isLight = false;
 	this->isVisible = true;
 	this->objectType = ENTITY_SPHERE;
 	this->hasTexture = false;
+	if(textureName.size() > 0 && this->texture.ReadFromFile(textureName.c_str())) {
+		this->hasTexture = true;
+	}
 
 	this->origin = origin;
 	this->material = material;
@@ -132,8 +143,8 @@ SceneObject* Sphere::intersect(Ray* r, Point &intersect) {
 ====================
 Sphere::calculateNormalForPoint
 	Calculates the normal of the point p on the object as hit from ray r.  
-	I assume an infinitely wide Sphere, so this will always return the normal 
-	as if the ray hit the Sphere
+	I assume an infinitely large Sphere, so this will always return the normal
+	as if the ray hit the Sphere at the given point
 ====================
 */
 Vector Sphere::calculateNormalForPoint(Point p, Point raySource) {
@@ -168,4 +179,33 @@ Sphere::getColor
 */
 Color Sphere::getColor() {
 	return this->material.color;
+}
+
+Color Sphere::calculateTextureFromMaterial(Point intercept, bool diagnosticEnabled) {
+	BMP* texture;
+	texture = &this->texture;
+	int height = texture->TellHeight();
+	int width  = texture->TellWidth();
+
+	Vector vectorToIntercept = intercept - origin;
+	vectorToIntercept.normalize();
+	double u = 0.5 + atan2(vectorToIntercept.z,vectorToIntercept.x) / 2 / 3.1415;
+	double v = 0.5 - asin(vectorToIntercept.y) / 3.1415;
+
+	int pixelX = abs((int)(u * width));
+	int pixelY = abs((int)(v * height));
+	pixelX %= width;
+	pixelY %= height;
+	Color matColor;
+
+	if(diagnosticEnabled) {
+		matColor = Color(v,0,sin(u * 3.1415));
+	}
+	else {
+		matColor.r = texture->GetPixel(pixelX,pixelY).Red/255.f;
+		matColor.g = texture->GetPixel(pixelX,pixelY).Green/255.f;
+		matColor.b = texture->GetPixel(pixelX,pixelY).Blue/255.f;
+	}
+
+	return matColor;
 }
